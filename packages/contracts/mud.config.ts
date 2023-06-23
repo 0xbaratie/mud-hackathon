@@ -27,12 +27,16 @@ export default mudConfig({
         name: "string",
         uri: "string",
         phase: "uint8",
-        prizes: "uint256[]",
-        deposit: "uint256",
         startTimestamp: "uint256",
         submitPeriod: "uint256",
         votingPeriod: "uint256",
         withdrawalPeriod: "uint256",
+      },
+    },
+    HackathonPrize: {
+      schema: {
+        prizes: "uint256[]",
+        deposit: "uint256",
       },
     },
     Submission: {

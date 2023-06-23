@@ -69,8 +69,8 @@ library Vote {
   /** Get voted */
   function get(uint256 hackathonId, address submitter) internal view returns (bool voted) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(hackathonId));
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32(uint256((hackathonId)));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
     return (_toBool(uint8(Bytes.slice1(_blob, 0))));
@@ -79,8 +79,8 @@ library Vote {
   /** Get voted (using the specified store) */
   function get(IStore _store, uint256 hackathonId, address submitter) internal view returns (bool voted) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(hackathonId));
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32(uint256((hackathonId)));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
     return (_toBool(uint8(Bytes.slice1(_blob, 0))));
@@ -89,8 +89,8 @@ library Vote {
   /** Set voted */
   function set(uint256 hackathonId, address submitter, bool voted) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(hackathonId));
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32(uint256((hackathonId)));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((voted)));
   }
@@ -98,8 +98,8 @@ library Vote {
   /** Set voted (using the specified store) */
   function set(IStore _store, uint256 hackathonId, address submitter, bool voted) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(hackathonId));
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32(uint256((hackathonId)));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((voted)));
   }
@@ -112,15 +112,15 @@ library Vote {
   /** Encode keys as a bytes32 array using this table's schema */
   function encodeKeyTuple(uint256 hackathonId, address submitter) internal pure returns (bytes32[] memory _keyTuple) {
     _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(hackathonId));
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32(uint256((hackathonId)));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
   }
 
   /* Delete all data for given keys */
   function deleteRecord(uint256 hackathonId, address submitter) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(hackathonId));
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32(uint256((hackathonId)));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     StoreSwitch.deleteRecord(_tableId, _keyTuple);
   }
@@ -128,8 +128,8 @@ library Vote {
   /* Delete all data for given keys (using the specified store) */
   function deleteRecord(IStore _store, uint256 hackathonId, address submitter) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(hackathonId));
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32(uint256((hackathonId)));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     _store.deleteRecord(_tableId, _keyTuple);
   }

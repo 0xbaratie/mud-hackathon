@@ -7,5 +7,6 @@ import { Counter, CounterTableId } from "./tables/Counter.sol";
 import { Config, ConfigData, ConfigTableId } from "./tables/Config.sol";
 import { Owner, OwnerTableId } from "./tables/Owner.sol";
 import { Hackathon, HackathonData, HackathonTableId } from "./tables/Hackathon.sol";
+import { HackathonPrize, HackathonPrizeData, HackathonPrizeTableId } from "./tables/HackathonPrize.sol";
 import { Submission, SubmissionData, SubmissionTableId } from "./tables/Submission.sol";
 import { Vote, VoteTableId } from "./tables/Vote.sol";

@@ -68,7 +68,7 @@ library Owner {
   /** Get isActive */
   function get(address owner) internal view returns (bool isActive) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[0] = bytes32(uint256(uint160((owner))));
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
     return (_toBool(uint8(Bytes.slice1(_blob, 0))));
@@ -77,7 +77,7 @@ library Owner {
   /** Get isActive (using the specified store) */
   function get(IStore _store, address owner) internal view returns (bool isActive) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[0] = bytes32(uint256(uint160((owner))));
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
     return (_toBool(uint8(Bytes.slice1(_blob, 0))));
@@ -86,7 +86,7 @@ library Owner {
   /** Set isActive */
   function set(address owner, bool isActive) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[0] = bytes32(uint256(uint160((owner))));
 
     StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((isActive)));
   }
@@ -94,7 +94,7 @@ library Owner {
   /** Set isActive (using the specified store) */
   function set(IStore _store, address owner, bool isActive) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[0] = bytes32(uint256(uint160((owner))));
 
     _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((isActive)));
   }
@@ -107,13 +107,13 @@ library Owner {
   /** Encode keys as a bytes32 array using this table's schema */
   function encodeKeyTuple(address owner) internal pure returns (bytes32[] memory _keyTuple) {
     _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[0] = bytes32(uint256(uint160((owner))));
   }
 
   /* Delete all data for given keys */
   function deleteRecord(address owner) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[0] = bytes32(uint256(uint160((owner))));
 
     StoreSwitch.deleteRecord(_tableId, _keyTuple);
   }
@@ -121,7 +121,7 @@ library Owner {
   /* Delete all data for given keys (using the specified store) */
   function deleteRecord(IStore _store, address owner) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[0] = bytes32(uint256(uint160((owner))));
 
     _store.deleteRecord(_tableId, _keyTuple);
   }

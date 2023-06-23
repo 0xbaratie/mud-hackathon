@@ -24,8 +24,6 @@ struct HackathonData {
   string name;
   string uri;
   uint8 phase;
-  uint256[] prizes;
-  uint256 deposit;
   uint256 startTimestamp;
   uint256 submitPeriod;
   uint256 votingPeriod;
@@ -35,16 +33,14 @@ struct HackathonData {
 library Hackathon {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](9);
+    SchemaType[] memory _schema = new SchemaType[](7);
     _schema[0] = SchemaType.STRING;
     _schema[1] = SchemaType.STRING;
     _schema[2] = SchemaType.UINT8;
-    _schema[3] = SchemaType.UINT256_ARRAY;
+    _schema[3] = SchemaType.UINT256;
     _schema[4] = SchemaType.UINT256;
     _schema[5] = SchemaType.UINT256;
     _schema[6] = SchemaType.UINT256;
-    _schema[7] = SchemaType.UINT256;
-    _schema[8] = SchemaType.UINT256;
 
     return SchemaLib.encode(_schema);
   }
@@ -58,16 +54,14 @@ library Hackathon {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](9);
+    string[] memory _fieldNames = new string[](7);
     _fieldNames[0] = "name";
     _fieldNames[1] = "uri";
     _fieldNames[2] = "phase";
-    _fieldNames[3] = "prizes";
-    _fieldNames[4] = "deposit";
-    _fieldNames[5] = "startTimestamp";
-    _fieldNames[6] = "submitPeriod";
-    _fieldNames[7] = "votingPeriod";
-    _fieldNames[8] = "withdrawalPeriod";
+    _fieldNames[3] = "startTimestamp";
+    _fieldNames[4] = "submitPeriod";
+    _fieldNames[5] = "votingPeriod";
+    _fieldNames[6] = "withdrawalPeriod";
     return ("Hackathon", _fieldNames);
   }
 
@@ -96,7 +90,7 @@ library Hackathon {
   /** Get name */
   function getName(bytes32 key) internal view returns (string memory name) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
     return (string(_blob));
@@ -105,7 +99,7 @@ library Hackathon {
   /** Get name (using the specified store) */
   function getName(IStore _store, bytes32 key) internal view returns (string memory name) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
     return (string(_blob));
@@ -114,7 +108,7 @@ library Hackathon {
   /** Set name */
   function setName(bytes32 key, string memory name) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     StoreSwitch.setField(_tableId, _keyTuple, 0, bytes((name)));
   }
@@ -122,7 +116,7 @@ library Hackathon {
   /** Set name (using the specified store) */
   function setName(IStore _store, bytes32 key, string memory name) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     _store.setField(_tableId, _keyTuple, 0, bytes((name)));
   }
@@ -130,7 +124,7 @@ library Hackathon {
   /** Get the length of name */
   function lengthName(bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 0, getSchema());
     return _byteLength / 1;
@@ -139,7 +133,7 @@ library Hackathon {
   /** Get the length of name (using the specified store) */
   function lengthName(IStore _store, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 0, getSchema());
     return _byteLength / 1;
@@ -148,7 +142,7 @@ library Hackathon {
   /** Get an item of name (unchecked, returns invalid data if index overflows) */
   function getItemName(bytes32 key, uint256 _index) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = StoreSwitch.getFieldSlice(_tableId, _keyTuple, 0, getSchema(), _index * 1, (_index + 1) * 1);
     return (string(_blob));
@@ -157,7 +151,7 @@ library Hackathon {
   /** Get an item of name (using the specified store) (unchecked, returns invalid data if index overflows) */
   function getItemName(IStore _store, bytes32 key, uint256 _index) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 0, getSchema(), _index * 1, (_index + 1) * 1);
     return (string(_blob));
@@ -166,7 +160,7 @@ library Hackathon {
   /** Push a slice to name */
   function pushName(bytes32 key, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     StoreSwitch.pushToField(_tableId, _keyTuple, 0, bytes((_slice)));
   }
@@ -174,7 +168,7 @@ library Hackathon {
   /** Push a slice to name (using the specified store) */
   function pushName(IStore _store, bytes32 key, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     _store.pushToField(_tableId, _keyTuple, 0, bytes((_slice)));
   }
@@ -182,7 +176,7 @@ library Hackathon {
   /** Pop a slice from name */
   function popName(bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     StoreSwitch.popFromField(_tableId, _keyTuple, 0, 1);
   }
@@ -190,7 +184,7 @@ library Hackathon {
   /** Pop a slice from name (using the specified store) */
   function popName(IStore _store, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     _store.popFromField(_tableId, _keyTuple, 0, 1);
   }
@@ -198,7 +192,7 @@ library Hackathon {
   /** Update a slice of name at `_index` */
   function updateName(bytes32 key, uint256 _index, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     StoreSwitch.updateInField(_tableId, _keyTuple, 0, _index * 1, bytes((_slice)));
   }
@@ -206,7 +200,7 @@ library Hackathon {
   /** Update a slice of name (using the specified store) at `_index` */
   function updateName(IStore _store, bytes32 key, uint256 _index, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     _store.updateInField(_tableId, _keyTuple, 0, _index * 1, bytes((_slice)));
   }
@@ -214,7 +208,7 @@ library Hackathon {
   /** Get uri */
   function getUri(bytes32 key) internal view returns (string memory uri) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
     return (string(_blob));
@@ -223,7 +217,7 @@ library Hackathon {
   /** Get uri (using the specified store) */
   function getUri(IStore _store, bytes32 key) internal view returns (string memory uri) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
     return (string(_blob));
@@ -232,7 +226,7 @@ library Hackathon {
   /** Set uri */
   function setUri(bytes32 key, string memory uri) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     StoreSwitch.setField(_tableId, _keyTuple, 1, bytes((uri)));
   }
@@ -240,7 +234,7 @@ library Hackathon {
   /** Set uri (using the specified store) */
   function setUri(IStore _store, bytes32 key, string memory uri) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     _store.setField(_tableId, _keyTuple, 1, bytes((uri)));
   }
@@ -248,7 +242,7 @@ library Hackathon {
   /** Get the length of uri */
   function lengthUri(bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 1, getSchema());
     return _byteLength / 1;
@@ -257,7 +251,7 @@ library Hackathon {
   /** Get the length of uri (using the specified store) */
   function lengthUri(IStore _store, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 1, getSchema());
     return _byteLength / 1;
@@ -266,7 +260,7 @@ library Hackathon {
   /** Get an item of uri (unchecked, returns invalid data if index overflows) */
   function getItemUri(bytes32 key, uint256 _index) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = StoreSwitch.getFieldSlice(_tableId, _keyTuple, 1, getSchema(), _index * 1, (_index + 1) * 1);
     return (string(_blob));
@@ -275,7 +269,7 @@ library Hackathon {
   /** Get an item of uri (using the specified store) (unchecked, returns invalid data if index overflows) */
   function getItemUri(IStore _store, bytes32 key, uint256 _index) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 1, getSchema(), _index * 1, (_index + 1) * 1);
     return (string(_blob));
@@ -284,7 +278,7 @@ library Hackathon {
   /** Push a slice to uri */
   function pushUri(bytes32 key, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     StoreSwitch.pushToField(_tableId, _keyTuple, 1, bytes((_slice)));
   }
@@ -292,7 +286,7 @@ library Hackathon {
   /** Push a slice to uri (using the specified store) */
   function pushUri(IStore _store, bytes32 key, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     _store.pushToField(_tableId, _keyTuple, 1, bytes((_slice)));
   }
@@ -300,7 +294,7 @@ library Hackathon {
   /** Pop a slice from uri */
   function popUri(bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     StoreSwitch.popFromField(_tableId, _keyTuple, 1, 1);
   }
@@ -308,7 +302,7 @@ library Hackathon {
   /** Pop a slice from uri (using the specified store) */
   function popUri(IStore _store, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     _store.popFromField(_tableId, _keyTuple, 1, 1);
   }
@@ -316,7 +310,7 @@ library Hackathon {
   /** Update a slice of uri at `_index` */
   function updateUri(bytes32 key, uint256 _index, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     StoreSwitch.updateInField(_tableId, _keyTuple, 1, _index * 1, bytes((_slice)));
   }
@@ -324,7 +318,7 @@ library Hackathon {
   /** Update a slice of uri (using the specified store) at `_index` */
   function updateUri(IStore _store, bytes32 key, uint256 _index, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     _store.updateInField(_tableId, _keyTuple, 1, _index * 1, bytes((_slice)));
   }
@@ -332,7 +326,7 @@ library Hackathon {
   /** Get phase */
   function getPhase(bytes32 key) internal view returns (uint8 phase) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
     return (uint8(Bytes.slice1(_blob, 0)));
@@ -341,7 +335,7 @@ library Hackathon {
   /** Get phase (using the specified store) */
   function getPhase(IStore _store, bytes32 key) internal view returns (uint8 phase) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
     return (uint8(Bytes.slice1(_blob, 0)));
@@ -350,7 +344,7 @@ library Hackathon {
   /** Set phase */
   function setPhase(bytes32 key, uint8 phase) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     StoreSwitch.setField(_tableId, _keyTuple, 2, abi.encodePacked((phase)));
   }
@@ -358,303 +352,151 @@ library Hackathon {
   /** Set phase (using the specified store) */
   function setPhase(IStore _store, bytes32 key, uint8 phase) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     _store.setField(_tableId, _keyTuple, 2, abi.encodePacked((phase)));
-  }
-
-  /** Get prizes */
-  function getPrizes(bytes32 key) internal view returns (uint256[] memory prizes) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 3);
-    return (SliceLib.getSubslice(_blob, 0, _blob.length).decodeArray_uint256());
-  }
-
-  /** Get prizes (using the specified store) */
-  function getPrizes(IStore _store, bytes32 key) internal view returns (uint256[] memory prizes) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 3);
-    return (SliceLib.getSubslice(_blob, 0, _blob.length).decodeArray_uint256());
-  }
-
-  /** Set prizes */
-  function setPrizes(bytes32 key, uint256[] memory prizes) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    StoreSwitch.setField(_tableId, _keyTuple, 3, EncodeArray.encode((prizes)));
-  }
-
-  /** Set prizes (using the specified store) */
-  function setPrizes(IStore _store, bytes32 key, uint256[] memory prizes) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.setField(_tableId, _keyTuple, 3, EncodeArray.encode((prizes)));
-  }
-
-  /** Get the length of prizes */
-  function lengthPrizes(bytes32 key) internal view returns (uint256) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 3, getSchema());
-    return _byteLength / 32;
-  }
-
-  /** Get the length of prizes (using the specified store) */
-  function lengthPrizes(IStore _store, bytes32 key) internal view returns (uint256) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 3, getSchema());
-    return _byteLength / 32;
-  }
-
-  /** Get an item of prizes (unchecked, returns invalid data if index overflows) */
-  function getItemPrizes(bytes32 key, uint256 _index) internal view returns (uint256) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    bytes memory _blob = StoreSwitch.getFieldSlice(_tableId, _keyTuple, 3, getSchema(), _index * 32, (_index + 1) * 32);
-    return (uint256(Bytes.slice32(_blob, 0)));
-  }
-
-  /** Get an item of prizes (using the specified store) (unchecked, returns invalid data if index overflows) */
-  function getItemPrizes(IStore _store, bytes32 key, uint256 _index) internal view returns (uint256) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 3, getSchema(), _index * 32, (_index + 1) * 32);
-    return (uint256(Bytes.slice32(_blob, 0)));
-  }
-
-  /** Push an element to prizes */
-  function pushPrizes(bytes32 key, uint256 _element) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    StoreSwitch.pushToField(_tableId, _keyTuple, 3, abi.encodePacked((_element)));
-  }
-
-  /** Push an element to prizes (using the specified store) */
-  function pushPrizes(IStore _store, bytes32 key, uint256 _element) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.pushToField(_tableId, _keyTuple, 3, abi.encodePacked((_element)));
-  }
-
-  /** Pop an element from prizes */
-  function popPrizes(bytes32 key) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    StoreSwitch.popFromField(_tableId, _keyTuple, 3, 32);
-  }
-
-  /** Pop an element from prizes (using the specified store) */
-  function popPrizes(IStore _store, bytes32 key) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.popFromField(_tableId, _keyTuple, 3, 32);
-  }
-
-  /** Update an element of prizes at `_index` */
-  function updatePrizes(bytes32 key, uint256 _index, uint256 _element) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    StoreSwitch.updateInField(_tableId, _keyTuple, 3, _index * 32, abi.encodePacked((_element)));
-  }
-
-  /** Update an element of prizes (using the specified store) at `_index` */
-  function updatePrizes(IStore _store, bytes32 key, uint256 _index, uint256 _element) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.updateInField(_tableId, _keyTuple, 3, _index * 32, abi.encodePacked((_element)));
-  }
-
-  /** Get deposit */
-  function getDeposit(bytes32 key) internal view returns (uint256 deposit) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 4);
-    return (uint256(Bytes.slice32(_blob, 0)));
-  }
-
-  /** Get deposit (using the specified store) */
-  function getDeposit(IStore _store, bytes32 key) internal view returns (uint256 deposit) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 4);
-    return (uint256(Bytes.slice32(_blob, 0)));
-  }
-
-  /** Set deposit */
-  function setDeposit(bytes32 key, uint256 deposit) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    StoreSwitch.setField(_tableId, _keyTuple, 4, abi.encodePacked((deposit)));
-  }
-
-  /** Set deposit (using the specified store) */
-  function setDeposit(IStore _store, bytes32 key, uint256 deposit) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.setField(_tableId, _keyTuple, 4, abi.encodePacked((deposit)));
   }
 
   /** Get startTimestamp */
   function getStartTimestamp(bytes32 key) internal view returns (uint256 startTimestamp) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 5);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 3);
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
   /** Get startTimestamp (using the specified store) */
   function getStartTimestamp(IStore _store, bytes32 key) internal view returns (uint256 startTimestamp) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 5);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 3);
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
   /** Set startTimestamp */
   function setStartTimestamp(bytes32 key, uint256 startTimestamp) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 5, abi.encodePacked((startTimestamp)));
+    StoreSwitch.setField(_tableId, _keyTuple, 3, abi.encodePacked((startTimestamp)));
   }
 
   /** Set startTimestamp (using the specified store) */
   function setStartTimestamp(IStore _store, bytes32 key, uint256 startTimestamp) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
-    _store.setField(_tableId, _keyTuple, 5, abi.encodePacked((startTimestamp)));
+    _store.setField(_tableId, _keyTuple, 3, abi.encodePacked((startTimestamp)));
   }
 
   /** Get submitPeriod */
   function getSubmitPeriod(bytes32 key) internal view returns (uint256 submitPeriod) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 6);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 4);
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
   /** Get submitPeriod (using the specified store) */
   function getSubmitPeriod(IStore _store, bytes32 key) internal view returns (uint256 submitPeriod) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 6);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 4);
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
   /** Set submitPeriod */
   function setSubmitPeriod(bytes32 key, uint256 submitPeriod) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 6, abi.encodePacked((submitPeriod)));
+    StoreSwitch.setField(_tableId, _keyTuple, 4, abi.encodePacked((submitPeriod)));
   }
 
   /** Set submitPeriod (using the specified store) */
   function setSubmitPeriod(IStore _store, bytes32 key, uint256 submitPeriod) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
-    _store.setField(_tableId, _keyTuple, 6, abi.encodePacked((submitPeriod)));
+    _store.setField(_tableId, _keyTuple, 4, abi.encodePacked((submitPeriod)));
   }
 
   /** Get votingPeriod */
   function getVotingPeriod(bytes32 key) internal view returns (uint256 votingPeriod) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 7);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 5);
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
   /** Get votingPeriod (using the specified store) */
   function getVotingPeriod(IStore _store, bytes32 key) internal view returns (uint256 votingPeriod) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 7);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 5);
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
   /** Set votingPeriod */
   function setVotingPeriod(bytes32 key, uint256 votingPeriod) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 7, abi.encodePacked((votingPeriod)));
+    StoreSwitch.setField(_tableId, _keyTuple, 5, abi.encodePacked((votingPeriod)));
   }
 
   /** Set votingPeriod (using the specified store) */
   function setVotingPeriod(IStore _store, bytes32 key, uint256 votingPeriod) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
-    _store.setField(_tableId, _keyTuple, 7, abi.encodePacked((votingPeriod)));
+    _store.setField(_tableId, _keyTuple, 5, abi.encodePacked((votingPeriod)));
   }
 
   /** Get withdrawalPeriod */
   function getWithdrawalPeriod(bytes32 key) internal view returns (uint256 withdrawalPeriod) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 8);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 6);
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
   /** Get withdrawalPeriod (using the specified store) */
   function getWithdrawalPeriod(IStore _store, bytes32 key) internal view returns (uint256 withdrawalPeriod) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 8);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 6);
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
   /** Set withdrawalPeriod */
   function setWithdrawalPeriod(bytes32 key, uint256 withdrawalPeriod) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 8, abi.encodePacked((withdrawalPeriod)));
+    StoreSwitch.setField(_tableId, _keyTuple, 6, abi.encodePacked((withdrawalPeriod)));
   }
 
   /** Set withdrawalPeriod (using the specified store) */
   function setWithdrawalPeriod(IStore _store, bytes32 key, uint256 withdrawalPeriod) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
-    _store.setField(_tableId, _keyTuple, 8, abi.encodePacked((withdrawalPeriod)));
+    _store.setField(_tableId, _keyTuple, 6, abi.encodePacked((withdrawalPeriod)));
   }
 
   /** Get the full data */
   function get(bytes32 key) internal view returns (HackathonData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = StoreSwitch.getRecord(_tableId, _keyTuple, getSchema());
     return decode(_blob);
@@ -663,7 +505,7 @@ library Hackathon {
   /** Get the full data (using the specified store) */
   function get(IStore _store, bytes32 key) internal view returns (HackathonData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = _store.getRecord(_tableId, _keyTuple, getSchema());
     return decode(_blob);
@@ -675,27 +517,15 @@ library Hackathon {
     string memory name,
     string memory uri,
     uint8 phase,
-    uint256[] memory prizes,
-    uint256 deposit,
     uint256 startTimestamp,
     uint256 submitPeriod,
     uint256 votingPeriod,
     uint256 withdrawalPeriod
   ) internal {
-    bytes memory _data = encode(
-      name,
-      uri,
-      phase,
-      prizes,
-      deposit,
-      startTimestamp,
-      submitPeriod,
-      votingPeriod,
-      withdrawalPeriod
-    );
+    bytes memory _data = encode(name, uri, phase, startTimestamp, submitPeriod, votingPeriod, withdrawalPeriod);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     StoreSwitch.setRecord(_tableId, _keyTuple, _data);
   }
@@ -707,27 +537,15 @@ library Hackathon {
     string memory name,
     string memory uri,
     uint8 phase,
-    uint256[] memory prizes,
-    uint256 deposit,
     uint256 startTimestamp,
     uint256 submitPeriod,
     uint256 votingPeriod,
     uint256 withdrawalPeriod
   ) internal {
-    bytes memory _data = encode(
-      name,
-      uri,
-      phase,
-      prizes,
-      deposit,
-      startTimestamp,
-      submitPeriod,
-      votingPeriod,
-      withdrawalPeriod
-    );
+    bytes memory _data = encode(name, uri, phase, startTimestamp, submitPeriod, votingPeriod, withdrawalPeriod);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     _store.setRecord(_tableId, _keyTuple, _data);
   }
@@ -739,8 +557,6 @@ library Hackathon {
       _table.name,
       _table.uri,
       _table.phase,
-      _table.prizes,
-      _table.deposit,
       _table.startTimestamp,
       _table.submitPeriod,
       _table.votingPeriod,
@@ -756,8 +572,6 @@ library Hackathon {
       _table.name,
       _table.uri,
       _table.phase,
-      _table.prizes,
-      _table.deposit,
       _table.startTimestamp,
       _table.submitPeriod,
       _table.votingPeriod,
@@ -767,26 +581,24 @@ library Hackathon {
 
   /** Decode the tightly packed blob using this table's schema */
   function decode(bytes memory _blob) internal view returns (HackathonData memory _table) {
-    // 161 is the total byte length of static data
-    PackedCounter _encodedLengths = PackedCounter.wrap(Bytes.slice32(_blob, 161));
+    // 129 is the total byte length of static data
+    PackedCounter _encodedLengths = PackedCounter.wrap(Bytes.slice32(_blob, 129));
 
     _table.phase = (uint8(Bytes.slice1(_blob, 0)));
 
-    _table.deposit = (uint256(Bytes.slice32(_blob, 1)));
+    _table.startTimestamp = (uint256(Bytes.slice32(_blob, 1)));
 
-    _table.startTimestamp = (uint256(Bytes.slice32(_blob, 33)));
+    _table.submitPeriod = (uint256(Bytes.slice32(_blob, 33)));
 
-    _table.submitPeriod = (uint256(Bytes.slice32(_blob, 65)));
+    _table.votingPeriod = (uint256(Bytes.slice32(_blob, 65)));
 
-    _table.votingPeriod = (uint256(Bytes.slice32(_blob, 97)));
-
-    _table.withdrawalPeriod = (uint256(Bytes.slice32(_blob, 129)));
+    _table.withdrawalPeriod = (uint256(Bytes.slice32(_blob, 97)));
 
     // Store trims the blob if dynamic fields are all empty
-    if (_blob.length > 161) {
+    if (_blob.length > 129) {
       uint256 _start;
       // skip static data length + dynamic lengths word
-      uint256 _end = 193;
+      uint256 _end = 161;
 
       _start = _end;
       _end += _encodedLengths.atIndex(0);
@@ -795,10 +607,6 @@ library Hackathon {
       _start = _end;
       _end += _encodedLengths.atIndex(1);
       _table.uri = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
-
-      _start = _end;
-      _end += _encodedLengths.atIndex(2);
-      _table.prizes = (SliceLib.getSubslice(_blob, _start, _end).decodeArray_uint256());
     }
   }
 
@@ -807,44 +615,39 @@ library Hackathon {
     string memory name,
     string memory uri,
     uint8 phase,
-    uint256[] memory prizes,
-    uint256 deposit,
     uint256 startTimestamp,
     uint256 submitPeriod,
     uint256 votingPeriod,
     uint256 withdrawalPeriod
   ) internal view returns (bytes memory) {
-    uint40[] memory _counters = new uint40[](3);
+    uint40[] memory _counters = new uint40[](2);
     _counters[0] = uint40(bytes(name).length);
     _counters[1] = uint40(bytes(uri).length);
-    _counters[2] = uint40(prizes.length * 32);
     PackedCounter _encodedLengths = PackedCounterLib.pack(_counters);
 
     return
       abi.encodePacked(
         phase,
-        deposit,
         startTimestamp,
         submitPeriod,
         votingPeriod,
         withdrawalPeriod,
         _encodedLengths.unwrap(),
         bytes((name)),
-        bytes((uri)),
-        EncodeArray.encode((prizes))
+        bytes((uri))
       );
   }
 
   /** Encode keys as a bytes32 array using this table's schema */
   function encodeKeyTuple(bytes32 key) internal pure returns (bytes32[] memory _keyTuple) {
     _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
   }
 
   /* Delete all data for given keys */
   function deleteRecord(bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     StoreSwitch.deleteRecord(_tableId, _keyTuple);
   }
@@ -852,7 +655,7 @@ library Hackathon {
   /* Delete all data for given keys (using the specified store) */
   function deleteRecord(IStore _store, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32((key));
 
     _store.deleteRecord(_tableId, _keyTuple);
   }

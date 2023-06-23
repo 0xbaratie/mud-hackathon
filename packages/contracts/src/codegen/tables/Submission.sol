@@ -79,8 +79,8 @@ library Submission {
   /** Get name */
   function getName(bytes32 hackathonId, address submitter) internal view returns (string memory name) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
     return (string(_blob));
@@ -89,8 +89,8 @@ library Submission {
   /** Get name (using the specified store) */
   function getName(IStore _store, bytes32 hackathonId, address submitter) internal view returns (string memory name) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
     return (string(_blob));
@@ -99,8 +99,8 @@ library Submission {
   /** Set name */
   function setName(bytes32 hackathonId, address submitter, string memory name) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     StoreSwitch.setField(_tableId, _keyTuple, 0, bytes((name)));
   }
@@ -108,8 +108,8 @@ library Submission {
   /** Set name (using the specified store) */
   function setName(IStore _store, bytes32 hackathonId, address submitter, string memory name) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     _store.setField(_tableId, _keyTuple, 0, bytes((name)));
   }
@@ -117,8 +117,8 @@ library Submission {
   /** Get the length of name */
   function lengthName(bytes32 hackathonId, address submitter) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 0, getSchema());
     return _byteLength / 1;
@@ -127,8 +127,8 @@ library Submission {
   /** Get the length of name (using the specified store) */
   function lengthName(IStore _store, bytes32 hackathonId, address submitter) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 0, getSchema());
     return _byteLength / 1;
@@ -137,8 +137,8 @@ library Submission {
   /** Get an item of name (unchecked, returns invalid data if index overflows) */
   function getItemName(bytes32 hackathonId, address submitter, uint256 _index) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     bytes memory _blob = StoreSwitch.getFieldSlice(_tableId, _keyTuple, 0, getSchema(), _index * 1, (_index + 1) * 1);
     return (string(_blob));
@@ -152,8 +152,8 @@ library Submission {
     uint256 _index
   ) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 0, getSchema(), _index * 1, (_index + 1) * 1);
     return (string(_blob));
@@ -162,8 +162,8 @@ library Submission {
   /** Push a slice to name */
   function pushName(bytes32 hackathonId, address submitter, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     StoreSwitch.pushToField(_tableId, _keyTuple, 0, bytes((_slice)));
   }
@@ -171,8 +171,8 @@ library Submission {
   /** Push a slice to name (using the specified store) */
   function pushName(IStore _store, bytes32 hackathonId, address submitter, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     _store.pushToField(_tableId, _keyTuple, 0, bytes((_slice)));
   }
@@ -180,8 +180,8 @@ library Submission {
   /** Pop a slice from name */
   function popName(bytes32 hackathonId, address submitter) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     StoreSwitch.popFromField(_tableId, _keyTuple, 0, 1);
   }
@@ -189,8 +189,8 @@ library Submission {
   /** Pop a slice from name (using the specified store) */
   function popName(IStore _store, bytes32 hackathonId, address submitter) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     _store.popFromField(_tableId, _keyTuple, 0, 1);
   }
@@ -198,8 +198,8 @@ library Submission {
   /** Update a slice of name at `_index` */
   function updateName(bytes32 hackathonId, address submitter, uint256 _index, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     StoreSwitch.updateInField(_tableId, _keyTuple, 0, _index * 1, bytes((_slice)));
   }
@@ -213,8 +213,8 @@ library Submission {
     string memory _slice
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     _store.updateInField(_tableId, _keyTuple, 0, _index * 1, bytes((_slice)));
   }
@@ -222,8 +222,8 @@ library Submission {
   /** Get uri */
   function getUri(bytes32 hackathonId, address submitter) internal view returns (string memory uri) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
     return (string(_blob));
@@ -232,8 +232,8 @@ library Submission {
   /** Get uri (using the specified store) */
   function getUri(IStore _store, bytes32 hackathonId, address submitter) internal view returns (string memory uri) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
     return (string(_blob));
@@ -242,8 +242,8 @@ library Submission {
   /** Set uri */
   function setUri(bytes32 hackathonId, address submitter, string memory uri) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     StoreSwitch.setField(_tableId, _keyTuple, 1, bytes((uri)));
   }
@@ -251,8 +251,8 @@ library Submission {
   /** Set uri (using the specified store) */
   function setUri(IStore _store, bytes32 hackathonId, address submitter, string memory uri) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     _store.setField(_tableId, _keyTuple, 1, bytes((uri)));
   }
@@ -260,8 +260,8 @@ library Submission {
   /** Get the length of uri */
   function lengthUri(bytes32 hackathonId, address submitter) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 1, getSchema());
     return _byteLength / 1;
@@ -270,8 +270,8 @@ library Submission {
   /** Get the length of uri (using the specified store) */
   function lengthUri(IStore _store, bytes32 hackathonId, address submitter) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 1, getSchema());
     return _byteLength / 1;
@@ -280,8 +280,8 @@ library Submission {
   /** Get an item of uri (unchecked, returns invalid data if index overflows) */
   function getItemUri(bytes32 hackathonId, address submitter, uint256 _index) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     bytes memory _blob = StoreSwitch.getFieldSlice(_tableId, _keyTuple, 1, getSchema(), _index * 1, (_index + 1) * 1);
     return (string(_blob));
@@ -295,8 +295,8 @@ library Submission {
     uint256 _index
   ) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 1, getSchema(), _index * 1, (_index + 1) * 1);
     return (string(_blob));
@@ -305,8 +305,8 @@ library Submission {
   /** Push a slice to uri */
   function pushUri(bytes32 hackathonId, address submitter, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     StoreSwitch.pushToField(_tableId, _keyTuple, 1, bytes((_slice)));
   }
@@ -314,8 +314,8 @@ library Submission {
   /** Push a slice to uri (using the specified store) */
   function pushUri(IStore _store, bytes32 hackathonId, address submitter, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     _store.pushToField(_tableId, _keyTuple, 1, bytes((_slice)));
   }
@@ -323,8 +323,8 @@ library Submission {
   /** Pop a slice from uri */
   function popUri(bytes32 hackathonId, address submitter) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     StoreSwitch.popFromField(_tableId, _keyTuple, 1, 1);
   }
@@ -332,8 +332,8 @@ library Submission {
   /** Pop a slice from uri (using the specified store) */
   function popUri(IStore _store, bytes32 hackathonId, address submitter) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     _store.popFromField(_tableId, _keyTuple, 1, 1);
   }
@@ -341,8 +341,8 @@ library Submission {
   /** Update a slice of uri at `_index` */
   function updateUri(bytes32 hackathonId, address submitter, uint256 _index, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     StoreSwitch.updateInField(_tableId, _keyTuple, 1, _index * 1, bytes((_slice)));
   }
@@ -356,8 +356,8 @@ library Submission {
     string memory _slice
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     _store.updateInField(_tableId, _keyTuple, 1, _index * 1, bytes((_slice)));
   }
@@ -365,8 +365,8 @@ library Submission {
   /** Get votes */
   function getVotes(bytes32 hackathonId, address submitter) internal view returns (uint256 votes) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
     return (uint256(Bytes.slice32(_blob, 0)));
@@ -375,8 +375,8 @@ library Submission {
   /** Get votes (using the specified store) */
   function getVotes(IStore _store, bytes32 hackathonId, address submitter) internal view returns (uint256 votes) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
     return (uint256(Bytes.slice32(_blob, 0)));
@@ -385,8 +385,8 @@ library Submission {
   /** Set votes */
   function setVotes(bytes32 hackathonId, address submitter, uint256 votes) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     StoreSwitch.setField(_tableId, _keyTuple, 2, abi.encodePacked((votes)));
   }
@@ -394,8 +394,8 @@ library Submission {
   /** Set votes (using the specified store) */
   function setVotes(IStore _store, bytes32 hackathonId, address submitter, uint256 votes) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     _store.setField(_tableId, _keyTuple, 2, abi.encodePacked((votes)));
   }
@@ -403,8 +403,8 @@ library Submission {
   /** Get the full data */
   function get(bytes32 hackathonId, address submitter) internal view returns (SubmissionData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     bytes memory _blob = StoreSwitch.getRecord(_tableId, _keyTuple, getSchema());
     return decode(_blob);
@@ -417,8 +417,8 @@ library Submission {
     address submitter
   ) internal view returns (SubmissionData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     bytes memory _blob = _store.getRecord(_tableId, _keyTuple, getSchema());
     return decode(_blob);
@@ -429,8 +429,8 @@ library Submission {
     bytes memory _data = encode(name, uri, votes);
 
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     StoreSwitch.setRecord(_tableId, _keyTuple, _data);
   }
@@ -447,8 +447,8 @@ library Submission {
     bytes memory _data = encode(name, uri, votes);
 
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     _store.setRecord(_tableId, _keyTuple, _data);
   }
@@ -499,15 +499,15 @@ library Submission {
   /** Encode keys as a bytes32 array using this table's schema */
   function encodeKeyTuple(bytes32 hackathonId, address submitter) internal pure returns (bytes32[] memory _keyTuple) {
     _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
   }
 
   /* Delete all data for given keys */
   function deleteRecord(bytes32 hackathonId, address submitter) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     StoreSwitch.deleteRecord(_tableId, _keyTuple);
   }
@@ -515,8 +515,8 @@ library Submission {
   /* Delete all data for given keys (using the specified store) */
   function deleteRecord(IStore _store, bytes32 hackathonId, address submitter) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+    _keyTuple[0] = bytes32((hackathonId));
+    _keyTuple[1] = bytes32(uint256(uint160((submitter))));
 
     _store.deleteRecord(_tableId, _keyTuple);
   }
