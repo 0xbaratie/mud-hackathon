@@ -2,7 +2,6 @@ import { mudConfig } from "@latticexyz/world/register";
 
 export default mudConfig({
   tables: {
-    //TODO delete this table later
     Counter: {
       keySchema: {},
       schema: "uint32",
@@ -15,17 +14,15 @@ export default mudConfig({
       },
     },
     Owner: {
-      keySchema: {
-        owner: "address",
-      },
       schema: {
         isActive: "bool",
+      },
+      keySchema: {
+        owner: "address",
       },
     },
     Hackathon: {
       schema: {
-        name: "string",
-        uri: "string",
         phase: "uint8",
         startTimestamp: "uint256",
         submitPeriod: "uint256",
@@ -35,28 +32,26 @@ export default mudConfig({
     },
     HackathonPrize: {
       schema: {
-        prizes: "uint256[]",
         deposit: "uint256",
+        prizes: "uint256[]",
       },
     },
     Submission: {
+      schema: {
+        votes: "uint256",
+      },
       keySchema: {
         hackathonId: "bytes32",
         submitter: "address",
       },
-      schema: {
-        name: "string",
-        uri: "string",
-        votes: "uint256",
-      },
     },
     Vote: {
+      schema: {
+        voted: "bool",
+      },
       keySchema: {
         hackathonId: "uint256",
         submitter: "address",
-      },
-      schema: {
-        voted: "bool",
       },
     },
   },
