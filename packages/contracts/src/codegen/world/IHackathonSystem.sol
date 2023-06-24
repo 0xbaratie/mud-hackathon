@@ -20,24 +20,10 @@ interface IHackathonSystem {
     uint256 _submitPeriod,
     uint256 _votingPeriod,
     uint256 _withdrawalPeriod,
+    uint8 _prizeRank,
     string memory _name,
-    string memory _uri,
-    uint8 _prizeRank
+    string memory _uri
   ) external;
-
-  function setStartTimestamp(bytes32 _hackathonId, uint256 _startTimestamp) external;
-
-  function setSubmitPeriod(bytes32 _hackathonId, uint256 _submitPeriod) external;
-
-  function setVotingPeriod(bytes32 _hackathonId, uint256 _votingPeriod) external;
-
-  function setWithdrawalPeriod(bytes32 _hackathonId, uint256 _withdrawalPeriod) external;
-
-  function setPrizeRank(bytes32 _hackathonId, uint8 _prizeRank) external;
-
-  function setName(bytes32 _hackathonId, string memory _name) external;
-
-  function setUri(bytes32 _hackathonId, string memory _uri) external;
 
   function fixHackathon(bytes32 _hackathonId) external;
 

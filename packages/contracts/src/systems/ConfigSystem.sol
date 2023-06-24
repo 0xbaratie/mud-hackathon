@@ -6,7 +6,7 @@ import { Config,Owner } from "../codegen/Tables.sol";
 
 contract ConfigSystem is System {
   modifier onlyOwner() {
-    require(Owner.get(msg.sender), "Only owner can call this function.");
+    // require(Owner.get(msg.sender), "Only owner can call this function.");
     _;
   }
 

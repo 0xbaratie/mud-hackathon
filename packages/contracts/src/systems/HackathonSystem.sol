@@ -6,6 +6,7 @@ import { Hackathon,Config,Owner,HackathonData,HackathonPrize,Submission } from "
 import { SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 enum Phase {
+  NONE,
   PREPARE_PRIZE,
   FIXED_PRIZE,
   HACKING,
@@ -61,9 +62,9 @@ contract HackathonSystem is System {
     uint256 _submitPeriod,
     uint256 _votingPeriod,
     uint256 _withdrawalPeriod,
+    uint8 _prizeRank,
     string memory _name,
-    string memory _uri,
-    uint8 _prizeRank
+    string memory _uri
   ) public onlyOwner onlyPhasePrepare(_hackathonId) {
     Hackathon.set(_hackathonId,HackathonData(
       uint8(Phase.PREPARE_PRIZE),
@@ -75,34 +76,6 @@ contract HackathonSystem is System {
       _name,
       _uri
     ));
-  }
-
-  function setStartTimestamp(bytes32 _hackathonId, uint256 _startTimestamp) public onlyOwner onlyPhasePrepare(_hackathonId) {
-    Hackathon.setStartTimestamp(_hackathonId,_startTimestamp);
-  }
-
-  function setSubmitPeriod(bytes32 _hackathonId, uint256 _submitPeriod) public onlyOwner onlyPhasePrepare(_hackathonId) {
-    Hackathon.setSubmitPeriod(_hackathonId,_submitPeriod);
-  }
-
-  function setVotingPeriod(bytes32 _hackathonId, uint256 _votingPeriod) public onlyOwner onlyPhasePrepare(_hackathonId) {
-    Hackathon.setVotingPeriod(_hackathonId,_votingPeriod);
-  }
-
-  function setWithdrawalPeriod(bytes32 _hackathonId, uint256 _withdrawalPeriod) public onlyOwner onlyPhasePrepare(_hackathonId) {
-    Hackathon.setWithdrawalPeriod(_hackathonId,_withdrawalPeriod);
-  }
-
-  function setPrizeRank(bytes32 _hackathonId, uint8 _prizeRank) public onlyOwner onlyPhasePrepare(_hackathonId) {
-    Hackathon.setPrizeRank(_hackathonId,_prizeRank);
-  }
-
-  function setName(bytes32 _hackathonId, string memory _name) public onlyOwner onlyPhasePrepare(_hackathonId) {
-    Hackathon.setName(_hackathonId,_name);
-  }
-
-  function setUri(bytes32 _hackathonId, string memory _uri) public onlyOwner onlyPhasePrepare(_hackathonId) {
-    Hackathon.setUri(_hackathonId,_uri);
   }
 
   function fixHackathon(bytes32 _hackathonId) public onlyOwner onlyPhasePrepare(_hackathonId){
@@ -122,10 +95,11 @@ contract HackathonSystem is System {
       require(_hackathonData.startTimestamp + _hackathonData.submitPeriod < block.timestamp, "SubmitPeriod is not passed.");
       Hackathon.setPhase(_hackathonId,uint8(Phase.VOTING));
 
-    // }else if(_hackathonData.phase == uint8(Phase.VOTING)){
-    //   // startTimestamp + submitPeriod + votingPeriod is past
-    //   require(_hackathonData.startTimestamp + _hackathonData.submitPeriod + _hackathonData.votingPeriod < block.timestamp, "VotingPeriod is not passed.");
-    //   Hackathon.setPhase(_hackathonId,uint8(Phase.WITHDRAWING));
+    }else if(_hackathonData.phase == uint8(Phase.VOTING)){
+      // startTimestamp + submitPeriod + votingPeriod is past
+      require(_hackathonData.startTimestamp + _hackathonData.submitPeriod + _hackathonData.votingPeriod < block.timestamp, "VotingPeriod is not passed.");
+      Hackathon.setPhase(_hackathonId,uint8(Phase.WITHDRAWING));
+      _finishVoting(_hackathonId);
 
     }else if(_hackathonData.phase == uint8(Phase.WITHDRAWING)){
       // startTimestamp + submitPeriod + votingPeriod + withdrawalPeriod is past
@@ -142,12 +116,7 @@ contract HackathonSystem is System {
     uint256 votes;
   }
 
-  function finishVoting(bytes32 _hackathonId) public {
-    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
-    require(_hackathonData.phase == uint8(Phase.VOTING), "Hackathon is not in VOTING phase.");
-    require(_hackathonData.startTimestamp + _hackathonData.submitPeriod + _hackathonData.votingPeriod < block.timestamp, "VotingPeriod is not passed.");
-    Hackathon.setPhase(_hackathonId,uint8(Phase.WITHDRAWING));
-
+  function _finishVoting(bytes32 _hackathonId) internal {
     //judge and set winners by votes, the number of winners is _hackathonData.prizeRank
     address[] memory _submitters = HackathonPrize.getSubmitters(_hackathonId);
     uint8 _submittersLength = uint8(_submitters.length);
@@ -168,7 +137,7 @@ contract HackathonSystem is System {
     }
 
     //set winners
-    uint8 _winnerCount = _hackathonData.prizeRank;
+    uint8 _winnerCount = Hackathon.get(_hackathonId).prizeRank;
     for(uint8 i = _winnerCount; i < _submittersLength; i++){
       if(_submittersWithVotes[i - 1].votes == _submittersWithVotes[i].votes){
         _winnerCount++;
