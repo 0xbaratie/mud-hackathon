@@ -28,17 +28,23 @@ export default mudConfig({
         submitPeriod: "uint256",
         votingPeriod: "uint256",
         withdrawalPeriod: "uint256",
+        prizeRank: "uint8", // prize is awarded to top N submitters
+        name: "string",
+        uri: "string",
       },
     },
     HackathonPrize: {
       schema: {
         deposit: "uint256",
-        prizes: "uint256[]",
+        submitters: "address[]",
       },
     },
     Submission: {
       schema: {
         votes: "uint256",
+        withdrawalPrize: "uint256",
+        name: "string",
+        uri: "string",
       },
       keySchema: {
         hackathonId: "bytes32",
@@ -51,7 +57,7 @@ export default mudConfig({
       },
       keySchema: {
         hackathonId: "uint256",
-        submitter: "address",
+        voter: "address",
       },
     },
   },
