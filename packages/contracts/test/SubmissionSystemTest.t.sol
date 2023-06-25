@@ -19,12 +19,11 @@ contract SubmissionSystemTest is MudV2Test {
 
     //set prize token
     mock = new MockERC20("Mock", "Mock", 6);
-    world.setPrizeToken(address(mock));
     deal(address(mock), address(this), 100000e6);
   }
 
   function testSubmit() public {
-    world.createHackathon(block.timestamp + 1,2,3,4,1,"test1","uri1");
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1");
 
     vm.expectRevert(bytes("Hackathon is not in SUBMISSION phase."));
     world.submit(bytes32(uint256(1)), "submit1", "submitUri1");
@@ -62,7 +61,7 @@ contract SubmissionSystemTest is MudV2Test {
   }
 
   function testVoteRevert() public {
-    world.createHackathon(block.timestamp + 1,2,3,4,1,"test1","uri1");
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1");
 
     vm.expectRevert(bytes("Hackathon is not in VOTING phase."));
     world.vote(bytes32(uint256(1)), address(this));
@@ -85,7 +84,7 @@ contract SubmissionSystemTest is MudV2Test {
   }
 
   function testVoteSuccess() public {
-    world.createHackathon(block.timestamp + 1,2,3,4,1,"test1","uri1");
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1");
 
     //fix
     mock.approve(address(world), 100000e6);    
@@ -108,7 +107,7 @@ contract SubmissionSystemTest is MudV2Test {
   }
 
   function testWithdrawPrize() public {
-    world.createHackathon(block.timestamp + 1,2,3,4,1,"test1","uri1");
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1");
 
     //fix
     mock.approve(address(world), 100000e6);    

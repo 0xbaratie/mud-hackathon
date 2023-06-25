@@ -54,7 +54,6 @@ contract SubmissionSystem is System {
     uint256 _deposit = HackathonPrize.getDeposit(_hackathonId);
     HackathonPrize.setDeposit(_hackathonId, _deposit - _prize);
 
-    address _prizeToken = Config.getPrizeToken();
-    IERC20(_prizeToken).safeTransfer(msg.sender, _prize);
+    IERC20(_hackathonData.prizeToken).safeTransfer(msg.sender, _prize);
   }
 }

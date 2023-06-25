@@ -20,17 +20,11 @@ import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCou
 bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16(""), bytes16("Config")));
 bytes32 constant ConfigTableId = _tableId;
 
-struct ConfigData {
-  address prizeToken;
-  bytes32 maxHackathonId;
-}
-
 library Config {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](2);
-    _schema[0] = SchemaType.ADDRESS;
-    _schema[1] = SchemaType.BYTES32;
+    SchemaType[] memory _schema = new SchemaType[](1);
+    _schema[0] = SchemaType.BYTES32;
 
     return SchemaLib.encode(_schema);
   }
@@ -43,9 +37,8 @@ library Config {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](2);
-    _fieldNames[0] = "prizeToken";
-    _fieldNames[1] = "maxHackathonId";
+    string[] memory _fieldNames = new string[](1);
+    _fieldNames[0] = "maxHackathonId";
     return ("Config", _fieldNames);
   }
 
@@ -71,120 +64,39 @@ library Config {
     _store.setMetadata(_tableId, _tableName, _fieldNames);
   }
 
-  /** Get prizeToken */
-  function getPrizeToken() internal view returns (address prizeToken) {
+  /** Get maxHackathonId */
+  function get() internal view returns (bytes32 maxHackathonId) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
-    return (address(Bytes.slice20(_blob, 0)));
-  }
-
-  /** Get prizeToken (using the specified store) */
-  function getPrizeToken(IStore _store) internal view returns (address prizeToken) {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
-    return (address(Bytes.slice20(_blob, 0)));
-  }
-
-  /** Set prizeToken */
-  function setPrizeToken(address prizeToken) internal {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((prizeToken)));
-  }
-
-  /** Set prizeToken (using the specified store) */
-  function setPrizeToken(IStore _store, address prizeToken) internal {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((prizeToken)));
-  }
-
-  /** Get maxHackathonId */
-  function getMaxHackathonId() internal view returns (bytes32 maxHackathonId) {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
     return (Bytes.slice32(_blob, 0));
   }
 
   /** Get maxHackathonId (using the specified store) */
-  function getMaxHackathonId(IStore _store) internal view returns (bytes32 maxHackathonId) {
+  function get(IStore _store) internal view returns (bytes32 maxHackathonId) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
     return (Bytes.slice32(_blob, 0));
   }
 
   /** Set maxHackathonId */
-  function setMaxHackathonId(bytes32 maxHackathonId) internal {
+  function set(bytes32 maxHackathonId) internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
-    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((maxHackathonId)));
+    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((maxHackathonId)));
   }
 
   /** Set maxHackathonId (using the specified store) */
-  function setMaxHackathonId(IStore _store, bytes32 maxHackathonId) internal {
+  function set(IStore _store, bytes32 maxHackathonId) internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
-    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((maxHackathonId)));
-  }
-
-  /** Get the full data */
-  function get() internal view returns (ConfigData memory _table) {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    bytes memory _blob = StoreSwitch.getRecord(_tableId, _keyTuple, getSchema());
-    return decode(_blob);
-  }
-
-  /** Get the full data (using the specified store) */
-  function get(IStore _store) internal view returns (ConfigData memory _table) {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    bytes memory _blob = _store.getRecord(_tableId, _keyTuple, getSchema());
-    return decode(_blob);
-  }
-
-  /** Set the full data using individual values */
-  function set(address prizeToken, bytes32 maxHackathonId) internal {
-    bytes memory _data = encode(prizeToken, maxHackathonId);
-
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    StoreSwitch.setRecord(_tableId, _keyTuple, _data);
-  }
-
-  /** Set the full data using individual values (using the specified store) */
-  function set(IStore _store, address prizeToken, bytes32 maxHackathonId) internal {
-    bytes memory _data = encode(prizeToken, maxHackathonId);
-
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    _store.setRecord(_tableId, _keyTuple, _data);
-  }
-
-  /** Set the full data using the data struct */
-  function set(ConfigData memory _table) internal {
-    set(_table.prizeToken, _table.maxHackathonId);
-  }
-
-  /** Set the full data using the data struct (using the specified store) */
-  function set(IStore _store, ConfigData memory _table) internal {
-    set(_store, _table.prizeToken, _table.maxHackathonId);
-  }
-
-  /** Decode the tightly packed blob using this table's schema */
-  function decode(bytes memory _blob) internal pure returns (ConfigData memory _table) {
-    _table.prizeToken = (address(Bytes.slice20(_blob, 0)));
-
-    _table.maxHackathonId = (Bytes.slice32(_blob, 20));
+    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((maxHackathonId)));
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(address prizeToken, bytes32 maxHackathonId) internal view returns (bytes memory) {
-    return abi.encodePacked(prizeToken, maxHackathonId);
+  function encode(bytes32 maxHackathonId) internal view returns (bytes memory) {
+    return abi.encodePacked(maxHackathonId);
   }
 
   /** Encode keys as a bytes32 array using this table's schema */

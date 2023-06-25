@@ -10,13 +10,13 @@ export default mudConfig({
     Config: {
       keySchema: {},
       schema: {
-        prizeToken: "address",
         maxHackathonId: "bytes32",
       },
     },
     Hackathon: {
       schema: {
         owner: "address",
+        prizeToken: "address",
         phase: "uint8",
         startTimestamp: "uint256",
         submitPeriod: "uint256",

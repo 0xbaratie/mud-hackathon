@@ -25,7 +25,6 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
-          prizeToken: RecsType.String,
           maxHackathonId: RecsType.String,
         },
         {
@@ -42,6 +41,7 @@ export function defineContractComponents(world: World) {
         world,
         {
           owner: RecsType.String,
+          prizeToken: RecsType.String,
           phase: RecsType.Number,
           startTimestamp: RecsType.BigInt,
           submitPeriod: RecsType.BigInt,

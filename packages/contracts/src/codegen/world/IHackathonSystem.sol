@@ -5,6 +5,7 @@ pragma solidity >=0.8.0;
 
 interface IHackathonSystem {
   function createHackathon(
+    address _prizeToken,
     uint256 _startTimestamp,
     uint256 _submitPeriod,
     uint256 _votingPeriod,
@@ -16,6 +17,7 @@ interface IHackathonSystem {
 
   function updateHackathon(
     bytes32 _hackathonId,
+    address _prizeToken,
     uint256 _startTimestamp,
     uint256 _submitPeriod,
     uint256 _votingPeriod,

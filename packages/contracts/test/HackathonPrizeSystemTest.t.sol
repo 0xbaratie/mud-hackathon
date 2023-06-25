@@ -19,12 +19,11 @@ contract HackathonPrizeSystemTest is MudV2Test {
 
     //set prize token
     mock = new MockERC20("Mock", "Mock", 6);
-    world.setPrizeToken(address(mock));
     deal(address(mock), address(this), 100000e6);
   }
 
   function testDepositPrize() public {
-    world.createHackathon(1,2,3,4,1,"test1","uri1");
+    world.createHackathon(address(mock),1,2,3,4,1,"test1","uri1");
 
     mock.approve(address(world), 100000e6);    
     world.depositPrize(bytes32(uint256(1)), 1000e6);

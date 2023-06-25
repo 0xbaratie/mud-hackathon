@@ -31,11 +31,12 @@ contract HackathonSystem is System {
   }
 
   function _incrementHackathonId() internal returns(bytes32 newHackathonId_){
-    newHackathonId_ = bytes32(uint256(Config.getMaxHackathonId()) + 1);
-    Config.setMaxHackathonId(newHackathonId_);
+    newHackathonId_ = bytes32(uint256(Config.get()) + 1);
+    Config.set(newHackathonId_);
   }
 
   function createHackathon(
+    address _prizeToken,
     uint256 _startTimestamp,
     uint256 _submitPeriod,
     uint256 _votingPeriod,
@@ -46,6 +47,7 @@ contract HackathonSystem is System {
   ) public {
     Hackathon.set(_incrementHackathonId(),HackathonData(
       msg.sender,
+      _prizeToken,
       uint8(Phase.PREPARE_PRIZE),
       _startTimestamp,
       _submitPeriod,
@@ -59,6 +61,7 @@ contract HackathonSystem is System {
   
   function updateHackathon(
     bytes32 _hackathonId,
+    address _prizeToken,
     uint256 _startTimestamp,
     uint256 _submitPeriod,
     uint256 _votingPeriod,
@@ -69,6 +72,7 @@ contract HackathonSystem is System {
   ) public onlyOwner onlyPhasePrepare(_hackathonId) {
     Hackathon.set(_hackathonId,HackathonData(
       msg.sender,
+      _prizeToken,
       uint8(Phase.PREPARE_PRIZE),
       _startTimestamp,
       _submitPeriod,
@@ -163,8 +167,7 @@ contract HackathonSystem is System {
     uint256 _deposit = HackathonPrize.getDeposit(_hackathonId);
     if(_deposit > 0){
       HackathonPrize.setDeposit(_hackathonId,0);
-      address _prizeToken = Config.getPrizeToken();
-      IERC20(_prizeToken).safeTransfer(msg.sender, _deposit);
+      IERC20(_hackathonData.prizeToken).safeTransfer(msg.sender, _deposit);
     }
 
   }

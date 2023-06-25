@@ -30,13 +30,13 @@ contract HackathonSystemTest is MudV2Test {
 
     //set prize token
     mock = new MockERC20("Mock", "Mock", 6);
-    world.setPrizeToken(address(mock));
     deal(address(mock), address(this), 100000e6);
   }
 
   function testCreateHackathon() public {
-    assertEq(Config.getMaxHackathonId(world), bytes32(uint256(0)));
+    assertEq(Config.get(world), bytes32(uint256(0)));
     world.createHackathon(
+      address(mock),
       1,
       2,
       3,
@@ -47,6 +47,8 @@ contract HackathonSystemTest is MudV2Test {
     );
 
     HackathonData memory _hackathon = Hackathon.get(world, bytes32(uint256(1)));
+    assertEq(_hackathon.owner, address(this));
+    assertEq(_hackathon.prizeToken, address(mock));
     assertEq(_hackathon.phase, uint8(Phase.PREPARE_PRIZE));
     assertEq(_hackathon.startTimestamp, 1);
     assertEq(_hackathon.submitPeriod, 2);
@@ -55,10 +57,12 @@ contract HackathonSystemTest is MudV2Test {
     assertEq(_hackathon.name, "test1");
     assertEq(_hackathon.uri, "uri1");
     assertEq(_hackathon.prizeRank, 1);
-    assertEq(Config.getMaxHackathonId(world), bytes32(uint256(1)));
+    assertEq(Config.get(world), bytes32(uint256(1)));
 
-    //increment
+    //increment by another
+    vm.prank(address(1));
     world.createHackathon(
+      address(2),
       5,
       6,
       7,
@@ -68,6 +72,8 @@ contract HackathonSystemTest is MudV2Test {
       "uri2"
     );
     HackathonData memory _hackathon2 = Hackathon.get(world, bytes32(uint256(2)));
+    assertEq(_hackathon2.owner, address(1));
+    assertEq(_hackathon2.prizeToken, address(2));
     assertEq(_hackathon2.phase, uint8(Phase.PREPARE_PRIZE));
     assertEq(_hackathon2.startTimestamp, 5);
     assertEq(_hackathon2.submitPeriod, 6);
@@ -76,11 +82,12 @@ contract HackathonSystemTest is MudV2Test {
     assertEq(_hackathon2.name, "test2");
     assertEq(_hackathon2.uri, "uri2");
     assertEq(_hackathon2.prizeRank, 2);
-    assertEq(Config.getMaxHackathonId(world), bytes32(uint256(2)));
+    assertEq(Config.get(world), bytes32(uint256(2)));
   }
 
   function testUpdateHackathon() public {
     world.createHackathon(
+      address(mock),
       1,
       2,
       3,
@@ -92,6 +99,7 @@ contract HackathonSystemTest is MudV2Test {
 
     world.updateHackathon(
       bytes32(uint256(1)),
+      address(1),
       5,
       6,
       7,
@@ -101,6 +109,8 @@ contract HackathonSystemTest is MudV2Test {
       "uri2"
     );
     HackathonData memory _hackathon = Hackathon.get(world, bytes32(uint256(1)));
+    assertEq(_hackathon.owner, address(this));
+    assertEq(_hackathon.prizeToken, address(1));
     assertEq(_hackathon.phase, uint8(Phase.PREPARE_PRIZE));
     assertEq(_hackathon.startTimestamp, 5);
     assertEq(_hackathon.submitPeriod, 6);
@@ -109,11 +119,11 @@ contract HackathonSystemTest is MudV2Test {
     assertEq(_hackathon.prizeRank, 2);
     assertEq(_hackathon.name, "test2");
     assertEq(_hackathon.uri, "uri2");
-    assertEq(Config.getMaxHackathonId(world), bytes32(uint256(1)));
+    assertEq(Config.get(world), bytes32(uint256(1)));
   }
 
   function testFixHackathon() public {
-    world.createHackathon(1,2,3,4,1,"test1","uri1");
+    world.createHackathon(address(mock),1,2,3,4,1,"test1","uri1");
 
     //revert
     vm.expectRevert(bytes("Deposit amount must be greater than 0."));    
@@ -126,7 +136,7 @@ contract HackathonSystemTest is MudV2Test {
   }
 
   function testProceedPhase() public {
-    world.createHackathon(block.timestamp + 1,2,3,4,1,"test1","uri1");
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1");
 
     vm.expectRevert(bytes("Cannot proceed phase."));
     world.proceedPhase(bytes32(uint256(1)));
@@ -171,7 +181,7 @@ contract HackathonSystemTest is MudV2Test {
   }
 
   function testWithdrawByOwner() public {
-    world.createHackathon(block.timestamp + 1,2,3,4,1,"test1","uri1");
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1");
 
     vm.expectRevert(bytes("Hackathon is not in END phase."));
     world.withdrawByOwner(bytes32(uint256(1)));
