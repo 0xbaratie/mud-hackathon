@@ -10,7 +10,7 @@ interface IHackathonSystem {
     uint256 _submitPeriod,
     uint256 _votingPeriod,
     uint256 _withdrawalPeriod,
-    uint8 _prizeRank,
+    uint8 _winnerCount,
     string memory _name,
     string memory _uri
   ) external;
@@ -22,7 +22,7 @@ interface IHackathonSystem {
     uint256 _submitPeriod,
     uint256 _votingPeriod,
     uint256 _withdrawalPeriod,
-    uint8 _prizeRank,
+    uint8 _winnerCount,
     string memory _name,
     string memory _uri
   ) external;

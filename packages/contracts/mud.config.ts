@@ -22,7 +22,7 @@ export default mudConfig({
         submitPeriod: "uint256",
         votingPeriod: "uint256",
         withdrawalPeriod: "uint256",
-        prizeRank: "uint8", // prize is awarded to top N submitters
+        winnerCount: "uint8", // prize is awarded to top N submitters
         name: "string",
         uri: "string",
       },

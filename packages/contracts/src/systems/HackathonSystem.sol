@@ -41,7 +41,7 @@ contract HackathonSystem is System {
     uint256 _submitPeriod,
     uint256 _votingPeriod,
     uint256 _withdrawalPeriod,
-    uint8 _prizeRank,
+    uint8 _winnerCount,
     string memory _name,
     string memory _uri
   ) public {
@@ -53,7 +53,7 @@ contract HackathonSystem is System {
       _submitPeriod,
       _votingPeriod,
       _withdrawalPeriod,
-      _prizeRank,
+      _winnerCount,
       _name,
       _uri
     ));
@@ -66,7 +66,7 @@ contract HackathonSystem is System {
     uint256 _submitPeriod,
     uint256 _votingPeriod,
     uint256 _withdrawalPeriod,
-    uint8 _prizeRank,
+    uint8 _winnerCount,
     string memory _name,
     string memory _uri
   ) public onlyOwner onlyPhasePrepare(_hackathonId) {
@@ -78,7 +78,7 @@ contract HackathonSystem is System {
       _submitPeriod,
       _votingPeriod,
       _withdrawalPeriod,
-      _prizeRank,
+      _winnerCount,
       _name,
       _uri
     ));
@@ -123,10 +123,10 @@ contract HackathonSystem is System {
   }
 
   function _finishVoting(bytes32 _hackathonId) internal {
-    //judge and set winners by votes, the number of winners is _hackathonData.prizeRank
+    //judge and set winners by votes, the number of winners is _hackathonData.winnerCount
     address[] memory _submitters = HackathonPrize.getSubmitters(_hackathonId);
     uint8 _submittersLength = uint8(_submitters.length);
-    uint8 _winnerCount = Hackathon.get(_hackathonId).prizeRank;
+    uint8 _winnerCount = Hackathon.get(_hackathonId).winnerCount;
     if(_submittersLength < _winnerCount) revert ("The number of submitters is less than the number of winners.");
 
     //set memory

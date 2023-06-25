@@ -28,7 +28,7 @@ struct HackathonData {
   uint256 submitPeriod;
   uint256 votingPeriod;
   uint256 withdrawalPeriod;
-  uint8 prizeRank;
+  uint8 winnerCount;
   string name;
   string uri;
 }
@@ -68,7 +68,7 @@ library Hackathon {
     _fieldNames[4] = "submitPeriod";
     _fieldNames[5] = "votingPeriod";
     _fieldNames[6] = "withdrawalPeriod";
-    _fieldNames[7] = "prizeRank";
+    _fieldNames[7] = "winnerCount";
     _fieldNames[8] = "name";
     _fieldNames[9] = "uri";
     return ("Hackathon", _fieldNames);
@@ -334,8 +334,8 @@ library Hackathon {
     _store.setField(_tableId, _keyTuple, 6, abi.encodePacked((withdrawalPeriod)));
   }
 
-  /** Get prizeRank */
-  function getPrizeRank(bytes32 key) internal view returns (uint8 prizeRank) {
+  /** Get winnerCount */
+  function getWinnerCount(bytes32 key) internal view returns (uint8 winnerCount) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -343,8 +343,8 @@ library Hackathon {
     return (uint8(Bytes.slice1(_blob, 0)));
   }
 
-  /** Get prizeRank (using the specified store) */
-  function getPrizeRank(IStore _store, bytes32 key) internal view returns (uint8 prizeRank) {
+  /** Get winnerCount (using the specified store) */
+  function getWinnerCount(IStore _store, bytes32 key) internal view returns (uint8 winnerCount) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -352,20 +352,20 @@ library Hackathon {
     return (uint8(Bytes.slice1(_blob, 0)));
   }
 
-  /** Set prizeRank */
-  function setPrizeRank(bytes32 key, uint8 prizeRank) internal {
+  /** Set winnerCount */
+  function setWinnerCount(bytes32 key, uint8 winnerCount) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreSwitch.setField(_tableId, _keyTuple, 7, abi.encodePacked((prizeRank)));
+    StoreSwitch.setField(_tableId, _keyTuple, 7, abi.encodePacked((winnerCount)));
   }
 
-  /** Set prizeRank (using the specified store) */
-  function setPrizeRank(IStore _store, bytes32 key, uint8 prizeRank) internal {
+  /** Set winnerCount (using the specified store) */
+  function setWinnerCount(IStore _store, bytes32 key, uint8 winnerCount) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    _store.setField(_tableId, _keyTuple, 7, abi.encodePacked((prizeRank)));
+    _store.setField(_tableId, _keyTuple, 7, abi.encodePacked((winnerCount)));
   }
 
   /** Get name */
@@ -632,7 +632,7 @@ library Hackathon {
     uint256 submitPeriod,
     uint256 votingPeriod,
     uint256 withdrawalPeriod,
-    uint8 prizeRank,
+    uint8 winnerCount,
     string memory name,
     string memory uri
   ) internal {
@@ -644,7 +644,7 @@ library Hackathon {
       submitPeriod,
       votingPeriod,
       withdrawalPeriod,
-      prizeRank,
+      winnerCount,
       name,
       uri
     );
@@ -666,7 +666,7 @@ library Hackathon {
     uint256 submitPeriod,
     uint256 votingPeriod,
     uint256 withdrawalPeriod,
-    uint8 prizeRank,
+    uint8 winnerCount,
     string memory name,
     string memory uri
   ) internal {
@@ -678,7 +678,7 @@ library Hackathon {
       submitPeriod,
       votingPeriod,
       withdrawalPeriod,
-      prizeRank,
+      winnerCount,
       name,
       uri
     );
@@ -700,7 +700,7 @@ library Hackathon {
       _table.submitPeriod,
       _table.votingPeriod,
       _table.withdrawalPeriod,
-      _table.prizeRank,
+      _table.winnerCount,
       _table.name,
       _table.uri
     );
@@ -718,7 +718,7 @@ library Hackathon {
       _table.submitPeriod,
       _table.votingPeriod,
       _table.withdrawalPeriod,
-      _table.prizeRank,
+      _table.winnerCount,
       _table.name,
       _table.uri
     );
@@ -743,7 +743,7 @@ library Hackathon {
 
     _table.withdrawalPeriod = (uint256(Bytes.slice32(_blob, 137)));
 
-    _table.prizeRank = (uint8(Bytes.slice1(_blob, 169)));
+    _table.winnerCount = (uint8(Bytes.slice1(_blob, 169)));
 
     // Store trims the blob if dynamic fields are all empty
     if (_blob.length > 170) {
@@ -770,7 +770,7 @@ library Hackathon {
     uint256 submitPeriod,
     uint256 votingPeriod,
     uint256 withdrawalPeriod,
-    uint8 prizeRank,
+    uint8 winnerCount,
     string memory name,
     string memory uri
   ) internal view returns (bytes memory) {
@@ -788,7 +788,7 @@ library Hackathon {
         submitPeriod,
         votingPeriod,
         withdrawalPeriod,
-        prizeRank,
+        winnerCount,
         _encodedLengths.unwrap(),
         bytes((name)),
         bytes((uri))

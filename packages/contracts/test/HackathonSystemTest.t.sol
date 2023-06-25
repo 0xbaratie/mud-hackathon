@@ -72,7 +72,7 @@ contract HackathonSystemTest is MudV2Test {
     assertEq(_hackathon.withdrawalPeriod, 4);
     assertEq(_hackathon.name, "test1");
     assertEq(_hackathon.uri, "uri1");
-    assertEq(_hackathon.prizeRank, 1);
+    assertEq(_hackathon.winnerCount, 1);
     assertEq(Config.get(world), bytes32(uint256(1)));
 
     //increment by another
@@ -97,7 +97,7 @@ contract HackathonSystemTest is MudV2Test {
     assertEq(_hackathon2.withdrawalPeriod, 8);
     assertEq(_hackathon2.name, "test2");
     assertEq(_hackathon2.uri, "uri2");
-    assertEq(_hackathon2.prizeRank, 2);
+    assertEq(_hackathon2.winnerCount, 2);
     assertEq(Config.get(world), bytes32(uint256(2)));
   }
 
@@ -132,7 +132,7 @@ contract HackathonSystemTest is MudV2Test {
     assertEq(_hackathon.submitPeriod, 6);
     assertEq(_hackathon.votingPeriod, 7);
     assertEq(_hackathon.withdrawalPeriod, 8);
-    assertEq(_hackathon.prizeRank, 2);
+    assertEq(_hackathon.winnerCount, 2);
     assertEq(_hackathon.name, "test2");
     assertEq(_hackathon.uri, "uri2");
     assertEq(Config.get(world), bytes32(uint256(1)));
@@ -275,7 +275,7 @@ contract HackathonSystemTest is MudV2Test {
     assertEq(Submission.getWithdrawalPrize(world, bytes32(uint256(1)), address(1)), 50);
   }
 
-  function testFinishVoting3() public { //prizeRank is 2 but really 3
+  function testFinishVoting3() public { //winnerCount is 2 but really 3
     world.createHackathon(address(mock),block.timestamp + 1,2,3,4,
       2, // 2 winners
       "test1","uri1");

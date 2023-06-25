@@ -47,7 +47,7 @@ export function defineContractComponents(world: World) {
           submitPeriod: RecsType.BigInt,
           votingPeriod: RecsType.BigInt,
           withdrawalPeriod: RecsType.BigInt,
-          prizeRank: RecsType.Number,
+          winnerCount: RecsType.Number,
           name: RecsType.String,
           uri: RecsType.String,
         },
