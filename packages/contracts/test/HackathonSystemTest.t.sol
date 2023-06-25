@@ -6,7 +6,7 @@ import { MudV2Test } from "@latticexyz/std-contracts/src/test/MudV2Test.t.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 import { IWorld } from "../src/codegen/world/IWorld.sol";
-import { Hackathon,HackathonData,Config } from "../src/codegen/Tables.sol";
+import { Hackathon,HackathonData,Config,Submission } from "../src/codegen/Tables.sol";
 import { Phase } from "../src/systems/HackathonSystem.sol";
 import { ERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
@@ -178,6 +178,124 @@ contract HackathonSystemTest is MudV2Test {
     skip(4);
     world.proceedPhase(bytes32(uint256(1)));
     assertEq(Hackathon.get(world, bytes32(uint256(1))).phase, uint8(Phase.END));
+  }
+
+  function testFinishVotingRevert() public {
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,
+      2, // 2 winners
+      "test1","uri1");
+
+    //fix
+    mock.approve(address(world), 100000e6);    
+    world.depositPrize(bytes32(uint256(1)), 100);
+    world.fixHackathon(bytes32(uint256(1)));
+
+    //proceed HACKING
+    skip(2);
+    world.proceedPhase(bytes32(uint256(1)));
+
+    //proceed VOTING
+    world.submit(bytes32(uint256(1)), "submit1","submit1"); //submit only 1
+    skip(2);
+    world.proceedPhase(bytes32(uint256(1)));
+
+    //proceed WITHDRAWING
+    skip(3);
+    vm.expectRevert(bytes("The number of submitters is less than the number of winners."));
+    world.proceedPhase(bytes32(uint256(1)));
+
+  }
+
+  function testFinishVoting1() public {
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1");
+
+    //fix
+    mock.approve(address(world), 100000e6);    
+    world.depositPrize(bytes32(uint256(1)), 100);
+    world.fixHackathon(bytes32(uint256(1)));
+
+    //proceed HACKING
+    skip(2);
+    world.proceedPhase(bytes32(uint256(1)));
+
+    //proceed VOTING
+    world.submit(bytes32(uint256(1)), "submit1","submit1"); //submit
+    skip(2);
+    world.proceedPhase(bytes32(uint256(1)));
+
+    //proceed WITHDRAWING
+    skip(3);
+    world.proceedPhase(bytes32(uint256(1)));
+
+    assertEq(Submission.getWithdrawalPrize(world, bytes32(uint256(1)), address(this)), 100);
+  }
+
+  function testFinishVoting2() public {
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,
+      2, // 2 winners
+      "test1","uri1");
+
+    //fix
+    mock.approve(address(world), 100000e6);    
+    world.depositPrize(bytes32(uint256(1)), 100);
+    world.fixHackathon(bytes32(uint256(1)));
+
+    //proceed HACKING
+    skip(2);
+    world.proceedPhase(bytes32(uint256(1)));
+
+    //proceed VOTING
+    world.submit(bytes32(uint256(1)), "submit1","submit1"); //submit
+    vm.prank(address(1));
+    world.submit(bytes32(uint256(1)), "submit2","submit2"); //submit
+    skip(2);
+    world.proceedPhase(bytes32(uint256(1)));
+
+    //proceed WITHDRAWING
+    skip(3);
+    world.proceedPhase(bytes32(uint256(1)));
+
+    assertEq(Submission.getWithdrawalPrize(world, bytes32(uint256(1)), address(this)), 50);
+    assertEq(Submission.getWithdrawalPrize(world, bytes32(uint256(1)), address(1)), 50);
+  }
+
+  function testFinishVoting3() public { //prizeRank is 2 but really 3
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,
+      2, // 2 winners
+      "test1","uri1");
+
+    //fix
+    mock.approve(address(world), 100000e6);    
+    world.depositPrize(bytes32(uint256(1)), 100);
+    world.fixHackathon(bytes32(uint256(1)));
+
+    //proceed HACKING
+    skip(2);
+    world.proceedPhase(bytes32(uint256(1)));
+
+    world.submit(bytes32(uint256(1)), "submit1","submit1"); //submit
+    vm.prank(address(1));
+    world.submit(bytes32(uint256(1)), "submit2","submit2"); //submit
+    vm.prank(address(2));
+    world.submit(bytes32(uint256(1)), "submit3","submit3"); //submit
+    vm.prank(address(3));
+    world.submit(bytes32(uint256(1)), "submit4","submit4"); //submit
+
+    //proceed VOTING
+    skip(2);
+    world.proceedPhase(bytes32(uint256(1)));
+    world.vote(bytes32(uint256(1)), address(this));
+    world.vote(bytes32(uint256(1)), address(1));
+    world.vote(bytes32(uint256(1)), address(2));
+
+    //proceed WITHDRAWING
+    skip(3);
+    world.proceedPhase(bytes32(uint256(1)));
+
+    assertEq(Submission.getWithdrawalPrize(world, bytes32(uint256(1)), address(this)), 33);
+    assertEq(Submission.getWithdrawalPrize(world, bytes32(uint256(1)), address(1)), 33);
+    assertEq(Submission.getWithdrawalPrize(world, bytes32(uint256(1)), address(2)), 33);
+    assertEq(Submission.getWithdrawalPrize(world, bytes32(uint256(1)), address(3)), 0);
   }
 
   function testWithdrawByOwner() public {

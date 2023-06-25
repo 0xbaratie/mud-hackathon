@@ -126,6 +126,10 @@ contract HackathonSystem is System {
     //judge and set winners by votes, the number of winners is _hackathonData.prizeRank
     address[] memory _submitters = HackathonPrize.getSubmitters(_hackathonId);
     uint8 _submittersLength = uint8(_submitters.length);
+    uint8 _winnerCount = Hackathon.get(_hackathonId).prizeRank;
+    if(_submittersLength < _winnerCount) revert ("The number of submitters is less than the number of winners.");
+
+    //set memory
     SubmitterWithVote[] memory _submittersWithVotes = new SubmitterWithVote[](_submittersLength);
 
     //sort by votes
@@ -142,8 +146,7 @@ contract HackathonSystem is System {
       }
     }
 
-    //set winners
-    uint8 _winnerCount = Hackathon.get(_hackathonId).prizeRank;
+    // count winners. if there are same votes, they are all winners.
     for(uint8 i = _winnerCount; i < _submittersLength; i++){
       if(_submittersWithVotes[i - 1].votes == _submittersWithVotes[i].votes){
         _winnerCount++;
