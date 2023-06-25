@@ -9,6 +9,7 @@ import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { Hackathon,HackathonData,Config,Submission } from "../src/codegen/Tables.sol";
 import { Phase } from "../src/systems/HackathonSystem.sol";
 import { ERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import { ERC721, IERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract MockERC20 is ERC20 {
   uint8 _decimals;
@@ -20,9 +21,17 @@ contract MockERC20 is ERC20 {
   }
 }
 
+contract MockERC721 is ERC721 {
+  constructor(string memory name_, string memory symbol_) ERC721(name_, symbol_) {}
+  function mint(address to, uint256 amount) public {
+    _mint(to, amount);
+  }
+}
+
 contract HackathonSystemTest is MudV2Test {
   IWorld public world;
   MockERC20 mock;
+  MockERC721 nft;
 
   function setUp() public override {
     super.setUp();
@@ -31,6 +40,13 @@ contract HackathonSystemTest is MudV2Test {
     //set prize token
     mock = new MockERC20("Mock", "Mock", 6);
     deal(address(mock), address(this), 100000e6);
+    //mint nft
+    nft = new MockERC721("NFT", "NFT");
+    nft.mint(address(this), 1);
+    nft.mint(address(this), 2);
+    nft.mint(address(this), 3);
+    nft.mint(address(1), 4);
+    world.setVoteToken(address(nft));
   }
 
   function testCreateHackathon() public {
@@ -284,9 +300,9 @@ contract HackathonSystemTest is MudV2Test {
     //proceed VOTING
     skip(2);
     world.proceedPhase(bytes32(uint256(1)));
-    world.vote(bytes32(uint256(1)), address(this));
-    world.vote(bytes32(uint256(1)), address(1));
-    world.vote(bytes32(uint256(1)), address(2));
+    world.vote(bytes32(uint256(1)), address(this), 1);
+    world.vote(bytes32(uint256(1)), address(1), 2);
+    world.vote(bytes32(uint256(1)), address(2), 3);
 
     //proceed WITHDRAWING
     skip(3);

@@ -31,8 +31,8 @@ library Vote {
 
   function getKeySchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](2);
-    _schema[0] = SchemaType.UINT256;
-    _schema[1] = SchemaType.ADDRESS;
+    _schema[0] = SchemaType.BYTES32;
+    _schema[1] = SchemaType.UINT256;
 
     return SchemaLib.encode(_schema);
   }
@@ -67,39 +67,39 @@ library Vote {
   }
 
   /** Get voted */
-  function get(uint256 hackathonId, address voter) internal view returns (bool voted) {
+  function get(bytes32 hackathonId, uint256 tokenId) internal view returns (bool voted) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(hackathonId));
-    _keyTuple[1] = bytes32(uint256(uint160(voter)));
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(tokenId));
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
     return (_toBool(uint8(Bytes.slice1(_blob, 0))));
   }
 
   /** Get voted (using the specified store) */
-  function get(IStore _store, uint256 hackathonId, address voter) internal view returns (bool voted) {
+  function get(IStore _store, bytes32 hackathonId, uint256 tokenId) internal view returns (bool voted) {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(hackathonId));
-    _keyTuple[1] = bytes32(uint256(uint160(voter)));
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(tokenId));
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
     return (_toBool(uint8(Bytes.slice1(_blob, 0))));
   }
 
   /** Set voted */
-  function set(uint256 hackathonId, address voter, bool voted) internal {
+  function set(bytes32 hackathonId, uint256 tokenId, bool voted) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(hackathonId));
-    _keyTuple[1] = bytes32(uint256(uint160(voter)));
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(tokenId));
 
     StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((voted)));
   }
 
   /** Set voted (using the specified store) */
-  function set(IStore _store, uint256 hackathonId, address voter, bool voted) internal {
+  function set(IStore _store, bytes32 hackathonId, uint256 tokenId, bool voted) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(hackathonId));
-    _keyTuple[1] = bytes32(uint256(uint160(voter)));
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(tokenId));
 
     _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((voted)));
   }
@@ -110,26 +110,26 @@ library Vote {
   }
 
   /** Encode keys as a bytes32 array using this table's schema */
-  function encodeKeyTuple(uint256 hackathonId, address voter) internal pure returns (bytes32[] memory _keyTuple) {
+  function encodeKeyTuple(bytes32 hackathonId, uint256 tokenId) internal pure returns (bytes32[] memory _keyTuple) {
     _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(hackathonId));
-    _keyTuple[1] = bytes32(uint256(uint160(voter)));
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(tokenId));
   }
 
   /* Delete all data for given keys */
-  function deleteRecord(uint256 hackathonId, address voter) internal {
+  function deleteRecord(bytes32 hackathonId, uint256 tokenId) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(hackathonId));
-    _keyTuple[1] = bytes32(uint256(uint160(voter)));
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(tokenId));
 
     StoreSwitch.deleteRecord(_tableId, _keyTuple);
   }
 
   /* Delete all data for given keys (using the specified store) */
-  function deleteRecord(IStore _store, uint256 hackathonId, address voter) internal {
+  function deleteRecord(IStore _store, bytes32 hackathonId, uint256 tokenId) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(hackathonId));
-    _keyTuple[1] = bytes32(uint256(uint160(voter)));
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(tokenId));
 
     _store.deleteRecord(_tableId, _keyTuple);
   }

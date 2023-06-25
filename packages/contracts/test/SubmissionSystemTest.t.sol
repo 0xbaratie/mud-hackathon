@@ -6,12 +6,13 @@ import { MudV2Test } from "@latticexyz/std-contracts/src/test/MudV2Test.t.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 import { IWorld } from "../src/codegen/world/IWorld.sol";
-import { Config,HackathonPrize,Submission } from "../src/codegen/Tables.sol";
-import { MockERC20} from "./HackathonSystemTest.t.sol";
+import { Config,HackathonPrize,Submission,Vote } from "../src/codegen/Tables.sol";
+import { MockERC20,MockERC721} from "./HackathonSystemTest.t.sol";
 
 contract SubmissionSystemTest is MudV2Test {
   IWorld public world;
   MockERC20 mock;
+  MockERC721 nft;
 
   function setUp() public override {
     super.setUp();
@@ -20,6 +21,14 @@ contract SubmissionSystemTest is MudV2Test {
     //set prize token
     mock = new MockERC20("Mock", "Mock", 6);
     deal(address(mock), address(this), 100000e6);
+    //mint nft
+    nft = new MockERC721("NFT", "NFT");
+    nft.mint(address(this), 1);
+    nft.mint(address(this), 2);
+    nft.mint(address(this), 3);
+    nft.mint(address(1), 4);
+    world.setVoteToken(address(nft));
+
   }
 
   function testSubmit() public {
@@ -64,7 +73,7 @@ contract SubmissionSystemTest is MudV2Test {
     world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1");
 
     vm.expectRevert(bytes("Hackathon is not in VOTING phase."));
-    world.vote(bytes32(uint256(1)), address(this));
+    world.vote(bytes32(uint256(1)), address(this),1);
 
     //fix
     mock.approve(address(world), 100000e6);    
@@ -79,8 +88,11 @@ contract SubmissionSystemTest is MudV2Test {
     skip(2);
     world.proceedPhase(bytes32(uint256(1)));
 
+    vm.expectRevert(bytes("Only NFT owners can vote."));
+    world.vote(bytes32(uint256(1)), address(this),4);
+
     vm.expectRevert(bytes("Submission does not exist."));
-    world.vote(bytes32(uint256(1)), address(this));
+    world.vote(bytes32(uint256(1)), address(this),1);
   }
 
   function testVoteSuccess() public {
@@ -100,10 +112,16 @@ contract SubmissionSystemTest is MudV2Test {
     skip(2);
     world.proceedPhase(bytes32(uint256(1)));
 
-    world.vote(bytes32(uint256(1)), address(this));
+    world.vote(bytes32(uint256(1)), address(this),1);
     vm.prank(address(1));
-    world.vote(bytes32(uint256(1)), address(this));
+    world.vote(bytes32(uint256(1)), address(this),4);
     assertEq(Submission.getVotes(world, bytes32(uint256(1)), address(this)), 2);
+    assertEq(Vote.get(world, bytes32(uint256(1)), 1), true);
+    assertEq(Vote.get(world, bytes32(uint256(1)), 4), true);
+
+    //revert re-vote
+    vm.expectRevert(bytes("Already voted."));
+    world.vote(bytes32(uint256(1)), address(this),1);
   }
 
   function testWithdrawPrize() public {
@@ -122,7 +140,7 @@ contract SubmissionSystemTest is MudV2Test {
     //proceed VOTING
     skip(2);
     world.proceedPhase(bytes32(uint256(1)));
-    world.vote(bytes32(uint256(1)), address(this));
+    world.vote(bytes32(uint256(1)), address(this),1);
 
     //proceed WITHDRAWING
     skip(3);

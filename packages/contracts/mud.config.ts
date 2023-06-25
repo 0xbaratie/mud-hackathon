@@ -50,8 +50,8 @@ export default mudConfig({
         voted: "bool",
       },
       keySchema: {
-        hackathonId: "uint256",
-        voter: "address",
+        hackathonId: "bytes32",
+        tokenId: "uint256",
       },
     },
   },
