@@ -2,6 +2,7 @@ import { mudConfig } from "@latticexyz/world/register";
 
 export default mudConfig({
   tables: {
+    //TODO delete Counter
     Counter: {
       keySchema: {},
       schema: "uint32",
@@ -13,16 +14,9 @@ export default mudConfig({
         maxHackathonId: "bytes32",
       },
     },
-    Owner: {
-      schema: {
-        isActive: "bool",
-      },
-      keySchema: {
-        owner: "address",
-      },
-    },
     Hackathon: {
       schema: {
+        owner: "address",
         phase: "uint8",
         startTimestamp: "uint256",
         submitPeriod: "uint256",

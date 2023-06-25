@@ -29,7 +29,5 @@ interface IHackathonSystem {
 
   function proceedPhase(bytes32 _hackathonId) external;
 
-  function finishVoting(bytes32 _hackathonId) external;
-
   function withdrawByOwner(bytes32 _hackathonId) external;
 }

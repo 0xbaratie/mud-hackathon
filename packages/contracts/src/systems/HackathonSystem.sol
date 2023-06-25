@@ -2,8 +2,8 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Hackathon,Config,Owner,HackathonData,HackathonPrize,Submission } from "../codegen/Tables.sol";
-import { SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import { Hackathon,Config,HackathonData,HackathonPrize,Submission } from "../codegen/Tables.sol";
+import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 enum Phase {
   NONE,
@@ -43,8 +43,9 @@ contract HackathonSystem is System {
     uint8 _prizeRank,
     string memory _name,
     string memory _uri
-  ) public onlyOwner {
+  ) public {
     Hackathon.set(_incrementHackathonId(),HackathonData(
+      msg.sender,
       uint8(Phase.PREPARE_PRIZE),
       _startTimestamp,
       _submitPeriod,
@@ -67,6 +68,7 @@ contract HackathonSystem is System {
     string memory _uri
   ) public onlyOwner onlyPhasePrepare(_hackathonId) {
     Hackathon.set(_hackathonId,HackathonData(
+      msg.sender,
       uint8(Phase.PREPARE_PRIZE),
       _startTimestamp,
       _submitPeriod,

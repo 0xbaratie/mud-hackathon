@@ -36,26 +36,12 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
-    Owner: (() => {
-      const tableId = new TableId("", "Owner");
-      return defineComponent(
-        world,
-        {
-          isActive: RecsType.Boolean,
-        },
-        {
-          metadata: {
-            contractId: tableId.toHexString(),
-            tableId: tableId.toString(),
-          },
-        }
-      );
-    })(),
     Hackathon: (() => {
       const tableId = new TableId("", "Hackathon");
       return defineComponent(
         world,
         {
+          owner: RecsType.String,
           phase: RecsType.Number,
           startTimestamp: RecsType.BigInt,
           submitPeriod: RecsType.BigInt,

@@ -6,7 +6,7 @@ import { MudV2Test } from "@latticexyz/std-contracts/src/test/MudV2Test.t.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 import { IWorld } from "../src/codegen/world/IWorld.sol";
-import { Owner,Config,HackathonPrize,Submission } from "../src/codegen/Tables.sol";
+import { Config,HackathonPrize,Submission } from "../src/codegen/Tables.sol";
 import { MockERC20} from "./HackathonSystemTest.t.sol";
 
 contract SubmissionSystemTest is MudV2Test {
