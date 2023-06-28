@@ -55,4 +55,7 @@ export default mudConfig({
       },
     },
   },
+  enums: {
+    Phase: ["NONE", "PREPARE_PRIZE", "FIXED_PRIZE", "HACKING", "VOTING", "WITHDRAWING", "END"],
+  },
 });
