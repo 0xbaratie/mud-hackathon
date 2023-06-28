@@ -20,7 +20,7 @@ contract HackathonSystem is System {
 
   modifier onlyOwner() {
     //TODO
-    // require(Owner.get(msg.sender), "Only owner can call this function.");
+    // require(Owner.get(_msgSender()), "Only owner can call this function.");
     _;
   }
 
@@ -46,7 +46,7 @@ contract HackathonSystem is System {
     string memory _uri
   ) public {
     Hackathon.set(_incrementHackathonId(),HackathonData(
-      msg.sender,
+      _msgSender(),
       _prizeToken,
       uint8(Phase.PREPARE_PRIZE),
       _startTimestamp,
@@ -71,7 +71,7 @@ contract HackathonSystem is System {
     string memory _uri
   ) public onlyOwner onlyPhasePrepare(_hackathonId) {
     Hackathon.set(_hackathonId,HackathonData(
-      msg.sender,
+      _msgSender(),
       _prizeToken,
       uint8(Phase.PREPARE_PRIZE),
       _startTimestamp,
@@ -170,7 +170,7 @@ contract HackathonSystem is System {
     uint256 _deposit = HackathonPrize.getDeposit(_hackathonId);
     if(_deposit > 0){
       HackathonPrize.setDeposit(_hackathonId,0);
-      IERC20(_hackathonData.prizeToken).safeTransfer(msg.sender, _deposit);
+      IERC20(_hackathonData.prizeToken).safeTransfer(_msgSender(), _deposit);
     }
 
   }

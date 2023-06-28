@@ -27,13 +27,13 @@ contract SubmissionSystem is System {
     require(_hackathonData.phase == uint8(Phase.HACKING), "Hackathon is not in SUBMISSION phase.");
 
     //if new submission, push submitter
-    SubmissionData memory _submissionData = Submission.get(_hackathonId, msg.sender);
+    SubmissionData memory _submissionData = Submission.get(_hackathonId, _msgSender());
     if(bytes(_submissionData.name).length == 0){
-      HackathonPrize.pushSubmitters(_hackathonId, msg.sender);
+      HackathonPrize.pushSubmitters(_hackathonId, _msgSender());
     }
 
-    Submission.setName(_hackathonId, msg.sender, _name);
-    Submission.setUri(_hackathonId, msg.sender, _uri);
+    Submission.setName(_hackathonId, _msgSender(), _name);
+    Submission.setUri(_hackathonId, _msgSender(), _uri);
   }
 
   function vote(bytes32 _hackathonId, address _submitter, uint256 _tokenId) public {
@@ -42,7 +42,7 @@ contract SubmissionSystem is System {
     require(_hackathonData.phase == uint8(Phase.VOTING), "Hackathon is not in VOTING phase.");
 
     // only NFT owners
-    require(IERC721(voteToken).ownerOf(_tokenId) == msg.sender, "Only NFT owners can vote.");
+    require(IERC721(voteToken).ownerOf(_tokenId) == _msgSender(), "Only NFT owners can vote.");
 
     // if already voted, revert
     require(!Vote.get(_hackathonId, _tokenId), "Already voted.");
@@ -63,12 +63,12 @@ contract SubmissionSystem is System {
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
     require(_hackathonData.phase == uint8(Phase.WITHDRAWING), "Hackathon is not in WITHDRAWING phase.");
 
-    uint256 _prize = Submission.getWithdrawalPrize(_hackathonId, msg.sender);
-    Submission.setWithdrawalPrize(_hackathonId, msg.sender, 0);
+    uint256 _prize = Submission.getWithdrawalPrize(_hackathonId, _msgSender());
+    Submission.setWithdrawalPrize(_hackathonId, _msgSender(), 0);
 
     uint256 _deposit = HackathonPrize.getDeposit(_hackathonId);
     HackathonPrize.setDeposit(_hackathonId, _deposit - _prize);
 
-    IERC20(_hackathonData.prizeToken).safeTransfer(msg.sender, _prize);
+    IERC20(_hackathonData.prizeToken).safeTransfer(_msgSender(), _prize);
   }
 }

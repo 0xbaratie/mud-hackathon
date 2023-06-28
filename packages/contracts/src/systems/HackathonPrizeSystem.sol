@@ -22,7 +22,7 @@ contract HackathonPrizeSystem is System {
     HackathonPrize.setDeposit(_hackathonId, _deposit + _amount);
 
     //transfer prize token
-    IERC20(_hackathonData.prizeToken).safeTransferFrom(msg.sender, address(this), _amount);
+    IERC20(_hackathonData.prizeToken).safeTransferFrom(_msgSender(), address(this), _amount);
   }  
 
 }
