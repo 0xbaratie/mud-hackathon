@@ -17,7 +17,7 @@ type Props = {
     children: ReactNode;
 };
 
-export const Header = ({children}: Props, ) => {
+export const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [wallet, setWallet] = useState({accounts:[]})
