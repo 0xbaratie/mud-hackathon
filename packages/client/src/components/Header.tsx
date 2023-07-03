@@ -13,10 +13,6 @@ console.log(isMetaMask);
 
 export const walletContext = createContext<any | null>(null);
 
-type Props = {
-    children: ReactNode;
-};
-
 export const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -49,9 +45,9 @@ export const Header = () => {
   };
   
   return (    
-    <div className="navbar bg-primary-content">
+    <div className="navbar bg-primary-content border border-b-gray-300">
       <div className="flex-1">
-        <a className="normal-case text-xl text-black font-bold">AW Hackathon</a>
+        <a className="ml-4 normal-case text-xl text-black font-bold">AW Hackathon</a>
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
