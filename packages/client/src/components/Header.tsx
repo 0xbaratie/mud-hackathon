@@ -1,6 +1,8 @@
 import React, {ReactNode, useContext, useState, createContext} from "react";
 import {Button, Container, Grid, SvgIcon, Typography, Menu, MenuItem, Box} from '@mui/material';
 import MetaMaskIcon from "../MetaMaskIcon";
+import FullScreenModal from './FullScreenModal';
+import HackathonForm from './HackathonForm';
 
 let injectedProvider = false;
 
@@ -17,6 +19,16 @@ export const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [wallet, setWallet] = useState({accounts:[]})
+  const [modalOpen, setModalOpen] = useState(false);
+
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   const updateWallet = async (accounts:any) => {
       setWallet({accounts})
@@ -28,6 +40,7 @@ export const Header = () => {
       })
       updateWallet(accounts)
   }
+  
   const handleDisconnect = async () => {
       await window.ethereum.request({
           method: "eth_requestAccounts",
@@ -40,6 +53,7 @@ export const Header = () => {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
       setAnchorEl(event.currentTarget);
   };
+
   const handleMenuClose = () => {
       setAnchorEl(null);
   };
@@ -51,7 +65,12 @@ export const Header = () => {
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
-          <li className="text-black"><a>Create a hackathon</a></li>
+          <li className="text-black"><a onClick={openModal} >Create a hackathon</a></li>
+         
+          <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
+            {/* モーダルのコンテンツ */}
+            <HackathonForm />
+          </FullScreenModal>
           <li className="text-black">
             { wallet.accounts.length > 0 ? (
                 <>
@@ -71,7 +90,7 @@ export const Header = () => {
 
                 <>
                     <Button variant="outlined" onClick={handleConnect} startIcon={<SvgIcon component={MetaMaskIcon} viewBox="0 0 300 300"/>} disabled={!isMetaMask}>
-                        connect
+                      Connect
                     </Button>
                 </>
             )}
