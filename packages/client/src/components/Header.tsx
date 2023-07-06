@@ -72,7 +72,6 @@ export const Header = () => {
           </li>
 
           <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-            {/* モーダルのコンテンツ */}
             <HackathonForm />
           </FullScreenModal>
           <li className="text-black">
