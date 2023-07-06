@@ -13,9 +13,9 @@ const DateTimePicker = () => {
   return (
     <div className="">
       <div className="p-2 border border-gray-300 rounded shadow">
-        <DatePicker 
-          selected={selectedDateTime} 
-          onChange={handleDateTimeChange} 
+        <DatePicker
+          selected={selectedDateTime}
+          onChange={handleDateTimeChange}
           showTimeSelect
           timeFormat="HH:mm"
           timeIntervals={15}
