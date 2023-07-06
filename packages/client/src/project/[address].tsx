@@ -21,8 +21,8 @@ export const ProjectPage: React.FC = () => {
         <p className="text-gray-400 mt-1">EdgeCause: Empowering Change through Decentralized Campaigns. Join our portal, where
 individuals and organizations harness the crowd's power.</p>
         <div className="mt-8">
-          <button className="btn bg-black text-white rounded-lg w-30">Live Demo</button>
-          <button className="ml-2 btn bg-white text-black rounded-lg w-30">Source Code</button>
+          <button className="btn bg-black text-white rounded-lg w-30"><a href="https://github.com/aw-labs" target="_blank">Live Demo</a></button>
+          <button className="ml-2 btn bg-white text-black rounded-lg w-30"><a href="https://github.com/aw-labs" target="_blank">Source Code</a></button>
         </div>
       </div>
       <div className="p-10">
