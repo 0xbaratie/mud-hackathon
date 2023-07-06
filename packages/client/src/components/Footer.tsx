@@ -1,6 +1,27 @@
-export const Footer = () => {
+import { useEffect, useState } from 'react';
+
+export const Footer: React.FC<{ activeTab: number }> = ({ activeTab }) => {
+
+  const [isScrollable, setIsScrollable] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrollable(window.innerHeight < document.body.clientHeight);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const footerStyle = isScrollable
+    ? { position: 'relative' as const }
+    : { position: 'fixed' as const, bottom: 0, width: '100%' };
+
   return (
-    <footer className="footer p-10 flex justify-center bg-gray-200 fixed bottom-0 w-full">
+    <footer className="footer mt-20 p-10 flex justify-center bg-gray-100" style={footerStyle}>
       <div className="">
         <div className="grid grid-flow-col gap-4">
           <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/AW_house">

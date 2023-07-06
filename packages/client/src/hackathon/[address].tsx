@@ -3,6 +3,7 @@ import { Header } from './../components/Header';
 import { Footer } from './../components/Footer';
 import HackathonOverview  from './../components/HackathonOverview';
 import HackathonPrizes  from './../components/HackathonPrizes';
+import HackathonProjects  from './../components/HackathonProjects';
 import Timeline from './../components/Timeline';
 import React, { useState } from 'react';
 
@@ -30,7 +31,7 @@ export const HackathonPage: React.FC = () => {
   };
 
   const ProjectsTabContent: React.FC = () => {
-    return <div>Projects タブのコンテンツ</div>;
+    return <HackathonProjects />;
   };
 
   const SubmitTabContent: React.FC = () => {
@@ -92,7 +93,7 @@ export const HackathonPage: React.FC = () => {
         <div className="w-3/4">{activeTabContent}</div>
         <Timeline />
       </div>
-      <Footer />
+      <Footer activeTab={activeTab}/>
     </>
   );
 };

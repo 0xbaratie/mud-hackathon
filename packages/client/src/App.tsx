@@ -3,6 +3,7 @@ import { useMUD } from './MUDContext';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { EventCard } from './components/EventCard';
+import React, { useState } from 'react';
 
 export const App = () => {
   const {
@@ -10,6 +11,7 @@ export const App = () => {
     systemCalls: { increment },
     network: { singletonEntity },
   } = useMUD();
+  const [activeTab, setActiveTab] = useState(1);
 
   return (
     <>
@@ -35,7 +37,7 @@ export const App = () => {
         <EventCard />
         <EventCard />
       </div>
-      <Footer />
+      <Footer activeTab={activeTab}/>
     </>
   );
 };
