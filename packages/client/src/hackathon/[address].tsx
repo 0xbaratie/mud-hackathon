@@ -2,6 +2,7 @@ import { useMUD } from './../MUDContext';
 import { Header } from './../components/Header';
 import { Footer } from './../components/Footer';
 import HackathonOverview  from './../components/HackathonOverview';
+import HackathonPrizes  from './../components/HackathonPrizes';
 import Timeline from './../components/Timeline';
 import React, { useState } from 'react';
 
@@ -25,7 +26,7 @@ export const HackathonPage: React.FC = () => {
   };
 
   const PrizesTabContent: React.FC = () => {
-    return <div>Prizes タブのコンテンツ</div>;
+    return <HackathonPrizes />;
   };
 
   const ProjectsTabContent: React.FC = () => {
