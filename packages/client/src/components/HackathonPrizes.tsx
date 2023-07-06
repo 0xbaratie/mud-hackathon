@@ -1,14 +1,27 @@
-import React, { FC } from 'react';
-import DateTimePicker from './DateTimePicker';
+import React, { useState } from 'react';
+import FullScreenModal from './FullScreenModal';
+import DepositModal from './DepositModal';
 
 const HackathonPrizes = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   return (
     <div className="mr-10">
+      <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
+        <DepositModal />
+      </FullScreenModal>
       <div className="flex justify-between items-center ">
         <h2 className="text-2xl font-bold">Prizes</h2>
         <button className="bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl">
-          <a href="https://oasys.framer.website/" target="_blank" rel="noopener noreferrer" >
-            Depost USDC
+          <a onClick={openModal} >
+            Deposit USDC
           </a>
         </button>
       </div>
