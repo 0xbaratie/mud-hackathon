@@ -4,7 +4,8 @@ import { App } from './App';
 import { setup } from './mud/setup';
 import { MUDProvider } from './MUDContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { HackathonPage } from './hackathon/[address]';
+import { HackathonPage } from './hackathon/[address]'
+import { ProjectPage } from './project/[address]';
 import WalletConnection from './WalletConnection';
 import './index.css';
 
@@ -19,6 +20,7 @@ setup().then((result) => {
       <Router>
         <Routes>
           <Route path="/hackathon/:address" element={<HackathonPage />} />
+          <Route path="/project/:address" element={<ProjectPage />} />
           <Route path="/" element={<App />} />
         </Routes>
       </Router>

@@ -18,7 +18,7 @@ const HackathonProjects = () => {
       <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
         <VoteModal />
       </FullScreenModal>
-      <a href="/projects/[address.tsx]" >
+      <a href="/project/[address]" >
         <div className="border rounded-md shadow-md h-[438px] relative">
           <img className="h-[228px] w-full object-cover" src={imageURL} alt="Image"></img>
           <div className="p-4">
