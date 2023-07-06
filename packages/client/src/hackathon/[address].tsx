@@ -87,7 +87,7 @@ export const HackathonPage: React.FC = () => {
           </a>
         </div>
       </div>
-      <div className="flex mt-4">
+      <div className="flex mt-6 p-6">
         <div className="w-3/4">{activeTabContent}</div>
         <Timeline />
       </div>

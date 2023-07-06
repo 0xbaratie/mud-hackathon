@@ -3,7 +3,7 @@ import DateTimePicker from './DateTimePicker';
 
 const HackathonOverview = () => {
   return (
-    <div className="p-6">
+    <div className="">
       <div className="flex">
         <img
           src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
