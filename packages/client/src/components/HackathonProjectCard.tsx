@@ -25,7 +25,7 @@ const HackathonProjects = () => {
             <p className="font-bold text-xl mb-1">LPU NAME SERVICE</p>
             <p className="text-sm">Name Service for students to claim their credentials and documents whitch will be issued as NFT by Universities, like certificates and documents</p>
           </div>
-          <div className="absolute bottom-4 right-0 pr-4">
+          <div className="flex absolute bottom-4 right-0 pr-4">
             <img src={VotingBox} className="" alt="Voting box icon" />
             <span className="ml-1 text-md font-bold">123</span>
           </div>
