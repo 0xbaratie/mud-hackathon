@@ -3,6 +3,7 @@ import { Button, Container, Grid, SvgIcon, Typography, Menu, MenuItem, Box } fro
 import MetaMaskIcon from '../MetaMaskIcon';
 import FullScreenModal from './FullScreenModal';
 import HackathonForm from './HackathonForm';
+import TitleLogo from '../../public/logo.svg';
 
 let injectedProvider = false;
 
@@ -60,11 +61,13 @@ export const Header = () => {
   return (
     <div className="navbar bg-primary-content border border-b-gray-300">
       <div className="flex-1">
-        <a className="ml-4 normal-case text-xl text-black font-bold">AW Hackathon</a>
+        <a href="/" className="ml-4 normal-case">
+          <img src={TitleLogo} className="" alt="AW Hackathon logo" />
+        </a>
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
-          <li className="text-black">
+          <li className="text-black font-bold">
             <a onClick={openModal}>Create a hackathon</a>
           </li>
 
