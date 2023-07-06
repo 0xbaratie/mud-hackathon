@@ -31,7 +31,7 @@ const HackathonSubmit = () => {
 
       <h1 className="text-md mb-2 mt-6">How to make?</h1>
       <p className="text-sm text-gray-500 mb-1">
-        Tell us about how you built this project; the nitty-gritty details. <br />What technologies did you use? How are they pieced together? <br /> If you used any sponsor technologies, how did it benefit your project? <br />Did you do anything particuarly hacky that's notable and worth mentioning?
+        Tell us about how you built this project; the nitty-gritty details. <br />What technologies did you use? How are they pieced together? <br /> If you used any sponsor technologies, how did it benefit your project? <br />Did you do anything particuarly hacky that is notable and worth mentioning?
       </p>
       <textarea placeholder="Enter additional information" className="textarea textarea-bordered textarea-md w-full max-w-xs" ></textarea>
 
