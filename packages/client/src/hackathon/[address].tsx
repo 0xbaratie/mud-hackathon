@@ -1,11 +1,8 @@
 import { useMUD } from "./../MUDContext";
 import { Header } from "./../components/Header";
 import { Footer } from "./../components/Footer";
+import Timeline from "./../components/Timeline";
 import React, { useState } from "react";
-import CheckCircleIcon from "../../public/icon_check_circle.svg";
-import NotFinishedIcon from "../../public/icon_not_finished.svg";
-
-
 
 export const HackathonPage: React.FC = () => {
   const {
@@ -97,50 +94,11 @@ export const HackathonPage: React.FC = () => {
           </a>
         </div>
       </div>
-      <div className="flex mt-4"> {/* Flex container to layout activeTabContent and the side menu */}
-        <div className="w-3/4"> {/* activeTabContent takes up 3/4 of the width */}
+      <div className="flex mt-4"> 
+        <div className="w-3/4"> 
           {activeTabContent}
         </div>
-        <div className="w-1/4 relative h-100"> {/* Add 'relative' here */}
-          <div className="mt-2">
-            <div className="absolute">
-              <img src={CheckCircleIcon} className=" -ml-2" alt="Check circle icon" />
-            </div>
-            <div className="pl-4 z-0 relative">
-              <h2 className="font-bold">Creating the hackathon project</h2>
-              <p className="text-gray-500">July 3, 2023, 4:23pm UTC</p>            
-            </div>
-          </div>
-          <div className="mt-8">
-            <div className="absolute">
-              <img src={CheckCircleIcon} className=" -ml-2" alt="Check circle icon" />
-            </div>
-            <div className="pl-4 z-0 relative">
-              <h2 className="font-bold">Creating the hackathon project</h2>
-              <p className="text-gray-500">July 3, 2023, 4:23pm UTC</p>            
-            </div>
-          </div>
-          <div className="mt-8">
-            <div className="absolute">
-              <img src={NotFinishedIcon} className=" -ml-2" alt="Check circle icon" />
-            </div>
-            <div className="pl-4 z-0 relative">
-              <h2 className="font-bold text-[#4D4D4D]">Creating the hackathon project</h2>
-              <p className="text-gray-500">July 3, 2023, 4:23pm UTC</p>            
-            </div>
-          </div>
-          <div className="mt-8">
-            <div className="absolute">
-              <img src={NotFinishedIcon} className=" -ml-2" alt="Check circle icon" />
-            </div>
-            <div className="pl-4 z-0 relative">
-              <h2 className="font-bold text-[#4D4D4D]">Creating the hackathon project</h2>
-              <p className="text-gray-500">July 3, 2023, 4:23pm UTC</p>            
-            </div>
-          </div>
-          
-        </div>
-
+        <Timeline />
       </div>
       <Footer />
     </>
