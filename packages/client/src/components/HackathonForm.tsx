@@ -44,7 +44,7 @@ const HackathonForm = () => {
         className="input input-bordered w-full max-w-xs mt-2 text-gray-300"
       />
       <div className="mt-6">
-        <button className="btn bg-black text-white rounded-lg">Create a hackathon</button>
+        <button className="btn bg-[#333333] text-white rounded-lg">Create a hackathon</button>
       </div>
     </div>
   );

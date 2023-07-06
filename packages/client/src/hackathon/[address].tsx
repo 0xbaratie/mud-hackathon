@@ -4,6 +4,7 @@ import { Footer } from './../components/Footer';
 import HackathonOverview  from './../components/HackathonOverview';
 import HackathonPrizes  from './../components/HackathonPrizes';
 import HackathonProjects  from './../components/HackathonProjects';
+import HackathonSubmit  from './../components/HackathonSubmit';
 import Timeline from './../components/Timeline';
 import React, { useState } from 'react';
 
@@ -35,7 +36,7 @@ export const HackathonPage: React.FC = () => {
   };
 
   const SubmitTabContent: React.FC = () => {
-    return <div>Submit タブのコンテンツ</div>;
+    return <HackathonSubmit />;
   };
 
   let activeTabContent;
