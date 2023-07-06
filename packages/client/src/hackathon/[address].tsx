@@ -1,6 +1,7 @@
 import { useMUD } from './../MUDContext';
 import { Header } from './../components/Header';
 import { Footer } from './../components/Footer';
+import HackathonOverview  from './../components/HackathonOverview';
 import Timeline from './../components/Timeline';
 import React, { useState } from 'react';
 
@@ -20,7 +21,7 @@ export const HackathonPage: React.FC = () => {
   const bgImage = 'https://beiz.jp/images_T/black/black_00053.jpg';
 
   const OverviewTabContent: React.FC = () => {
-    return <div>Overview タブのコンテンツ</div>;
+    return <HackathonOverview />;
   };
 
   const PrizesTabContent: React.FC = () => {
