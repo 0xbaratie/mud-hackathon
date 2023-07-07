@@ -1,7 +1,7 @@
 export const EventCard = () => {
   return (
     <a href="/hackathon/[hackathonAddress]">
-      <div className="flex items-center space-x-4 border border-gray-300 border-l-4 h-[190px]">
+      <div className="flex items-center space-x-4 custom-border h-[190px]">
         <div className="ml-3">
           <figure>
             <img
