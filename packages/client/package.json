@@ -11,6 +11,7 @@
     "test": "tsc --noEmit"
   },
   "dependencies": {
+    "@emotion/styled": "^11.11.0",
     "@ethersproject/providers": "^5.7.2",
     "@latticexyz/common": "2.0.0-alpha.1.243+fc3bd590",
     "@latticexyz/dev-tools": "2.0.0-alpha.1.243+fc3bd590",
@@ -21,18 +22,28 @@
     "@latticexyz/std-client": "2.0.0-alpha.1.243+fc3bd590",
     "@latticexyz/utils": "2.0.0-alpha.1.243+fc3bd590",
     "@latticexyz/world": "2.0.0-alpha.1.243+fc3bd590",
+    "@mui/material": "^5.13.6",
     "@wagmi/chains": "^0.2.22",
     "contracts": "workspace:*",
     "ethers": "^5.7.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-datepicker": "^4.15.0",
+    "react-router-dom": "^6.14.1",
+    "react-time-picker": "^6.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.6",
+    "@types/react-datepicker": "^4.11.2",
     "@types/react-dom": "^18.2.4",
     "@vitejs/plugin-react": "^3.1.0",
+    "autoprefixer": "^10.4.14",
+    "daisyui": "^3.1.7",
     "eslint-plugin-react": "7.31.11",
     "eslint-plugin-react-hooks": "4.6.0",
+    "postcss": "^8.4.24",
+    "prettier": "^2.6.2",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.3.2",
     "vite": "^4.2.1",
     "wait-port": "^1.0.4"
   }

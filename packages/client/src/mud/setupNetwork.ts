@@ -1,13 +1,13 @@
-import { setupMUDV2Network } from "@latticexyz/std-client";
-import { createFastTxExecutor, createFaucetService, getSnapSyncRecords } from "@latticexyz/network";
-import { getNetworkConfig } from "./getNetworkConfig";
-import { defineContractComponents } from "./contractComponents";
-import { world } from "./world";
-import { Contract, Signer, utils } from "ethers";
-import { JsonRpcProvider } from "@ethersproject/providers";
-import { IWorld__factory } from "contracts/types/ethers-contracts/factories/IWorld__factory";
-import { getTableIds } from "@latticexyz/utils";
-import storeConfig from "contracts/mud.config";
+import { setupMUDV2Network } from '@latticexyz/std-client';
+import { createFastTxExecutor, createFaucetService, getSnapSyncRecords } from '@latticexyz/network';
+import { getNetworkConfig } from './getNetworkConfig';
+import { defineContractComponents } from './contractComponents';
+import { world } from './world';
+import { Contract, Signer, utils } from 'ethers';
+import { JsonRpcProvider } from '@ethersproject/providers';
+import { IWorld__factory } from 'contracts/types/ethers-contracts/factories/IWorld__factory';
+import { getTableIds } from '@latticexyz/utils';
+import storeConfig from 'contracts/mud.config';
 
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
 
@@ -18,7 +18,7 @@ export async function setupNetwork() {
     networkConfig,
     world,
     contractComponents,
-    syncThread: "main",
+    syncThread: 'main',
     storeConfig,
     worldAbi: IWorld__factory.abi,
   });
@@ -27,16 +27,16 @@ export async function setupNetwork() {
   const signer = result.network.signer.get();
   if (networkConfig.faucetServiceUrl && signer) {
     const address = await signer.getAddress();
-    console.info("[Dev Faucet]: Player address -> ", address);
+    console.info('[Dev Faucet]: Player address -> ', address);
 
     const faucet = createFaucetService(networkConfig.faucetServiceUrl);
 
     const requestDrip = async () => {
       const balance = await signer.getBalance();
       console.info(`[Dev Faucet]: Player balance -> ${balance}`);
-      const lowBalance = balance?.lte(utils.parseEther("1"));
+      const lowBalance = balance?.lte(utils.parseEther('1'));
       if (lowBalance) {
-        console.info("[Dev Faucet]: Balance is low, dripping funds to player");
+        console.info('[Dev Faucet]: Balance is low, dripping funds to player');
         // Double drip
         await faucet.dripDev({ address });
         await faucet.dripDev({ address });
@@ -59,7 +59,7 @@ export async function setupNetwork() {
       networkConfig.worldAddress,
       getTableIds(storeConfig),
       currentBlockNumber,
-      signerOrProvider
+      signerOrProvider,
     );
 
     console.log(`Syncing ${tableRecords.length} records`);
@@ -80,13 +80,13 @@ export async function setupNetwork() {
     args: Parameters<C[F]>,
     options?: {
       retryCount?: number;
-    }
+    },
   ) => Promise<ReturnType<C[F]>>;
 
   function bindFastTxExecute<C extends Contract>(contract: C): BoundFastTxExecuteFn<C> {
     return async function (...args) {
       if (!fastTxExecutor) {
-        throw new Error("no signer");
+        throw new Error('no signer');
       }
       const { tx } = await fastTxExecutor.fastTxExecute(contract, ...args);
       return await tx;
