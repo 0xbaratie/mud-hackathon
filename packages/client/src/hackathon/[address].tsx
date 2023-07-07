@@ -40,13 +40,14 @@ export const HackathonPage: React.FC = () => {
   };
 
   let activeTabContent;
-
+  let containerClassName = "w-3/4";
   if (activeTab === 1) {
     activeTabContent = <OverviewTabContent />;
   } else if (activeTab === 2) {
     activeTabContent = <PrizesTabContent />;
   } else if (activeTab === 3) {
     activeTabContent = <ProjectsTabContent />;
+    containerClassName = "w-full";
   } else if (activeTab === 4) {
     activeTabContent = <SubmitTabContent />;
   }
@@ -91,10 +92,14 @@ export const HackathonPage: React.FC = () => {
         </div>
       </div>
       <div className="flex mt-6 p-6">
-        <div className="w-3/4">{activeTabContent}</div>
-        <Timeline />
+        <div className={containerClassName}>
+          {activeTabContent}
+        </div>
+        {activeTab !== 3 && (
+          <Timeline />      
+        )}
       </div>
-      <Footer activeTab={activeTab}/>
+      <Footer/>
     </>
   );
 };

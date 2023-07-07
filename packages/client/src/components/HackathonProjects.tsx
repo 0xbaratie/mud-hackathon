@@ -4,13 +4,18 @@ import HackathonProjectCard  from './HackathonProjectCard';
 const imageURL = "https://storage.googleapis.com/ethglobal-api-production/projects%2F0wa8j%2Fimages%2FToronto_in_COVID-19_times_by_tour_boat.png"
 const HackathonProjects = () => {
   return (
-    <div className="grid grid-cols-3">
-      <HackathonProjectCard />
-      <HackathonProjectCard />
-      <HackathonProjectCard />
-      <HackathonProjectCard />
-      <HackathonProjectCard />
+    <div className="flex flex-wrap justify-center">
+      <div className="w-full sm:w-1/1 md:w-1/2 lg:w-1/3 p-2"><HackathonProjectCard /></div>
+      <div className="w-full sm:w-1/1 md:w-1/2 lg:w-1/3 p-2"><HackathonProjectCard /></div>
+      <div className="w-full sm:w-1/1 md:w-1/2 lg:w-1/3 p-2"><HackathonProjectCard /></div>
+      <div className="w-full sm:w-1/1 md:w-1/2 lg:w-1/3 p-2"><HackathonProjectCard /></div>
+      <div className="w-full sm:w-1/1 md:w-1/2 lg:w-1/3 p-2"><HackathonProjectCard /></div>
+      <div className="w-full sm:w-1/1 md:w-1/2 lg:w-1/3 p-2"><HackathonProjectCard /></div>
+      <div className="w-full sm:w-1/1 md:w-1/2 lg:w-1/3 p-2"><HackathonProjectCard /></div>
+      <div className="w-full sm:w-1/1 md:w-1/2 lg:w-1/3 p-2"><HackathonProjectCard /></div>
+      <div className="w-full sm:w-1/1 md:w-1/2 lg:w-1/3 p-2"><HackathonProjectCard /></div>
     </div>
+
   );  
 };
 

@@ -14,7 +14,7 @@ const HackathonProjects = () => {
   };
 
   return (
-    <div className="mt-10" style={{width: "390px"}}>
+    <div className="mt-10 w-[390px] mx-auto">
       <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
         <VoteModal />
       </FullScreenModal>
