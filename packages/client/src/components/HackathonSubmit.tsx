@@ -59,8 +59,11 @@ const HackathonSubmit = () => {
       <p className="text-sm text-gray-500 mb-1">
         The ideal aspect ratio is 16:9 - for example 640x360 px.
       </p>
-      <img src={Upload} alt='image' className='w-50' />
-      <input className='hidden' type='file' />
+      <input
+        type="text"
+        placeholder="http://arweave.net/xxxxxxxxxxxxxx"
+        className="input input-bordered w-full max-w-xs mt-2 text-gray-300"
+      />
 
       <div className="mt-10">
         <button className="btn bg-[#333333] text-white rounded-lg">Submit your project</button>
