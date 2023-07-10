@@ -1,4 +1,12 @@
 {
+  "420": {
+    "address": "0x3B082BD77Ba1c1a5b91cF6Eb995ad9d60Ddd0001",
+    "blockNumber": 11778353
+  },
+  "4242": {
+    "address": "0xcC1380742410DEd8e4E1cAAdA7f12685642FDF2f",
+    "blockNumber": 19292676
+  },
   "31337": {
     "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
   }

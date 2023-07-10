@@ -10,6 +10,7 @@
     "build:typechain": "rimraf types && typechain --target=ethers-v5 out/IWorld.sol/IWorld.json",
     "deploy:local": "pnpm run build && mud deploy",
     "deploy:testnet": "pnpm run build && mud deploy --profile=lattice-testnet",
+    "deploy:opgoerli": "pnpm run build && mud deploy --profile=opgoerli",
     "dev": "pnpm mud dev-contracts --tsgenOutput ../client/src/mud",
     "lint": "pnpm run prettier && pnpm run solhint",
     "prettier": "prettier --write 'src/**/*.sol'",
