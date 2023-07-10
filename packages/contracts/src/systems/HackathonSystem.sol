@@ -9,9 +9,10 @@ import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/Saf
 contract HackathonSystem is System {
   using SafeERC20 for IERC20;
 
-  modifier onlyOwner() {
-    //TODO
-    // require(Owner.get(_msgSender()), "Only owner can call this function.");
+  address public owner;
+
+  modifier onlyOwner(bytes32 _hackathonId) {
+    require(Hackathon.get(_hackathonId).owner == _msgSender(), "Only owner can call this function.");
     _;
   }
 
@@ -60,7 +61,7 @@ contract HackathonSystem is System {
     uint8 _winnerCount,
     string memory _name,
     string memory _uri
-  ) public onlyOwner onlyPhasePrepare(_hackathonId) {
+  ) public onlyOwner(_hackathonId) onlyPhasePrepare(_hackathonId) {
     Hackathon.set(_hackathonId,HackathonData(
       _msgSender(),
       _prizeToken,
@@ -75,7 +76,7 @@ contract HackathonSystem is System {
     ));
   }
 
-  function fixHackathon(bytes32 _hackathonId) public onlyOwner onlyPhasePrepare(_hackathonId){
+  function fixHackathon(bytes32 _hackathonId) public onlyOwner(_hackathonId) onlyPhasePrepare(_hackathonId){
     uint256 _deposit = HackathonPrize.getDeposit(_hackathonId);
     require(_deposit > 0, "Deposit amount must be greater than 0.");
     Hackathon.setPhase(_hackathonId,uint8(Phase.FIXED_PRIZE));
@@ -153,7 +154,7 @@ contract HackathonSystem is System {
     }
   }
 
-  function withdrawByOwner(bytes32 _hackathonId) public onlyOwner {
+  function withdrawByOwner(bytes32 _hackathonId) public onlyOwner(_hackathonId) {
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
     require(_hackathonData.phase == uint8(Phase.END), "Hackathon is not in END phase.");
 
