@@ -31,7 +31,7 @@ export const Header = () => {
           <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
             <HackathonForm />
           </FullScreenModal>
-          {/* <ConnectButton /> */}
+          <ConnectButton />
         </ul>
       </div>
     </div>
