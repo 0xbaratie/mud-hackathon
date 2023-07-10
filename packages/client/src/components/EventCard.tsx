@@ -1,4 +1,20 @@
-export const EventCard = () => {
+import { useComponentValue } from '@latticexyz/react';
+import { ethers } from 'ethers';
+import { useMUD } from '../MUDContext';
+
+export const EventCard = ({ hackathonNum }) => {
+  const {
+    components: { Hackathon },
+    network: { singletonEntity },
+  } = useMUD();
+
+  const bigNum = ethers.BigNumber.from(hackathonNum);
+  const paddedHexStr = '0x' + bigNum.toHexString().slice(2).padStart(64, '0');
+  console.log(paddedHexStr);
+
+  const hackathon = useComponentValue(Hackathon, paddedHexStr);
+  console.log(hackathon);
+
   return (
     <a href="/hackathon/[hackathonAddress]">
       <div className="flex items-center space-x-4 custom-border h-[190px]">

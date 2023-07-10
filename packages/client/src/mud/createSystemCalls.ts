@@ -14,8 +14,31 @@ export function createSystemCalls(
     await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
     return getComponentValue(Counter, singletonEntity);
   };
+  const createHackathon = async (
+    _prizeToken: string,
+    _startTimestamp: number,
+    _submitPeriod: number,
+    _votingPeriod: number,
+    _withdrawalPeriod: number,
+    _winnerCount: number,
+    _name: string,
+    _uri: string,
+  ) => {
+    const tx = await worldSend('createHackathon', [
+      _prizeToken,
+      _startTimestamp,
+      _submitPeriod,
+      _votingPeriod,
+      _withdrawalPeriod,
+      _winnerCount,
+      _name,
+      _uri,
+    ]);
+    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+  };
 
   return {
     increment,
+    createHackathon,
   };
 }

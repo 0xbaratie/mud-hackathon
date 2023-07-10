@@ -1,7 +1,12 @@
 import React, { FC } from 'react';
 import DateTimePicker from './DateTimePicker';
+import { useMUD } from '../MUDContext';
 
 const HackathonForm = () => {
+  const {
+    systemCalls: { createHackathon },
+  } = useMUD();
+
   return (
     <div className="p-6">
       <h1 className="text-sm mb-2">Hackathon title</h1>
@@ -44,7 +49,25 @@ const HackathonForm = () => {
         className="input input-bordered w-full max-w-xs mt-2 text-gray-300"
       />
       <div className="mt-6">
-        <button className="btn bg-[#333333] text-white rounded-lg">Create a hackathon</button>
+        <button
+          className="btn bg-[#333333] text-white rounded-lg"
+          onClick={async (event) => {
+            event.preventDefault();
+            //TODO delete
+            await createHackathon(
+              '0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000', //OPGoerli ETH
+              Date.now() + 1000 * 60 * 60 * 24 * 7,
+              Date.now() + 1000 * 60 * 60 * 24 * 14,
+              Date.now() + 1000 * 60 * 60 * 24 * 21,
+              Date.now() + 1000 * 60 * 60 * 24 * 28,
+              2,
+              'Test1',
+              'Url1',
+            );
+          }}
+        >
+          Create a hackathon
+        </button>
       </div>
     </div>
   );
