@@ -49,6 +49,10 @@ export async function setupNetwork() {
   }
 
   const provider = result.network.providers.get().json;
+  // TODO if use wallet connect, use wallet provider
+  // const walletProvider = new Web3Provider((window as any).ethereum);
+  // const walletSigner = walletProvider.getSigner();
+  // const signerOrProvider = walletSigner ?? signer ?? provider;
   const signerOrProvider = signer ?? provider;
   // Create a World contract instance
   const worldContract = IWorld__factory.connect(networkConfig.worldAddress, signerOrProvider);

@@ -1,11 +1,11 @@
-import { useMUD } from './../MUDContext';
-import { Header } from './../components/Header';
-import { Footer } from './../components/Footer';
-import HackathonOverview  from './../components/HackathonOverview';
-import HackathonPrizes  from './../components/HackathonPrizes';
-import HackathonProjects  from './../components/HackathonProjects';
-import HackathonSubmit  from './../components/HackathonSubmit';
-import Timeline from './../components/Timeline';
+import { useMUD } from '../MUDContext';
+import { Header } from '../components/Header';
+import { Footer } from '../components/Footer';
+import HackathonOverview from '../components/HackathonOverview';
+import HackathonPrizes from '../components/HackathonPrizes';
+import HackathonProjects from '../components/HackathonProjects';
+import HackathonSubmit from '../components/HackathonSubmit';
+import Timeline from '../components/Timeline';
 import React, { useState } from 'react';
 
 export const HackathonPage: React.FC = () => {
@@ -40,14 +40,14 @@ export const HackathonPage: React.FC = () => {
   };
 
   let activeTabContent;
-  let containerClassName = "w-3/4";
+  let containerClassName = 'w-3/4';
   if (activeTab === 1) {
     activeTabContent = <OverviewTabContent />;
   } else if (activeTab === 2) {
     activeTabContent = <PrizesTabContent />;
   } else if (activeTab === 3) {
     activeTabContent = <ProjectsTabContent />;
-    containerClassName = "w-full";
+    containerClassName = 'w-full';
   } else if (activeTab === 4) {
     activeTabContent = <SubmitTabContent />;
   }
@@ -92,14 +92,10 @@ export const HackathonPage: React.FC = () => {
         </div>
       </div>
       <div className="flex mt-6 p-6">
-        <div className={containerClassName}>
-          {activeTabContent}
-        </div>
-        {activeTab !== 3 && (
-          <Timeline />      
-        )}
+        <div className={containerClassName}>{activeTabContent}</div>
+        {activeTab !== 3 && <Timeline />}
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };

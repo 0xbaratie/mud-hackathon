@@ -3,11 +3,9 @@ import DatePicker from 'react-datepicker';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-const DateTimePicker = () => {
-  const [selectedDateTime, setSelectedDateTime] = useState(new Date());
-
+const DateTimePicker = ({ selectedDateTime, setSelectedDateTime }) => {
   const handleDateTimeChange = (dateTime: any) => {
-    setSelectedDateTime(dateTime);
+    setSelectedDateTime(dateTime.getTime() / 1000);
   };
 
   return (
@@ -21,7 +19,7 @@ const DateTimePicker = () => {
           timeIntervals={15}
           timeCaption="time"
           dateFormat="MMMM d, yyyy h:mm aa"
-          className="text-gray-300"
+          className="text-gray-900"
         />
       </div>
     </div>

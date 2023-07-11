@@ -10,13 +10,13 @@ export const EventCard = ({ hackathonNum }) => {
 
   const bigNum = ethers.BigNumber.from(hackathonNum);
   const paddedHexStr = '0x' + bigNum.toHexString().slice(2).padStart(64, '0');
-  console.log(paddedHexStr);
+  // console.log(paddedHexStr);
 
   const hackathon = useComponentValue(Hackathon, paddedHexStr);
   console.log(hackathon);
 
   return (
-    <a href="/hackathon/[hackathonAddress]">
+    <a href={'/hackathon/' + hackathonNum}>
       <div className="flex items-center space-x-4 custom-border h-[190px]">
         <div className="ml-3">
           <figure>
@@ -28,10 +28,10 @@ export const EventCard = ({ hackathonNum }) => {
           </figure>
         </div>
         <div className="card-body">
-          <h2 className="card-title text-md">Hack Week Developers Developers</h2>
+          <h2 className="card-title text-md">{hackathon.name}</h2>
           <div className="card-actions mt-2">
             <button className="bg-[#333333] text-white pl-4 pr-4 pt-1 pb-1 text-sm rounded-3xl">
-              about 5 hours left
+              about {Math.floor((Number(hackathon.submitPeriod) - Date.now() / 1000) / 3600)} hours
             </button>
           </div>
           <div className="mt-2">
