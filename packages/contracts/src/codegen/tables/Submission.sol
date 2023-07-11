@@ -25,16 +25,18 @@ struct SubmissionData {
   uint256 withdrawalPrize;
   string name;
   string uri;
+  string imageUri;
 }
 
 library Submission {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](4);
+    SchemaType[] memory _schema = new SchemaType[](5);
     _schema[0] = SchemaType.UINT256;
     _schema[1] = SchemaType.UINT256;
     _schema[2] = SchemaType.STRING;
     _schema[3] = SchemaType.STRING;
+    _schema[4] = SchemaType.STRING;
 
     return SchemaLib.encode(_schema);
   }
@@ -49,11 +51,12 @@ library Submission {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](4);
+    string[] memory _fieldNames = new string[](5);
     _fieldNames[0] = "votes";
     _fieldNames[1] = "withdrawalPrize";
     _fieldNames[2] = "name";
     _fieldNames[3] = "uri";
+    _fieldNames[4] = "imageUri";
     return ("Submission", _fieldNames);
   }
 
@@ -445,6 +448,157 @@ library Submission {
     _store.updateInField(_tableId, _keyTuple, 3, _index * 1, bytes((_slice)));
   }
 
+  /** Get imageUri */
+  function getImageUri(bytes32 hackathonId, address submitter) internal view returns (string memory imageUri) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 4);
+    return (string(_blob));
+  }
+
+  /** Get imageUri (using the specified store) */
+  function getImageUri(
+    IStore _store,
+    bytes32 hackathonId,
+    address submitter
+  ) internal view returns (string memory imageUri) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 4);
+    return (string(_blob));
+  }
+
+  /** Set imageUri */
+  function setImageUri(bytes32 hackathonId, address submitter, string memory imageUri) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+
+    StoreSwitch.setField(_tableId, _keyTuple, 4, bytes((imageUri)));
+  }
+
+  /** Set imageUri (using the specified store) */
+  function setImageUri(IStore _store, bytes32 hackathonId, address submitter, string memory imageUri) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+
+    _store.setField(_tableId, _keyTuple, 4, bytes((imageUri)));
+  }
+
+  /** Get the length of imageUri */
+  function lengthImageUri(bytes32 hackathonId, address submitter) internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+
+    uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 4, getSchema());
+    return _byteLength / 1;
+  }
+
+  /** Get the length of imageUri (using the specified store) */
+  function lengthImageUri(IStore _store, bytes32 hackathonId, address submitter) internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+
+    uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 4, getSchema());
+    return _byteLength / 1;
+  }
+
+  /** Get an item of imageUri (unchecked, returns invalid data if index overflows) */
+  function getItemImageUri(
+    bytes32 hackathonId,
+    address submitter,
+    uint256 _index
+  ) internal view returns (string memory) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+
+    bytes memory _blob = StoreSwitch.getFieldSlice(_tableId, _keyTuple, 4, getSchema(), _index * 1, (_index + 1) * 1);
+    return (string(_blob));
+  }
+
+  /** Get an item of imageUri (using the specified store) (unchecked, returns invalid data if index overflows) */
+  function getItemImageUri(
+    IStore _store,
+    bytes32 hackathonId,
+    address submitter,
+    uint256 _index
+  ) internal view returns (string memory) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+
+    bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 4, getSchema(), _index * 1, (_index + 1) * 1);
+    return (string(_blob));
+  }
+
+  /** Push a slice to imageUri */
+  function pushImageUri(bytes32 hackathonId, address submitter, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+
+    StoreSwitch.pushToField(_tableId, _keyTuple, 4, bytes((_slice)));
+  }
+
+  /** Push a slice to imageUri (using the specified store) */
+  function pushImageUri(IStore _store, bytes32 hackathonId, address submitter, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+
+    _store.pushToField(_tableId, _keyTuple, 4, bytes((_slice)));
+  }
+
+  /** Pop a slice from imageUri */
+  function popImageUri(bytes32 hackathonId, address submitter) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+
+    StoreSwitch.popFromField(_tableId, _keyTuple, 4, 1);
+  }
+
+  /** Pop a slice from imageUri (using the specified store) */
+  function popImageUri(IStore _store, bytes32 hackathonId, address submitter) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+
+    _store.popFromField(_tableId, _keyTuple, 4, 1);
+  }
+
+  /** Update a slice of imageUri at `_index` */
+  function updateImageUri(bytes32 hackathonId, address submitter, uint256 _index, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+
+    StoreSwitch.updateInField(_tableId, _keyTuple, 4, _index * 1, bytes((_slice)));
+  }
+
+  /** Update a slice of imageUri (using the specified store) at `_index` */
+  function updateImageUri(
+    IStore _store,
+    bytes32 hackathonId,
+    address submitter,
+    uint256 _index,
+    string memory _slice
+  ) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(submitter)));
+
+    _store.updateInField(_tableId, _keyTuple, 4, _index * 1, bytes((_slice)));
+  }
+
   /** Get the full data */
   function get(bytes32 hackathonId, address submitter) internal view returns (SubmissionData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](2);
@@ -476,9 +630,10 @@ library Submission {
     uint256 votes,
     uint256 withdrawalPrize,
     string memory name,
-    string memory uri
+    string memory uri,
+    string memory imageUri
   ) internal {
-    bytes memory _data = encode(votes, withdrawalPrize, name, uri);
+    bytes memory _data = encode(votes, withdrawalPrize, name, uri, imageUri);
 
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
@@ -495,9 +650,10 @@ library Submission {
     uint256 votes,
     uint256 withdrawalPrize,
     string memory name,
-    string memory uri
+    string memory uri,
+    string memory imageUri
   ) internal {
-    bytes memory _data = encode(votes, withdrawalPrize, name, uri);
+    bytes memory _data = encode(votes, withdrawalPrize, name, uri, imageUri);
 
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
@@ -508,12 +664,12 @@ library Submission {
 
   /** Set the full data using the data struct */
   function set(bytes32 hackathonId, address submitter, SubmissionData memory _table) internal {
-    set(hackathonId, submitter, _table.votes, _table.withdrawalPrize, _table.name, _table.uri);
+    set(hackathonId, submitter, _table.votes, _table.withdrawalPrize, _table.name, _table.uri, _table.imageUri);
   }
 
   /** Set the full data using the data struct (using the specified store) */
   function set(IStore _store, bytes32 hackathonId, address submitter, SubmissionData memory _table) internal {
-    set(_store, hackathonId, submitter, _table.votes, _table.withdrawalPrize, _table.name, _table.uri);
+    set(_store, hackathonId, submitter, _table.votes, _table.withdrawalPrize, _table.name, _table.uri, _table.imageUri);
   }
 
   /** Decode the tightly packed blob using this table's schema */
@@ -538,6 +694,10 @@ library Submission {
       _start = _end;
       _end += _encodedLengths.atIndex(1);
       _table.uri = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
+
+      _start = _end;
+      _end += _encodedLengths.atIndex(2);
+      _table.imageUri = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
     }
   }
 
@@ -546,14 +706,24 @@ library Submission {
     uint256 votes,
     uint256 withdrawalPrize,
     string memory name,
-    string memory uri
+    string memory uri,
+    string memory imageUri
   ) internal view returns (bytes memory) {
-    uint40[] memory _counters = new uint40[](2);
+    uint40[] memory _counters = new uint40[](3);
     _counters[0] = uint40(bytes(name).length);
     _counters[1] = uint40(bytes(uri).length);
+    _counters[2] = uint40(bytes(imageUri).length);
     PackedCounter _encodedLengths = PackedCounterLib.pack(_counters);
 
-    return abi.encodePacked(votes, withdrawalPrize, _encodedLengths.unwrap(), bytes((name)), bytes((uri)));
+    return
+      abi.encodePacked(
+        votes,
+        withdrawalPrize,
+        _encodedLengths.unwrap(),
+        bytes((name)),
+        bytes((uri)),
+        bytes((imageUri))
+      );
   }
 
   /** Encode keys as a bytes32 array using this table's schema */

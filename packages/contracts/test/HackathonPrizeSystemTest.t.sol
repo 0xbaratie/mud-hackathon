@@ -23,7 +23,7 @@ contract HackathonPrizeSystemTest is MudV2Test {
   }
 
   function testDepositPrize() public {
-    world.createHackathon(address(mock),1,2,3,4,1,"test1","uri1");
+    world.createHackathon(address(mock),1,2,3,4,1,"test1","uri1","imageUri1");
 
     mock.approve(address(world), 100000e6);    
     world.depositPrize(bytes32(uint256(1)), 1000e6);

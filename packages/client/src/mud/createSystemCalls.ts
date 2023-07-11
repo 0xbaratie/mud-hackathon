@@ -23,6 +23,7 @@ export function createSystemCalls(
     _winnerCount: number,
     _name: string,
     _uri: string,
+    _imageUri: string,
   ) => {
     const tx = await worldSend('createHackathon', [
       _prizeToken,
@@ -33,6 +34,7 @@ export function createSystemCalls(
       _winnerCount,
       _name,
       _uri,
+      _imageUri,
     ]);
     await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };

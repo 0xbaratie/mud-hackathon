@@ -35,7 +35,8 @@ contract HackathonSystem is System {
     uint256 _withdrawalPeriod,
     uint8 _winnerCount,
     string memory _name,
-    string memory _uri
+    string memory _uri,
+    string memory _imageUri
   ) public {
     Hackathon.set(_incrementHackathonId(),HackathonData(
       _msgSender(),
@@ -47,7 +48,8 @@ contract HackathonSystem is System {
       _withdrawalPeriod,
       _winnerCount,
       _name,
-      _uri
+      _uri,
+      _imageUri
     ));
   }
   
@@ -60,7 +62,8 @@ contract HackathonSystem is System {
     uint256 _withdrawalPeriod,
     uint8 _winnerCount,
     string memory _name,
-    string memory _uri
+    string memory _uri,
+    string memory _imageUri
   ) public onlyOwner(_hackathonId) onlyPhasePrepare(_hackathonId) {
     Hackathon.set(_hackathonId,HackathonData(
       _msgSender(),
@@ -72,7 +75,8 @@ contract HackathonSystem is System {
       _withdrawalPeriod,
       _winnerCount,
       _name,
-      _uri
+      _uri,
+      _imageUri
     ));
   }
 

@@ -20,7 +20,8 @@ contract SubmissionSystem is System {
   function submit(
     bytes32 _hackathonId,
     string memory _name,
-    string memory _uri
+    string memory _uri,
+    string memory _imageUri
   ) public {
     //validate phase
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
@@ -34,6 +35,7 @@ contract SubmissionSystem is System {
 
     Submission.setName(_hackathonId, _msgSender(), _name);
     Submission.setUri(_hackathonId, _msgSender(), _uri);
+    Submission.setImageUri(_hackathonId, _msgSender(), _imageUri);
   }
 
   function vote(bytes32 _hackathonId, address _submitter, uint256 _tokenId) public {

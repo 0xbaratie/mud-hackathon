@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 const DateTimePicker = ({ selectedDateTime, setSelectedDateTime }) => {
   const handleDateTimeChange = (dateTime: any) => {
-    setSelectedDateTime(dateTime.getTime() / 1000);
+    setSelectedDateTime(Math.floor(dateTime.getTime() / 1000));
   };
 
   return (

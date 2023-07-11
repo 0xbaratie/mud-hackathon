@@ -15,6 +15,7 @@ const HackathonForm = () => {
   const [winnerCount, setWinnerCount] = useState(0);
   const [name, setName] = useState('');
   const [uri, setUri] = useState('');
+  const [imageUri, setImageUri] = useState('');
 
   return (
     <div className="p-4">
@@ -80,6 +81,14 @@ const HackathonForm = () => {
         value={winnerCount}
         onChange={(e) => setWinnerCount(e.target.value)}
       />
+      <h1 className="text-sm mb-1 mt-3">Website</h1>
+      <input
+        type="text"
+        placeholder="http://detail"
+        className="input input-bordered w-full max-w-xs text-gray-900"
+        value={imageUri}
+        onChange={(e) => setImageUri(e.target.value)}
+      />
       <h1 className="text-sm mb-1 mt-3">Cover image</h1>
       <p className="text-sm text-gray-500 mb-1">
         The ideal aspect ratio is 9 : 2 - for example 1440 x 320 px.
@@ -105,6 +114,7 @@ const HackathonForm = () => {
               winnerCount,
               name,
               uri,
+              imageUri,
             );
           }}
         >

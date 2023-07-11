@@ -25,6 +25,7 @@ export default mudConfig({
         winnerCount: "uint8", // prize is awarded to top N submitters
         name: "string",
         uri: "string",
+        imageUri: "string",
       },
     },
     HackathonPrize: {
@@ -39,6 +40,7 @@ export default mudConfig({
         withdrawalPrize: "uint256",
         name: "string",
         uri: "string",
+        imageUri: "string",
       },
       keySchema: {
         hackathonId: "bytes32",

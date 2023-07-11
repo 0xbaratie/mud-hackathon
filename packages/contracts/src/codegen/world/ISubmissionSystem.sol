@@ -6,7 +6,7 @@ pragma solidity >=0.8.0;
 interface ISubmissionSystem {
   function setVoteToken(address _voteToken) external;
 
-  function submit(bytes32 _hackathonId, string memory _name, string memory _uri) external;
+  function submit(bytes32 _hackathonId, string memory _name, string memory _uri, string memory _imageUri) external;
 
   function vote(bytes32 _hackathonId, address _submitter, uint256 _tokenId) external;
 

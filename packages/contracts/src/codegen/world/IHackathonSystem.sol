@@ -12,7 +12,8 @@ interface IHackathonSystem {
     uint256 _withdrawalPeriod,
     uint8 _winnerCount,
     string memory _name,
-    string memory _uri
+    string memory _uri,
+    string memory _imageUri
   ) external;
 
   function updateHackathon(
@@ -24,7 +25,8 @@ interface IHackathonSystem {
     uint256 _withdrawalPeriod,
     uint8 _winnerCount,
     string memory _name,
-    string memory _uri
+    string memory _uri,
+    string memory _imageUri
   ) external;
 
   function fixHackathon(bytes32 _hackathonId) external;
