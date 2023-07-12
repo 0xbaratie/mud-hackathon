@@ -35,7 +35,7 @@ contract SubmissionSystemTest is MudV2Test {
     world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1","imageUri1");
 
     vm.expectRevert(bytes("Hackathon is not in SUBMISSION phase."));
-    world.submit(bytes32(uint256(1)), "submit1", "submitUri1", "submitImageUri1");
+    world.submit(bytes32(uint256(1)), "submit1","description1" ,"submitUri1", "submitImageUri1");
 
     //fix
     mock.approve(address(world), 100000e6);    
@@ -47,7 +47,7 @@ contract SubmissionSystemTest is MudV2Test {
     world.proceedPhase(bytes32(uint256(1)));
 
     // submit
-    world.submit(bytes32(uint256(1)), "submit1", "submitUri1", "submitImageUri1");
+    world.submit(bytes32(uint256(1)), "submit1","description1" , "submitUri1", "submitImageUri1");
     address[] memory _submitters = HackathonPrize.getSubmitters(world, bytes32(uint256(1)));
     assertEq(_submitters[0], address(this));
     assertEq(Submission.getName(world, bytes32(uint256(1)), address(this)), "submit1");
@@ -55,14 +55,14 @@ contract SubmissionSystemTest is MudV2Test {
 
     // submit twice
     vm.prank(address(1));
-    world.submit(bytes32(uint256(1)), "submit2", "submitUri2", "submitImageUri1");
+    world.submit(bytes32(uint256(1)), "submit2", "description2" ,"submitUri2", "submitImageUri1");
     _submitters = HackathonPrize.getSubmitters(world, bytes32(uint256(1)));
     assertEq(_submitters[1], address(1));
     assertEq(Submission.getName(world, bytes32(uint256(1)), address(1)), "submit2");
     assertEq(Submission.getUri(world, bytes32(uint256(1)), address(1)), "submitUri2");
 
     // update submit
-    world.submit(bytes32(uint256(1)), "submit3", "submitUri3", "submitImageUri1");
+    world.submit(bytes32(uint256(1)), "submit3","description3" , "submitUri3", "submitImageUri1");
     _submitters = HackathonPrize.getSubmitters(world, bytes32(uint256(1)));
     assertEq(_submitters.length, 2);
     assertEq(Submission.getName(world, bytes32(uint256(1)), address(this)), "submit3");
@@ -106,7 +106,7 @@ contract SubmissionSystemTest is MudV2Test {
     //proceed HACKING
     skip(2);
     world.proceedPhase(bytes32(uint256(1)));
-    world.submit(bytes32(uint256(1)), "submit1", "submitUri1", "submitImageUri1");
+    world.submit(bytes32(uint256(1)), "submit1","description1" , "submitUri1", "submitImageUri1");
 
     //proceed VOTING
     skip(2);
@@ -135,7 +135,7 @@ contract SubmissionSystemTest is MudV2Test {
     //proceed HACKING
     skip(2);
     world.proceedPhase(bytes32(uint256(1)));
-    world.submit(bytes32(uint256(1)), "submit1", "submitUri1", "submitImageUri1");
+    world.submit(bytes32(uint256(1)), "submit1","description1" , "submitUri1", "submitImageUri1");
 
     //proceed VOTING
     skip(2);

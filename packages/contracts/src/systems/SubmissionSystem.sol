@@ -20,6 +20,7 @@ contract SubmissionSystem is System {
   function submit(
     bytes32 _hackathonId,
     string memory _name,
+    string memory _description,
     string memory _uri,
     string memory _imageUri
   ) public {
@@ -34,6 +35,7 @@ contract SubmissionSystem is System {
     }
 
     Submission.setName(_hackathonId, _msgSender(), _name);
+    Submission.setDescription(_hackathonId, _msgSender(), _description);
     Submission.setUri(_hackathonId, _msgSender(), _uri);
     Submission.setImageUri(_hackathonId, _msgSender(), _imageUri);
   }

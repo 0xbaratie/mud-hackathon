@@ -38,9 +38,20 @@ export function createSystemCalls(
     ]);
     await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
+  const submit = async (
+    _hackathonId: string,
+    _name: string,
+    _description: string,
+    _uri: string,
+    _imageUri: string,
+  ) => {
+    const tx = await worldSend('submit', [_hackathonId, _name, _description, _uri, _imageUri]);
+    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+  };
 
   return {
     increment,
     createHackathon,
+    submit,
   };
 }

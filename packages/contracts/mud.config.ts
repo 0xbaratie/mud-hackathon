@@ -39,6 +39,7 @@ export default mudConfig({
         votes: "uint256",
         withdrawalPrize: "uint256",
         name: "string",
+        description: "string",
         uri: "string",
         imageUri: "string",
       },

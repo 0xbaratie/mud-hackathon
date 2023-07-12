@@ -2,20 +2,34 @@ import React, { FC } from 'react';
 import DateTimePicker from './DateTimePicker';
 import { useMUD } from '../MUDContext';
 import { useState } from 'react';
+import { PRIZE_TOKEN } from '../constants/constants';
 
 const HackathonForm = () => {
+  const getWeeksLater = (weeks: number) => {
+    const date = new Date();
+    date.setDate(date.getDate() + 7 * weeks);
+    date.setHours(23);
+    date.setMinutes(59);
+    date.setSeconds(0);
+    return date;
+  };
+
+  const getTimestampFromDate = (date: Date) => {
+    return Math.floor(date.getTime() / 1000);
+  };
+
   const {
     systemCalls: { createHackathon },
   } = useMUD();
-  const [prizeToken, setPrizeToken] = useState('');
-  const [startTimestamp, setStartTimestamp] = useState(0);
-  const [submitPeriod, setSubmitPeriod] = useState(0);
-  const [votingPeriod, setVotingPeriod] = useState(0);
-  const [withdrawalPeriod, setWithdrawalPeriod] = useState(0);
-  const [winnerCount, setWinnerCount] = useState(0);
-  const [name, setName] = useState('');
-  const [uri, setUri] = useState('');
-  const [imageUri, setImageUri] = useState('');
+  const [prizeToken, setPrizeToken] = useState(PRIZE_TOKEN.ETH);
+  const [startTimestamp, setStartTimestamp] = useState(getWeeksLater(1));
+  const [submitPeriod, setSubmitPeriod] = useState(getWeeksLater(2));
+  const [votingPeriod, setVotingPeriod] = useState(getWeeksLater(3));
+  const [withdrawalPeriod, setWithdrawalPeriod] = useState(getWeeksLater(4));
+  const [winnerCount, setWinnerCount] = useState(1);
+  const [name, setName] = useState('Hackathon1');
+  const [uri, setUri] = useState('https://url1');
+  const [imageUri, setImageUri] = useState('https://imageUrl1');
 
   return (
     <div className="p-4">
@@ -33,6 +47,8 @@ const HackathonForm = () => {
         type="text"
         placeholder="https://xxxxxxx.framer.website/"
         className="input input-bordered w-full max-w-xs text-gray-900"
+        value={uri}
+        onChange={(e) => setUri(e.target.value)}
       />
       <h1 className="text-sm mb-1 mt-3 ">Prize token (Optimism chain)</h1>
       <select
@@ -40,12 +56,9 @@ const HackathonForm = () => {
         value={prizeToken}
         onChange={(e) => setPrizeToken(e.target.value)}
       >
-        <option disabled value="" className="text-gray-900">
-          Select a token
-        </option>
-        <option value="0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000">ETH</option> {/* OPGoerli ETH */}
-        <option>USDC</option>
-        <option>DAI</option>
+        <option value={PRIZE_TOKEN.ETH}>ETH</option> {/* OPGoerli ETH */}
+        <option value={PRIZE_TOKEN.USDC}>USDC</option>
+        <option value={PRIZE_TOKEN.DAI}>DAI</option>
       </select>
       <div className="flex">
         <div className="flex-1">
@@ -81,14 +94,6 @@ const HackathonForm = () => {
         value={winnerCount}
         onChange={(e) => setWinnerCount(e.target.value)}
       />
-      <h1 className="text-sm mb-1 mt-3">Website</h1>
-      <input
-        type="text"
-        placeholder="http://detail"
-        className="input input-bordered w-full max-w-xs text-gray-900"
-        value={imageUri}
-        onChange={(e) => setImageUri(e.target.value)}
-      />
       <h1 className="text-sm mb-1 mt-3">Cover image</h1>
       <p className="text-sm text-gray-500 mb-1">
         The ideal aspect ratio is 9 : 2 - for example 1440 x 320 px.
@@ -97,8 +102,8 @@ const HackathonForm = () => {
         type="text"
         placeholder="http://arweave.net/xxxxxxxxxxxxxx"
         className="input input-bordered w-full max-w-xs text-gray-900"
-        value={uri}
-        onChange={(e) => setUri(e.target.value)}
+        value={imageUri}
+        onChange={(e) => setImageUri(e.target.value)}
       />
       <div className="mt-3">
         <button
@@ -107,10 +112,10 @@ const HackathonForm = () => {
             event.preventDefault();
             await createHackathon(
               prizeToken,
-              startTimestamp,
-              submitPeriod,
-              votingPeriod,
-              withdrawalPeriod,
+              getTimestampFromDate(startTimestamp),
+              getTimestampFromDate(submitPeriod),
+              getTimestampFromDate(votingPeriod),
+              getTimestampFromDate(withdrawalPeriod),
               winnerCount,
               name,
               uri,

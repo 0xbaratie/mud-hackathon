@@ -1,59 +1,105 @@
 import React, { FC } from 'react';
 import Upload from '../../public/upload.svg';
-const HackathonSubmit = () => {
+import { useState } from 'react';
+import { useMUD } from '../MUDContext';
+
+const HackathonSubmit = ({ hackathonId }) => {
+  const [name, setName] = useState('Your Project');
+  const [description, setDescription] = useState('Short description');
+  const [uri, setUri] = useState('https://yourproject');
+  const [imageUri, setImageUri] = useState('https://yourprojectimage');
+  const {
+    systemCalls: { submit },
+  } = useMUD();
+
   return (
     <div className="p-6">
       <h1 className="text-md mb-2">Project title</h1>
       <input
         type="text"
         placeholder="Enter your project title"
-        className="input input-bordered w-full max-w-xs mt-2 text-gray-300"
+        className="input input-bordered w-full max-w-xs mt-2 text-gray-900"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
       />
 
-      <h1 className="text-md mb-2 mt-6">If you have a demonstration, link to it here! (Optional)</h1>
+      {/* <h1 className="text-md mb-2 mt-6">
+        If you have a demonstration, link to it here! (Optional)
+      </h1>
       <input
         type="text"
         placeholder="xxxxx.vercel.com"
-        className="input input-bordered w-full max-w-xs mt-2 text-gray-300"
-      />
-     
+        className="input input-bordered w-full max-w-xs mt-2 text-gray-900"
+      /> */}
+
       <h1 className="text-md mb-2 mt-6">Short description</h1>
       <p className="text-sm text-gray-500 mb-1">
         A max 280-character or less description of your project (it should fit in a tweet!)
       </p>
-      <textarea placeholder="Enter additional information" className="textarea textarea-bordered textarea-md w-full max-w-xs" ></textarea>
+      <input
+        type="text"
+        placeholder="Enter additional information"
+        className="input input-bordered w-full max-w-xs mt-2 text-gray-900"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
 
-      <h1 className="text-md mb-2 mt-6">Description</h1>
+      {/* <h1 className="text-md mb-2 mt-6">Description</h1>
       <p className="text-sm text-gray-500 mb-1">
         Go in as much detail as you can about what this project is. Please be as clear as possible!
       </p>
-      <textarea placeholder="Enter additional information" className="textarea textarea-bordered textarea-md w-full max-w-xs" ></textarea>
+      <textarea
+        placeholder="Enter additional information"
+        className="textarea textarea-bordered textarea-md w-full max-w-xs"
+      ></textarea> */}
 
-      <h1 className="text-md mb-2 mt-6">How to make?</h1>
+      {/* <h1 className="text-md mb-2 mt-6">How to make?</h1>
       <p className="text-sm text-gray-500 mb-1">
-        Tell us about how you built this project; the nitty-gritty details. <br />What technologies did you use? How are they pieced together? <br /> If you used any sponsor technologies, how did it benefit your project? <br />Did you do anything particuarly hacky that is notable and worth mentioning?
+        Tell us about how you built this project; the nitty-gritty details. <br />
+        What technologies did you use? How are they pieced together? <br /> If you used any sponsor
+        technologies, how did it benefit your project? <br />
+        Did you do anything particuarly hacky that is notable and worth mentioning?
       </p>
-      <textarea placeholder="Enter additional information" className="textarea textarea-bordered textarea-md w-full max-w-xs" ></textarea>
+      <textarea
+        placeholder="Enter additional information"
+        className="textarea textarea-bordered textarea-md w-full max-w-xs"
+      ></textarea> */}
 
-      <h1 className="text-md mb-2 mt-6">GitHub public repository or a link to the source code  (Optional)</h1>
+      {/* <h1 className="text-md mb-2 mt-6">
+        GitHub public repository or a link to the source code (Optional)
+      </h1>
       <p className="text-sm text-gray-500 mb-1">
-        Where we can go to view the source code, development activity, or design history. <br />If your design work was composed entirely on something like Figma, then you can link that here.
+        Where we can go to view the source code, development activity, or design history. <br />
+        If your design work was composed entirely on something like Figma, then you can link that
+        here.
       </p>
       <input
         type="text"
         placeholder="github.com/xxxxx/yyyyy"
-        className="input input-bordered w-full max-w-xs mt-2 text-gray-300"
+        className="input input-bordered w-full max-w-xs mt-2 text-gray-900"
+      /> */}
+
+      <h1 className="text-md mb-2 mt-6">Project URL</h1>
+      <p className="text-sm text-gray-500 mb-1"></p>
+      <input
+        type="text"
+        placeholder="https://xxxxx/yyyyy"
+        className="input input-bordered w-full max-w-xs mt-2 text-gray-900"
+        value={uri}
+        onChange={(e) => setUri(e.target.value)}
       />
 
-      <h1 className="text-md mb-2 mt-6">Demo video (Optional)</h1>
+      {/* <h1 className="text-md mb-2 mt-6">Demo video (Optional)</h1>
       <p className="text-sm text-gray-500 mb-1">
-      • Please ensure the video is between 2 and 4 minutes<br />• Please ensure that minimum video resolution is 720p <br />• Please ensure the video has audio without music
+        • Please ensure the video is between 2 and 4 minutes
+        <br />• Please ensure that minimum video resolution is 720p <br />• Please ensure the video
+        has audio without music
       </p>
       <input
         type="text"
         placeholder="loom.com/xxxxxxxxxxx"
-        className="input input-bordered w-full max-w-xs mt-2 text-gray-300"
-      />
+        className="input input-bordered w-full max-w-xs mt-2 text-gray-900"
+      /> */}
 
       <h1 className="text-md mb-2 mt-6">Cover image</h1>
       <p className="text-sm text-gray-500 mb-1">
@@ -62,14 +108,24 @@ const HackathonSubmit = () => {
       <input
         type="text"
         placeholder="http://arweave.net/xxxxxxxxxxxxxx"
-        className="input input-bordered w-full max-w-xs mt-2 text-gray-300"
+        className="input input-bordered w-full max-w-xs mt-2 text-gray-900"
+        value={imageUri}
+        onChange={(e) => setImageUri(e.target.value)}
       />
 
       <div className="mt-10">
-        <button className="btn bg-[#333333] text-white rounded-lg">Submit your project</button>
+        <button
+          className="btn bg-[#333333] text-white rounded-lg"
+          onClick={async (event) => {
+            event.preventDefault();
+            await submit(hackathonId, name, description, uri, imageUri);
+          }}
+        >
+          Submit your project
+        </button>
       </div>
     </div>
-  );  
+  );
 };
 
 export default HackathonSubmit;

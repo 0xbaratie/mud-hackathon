@@ -1,22 +1,22 @@
 import { useComponentValue } from '@latticexyz/react';
 import { ethers } from 'ethers';
 import { useMUD } from '../MUDContext';
+import { Link } from 'react-router-dom';
+import { HackathonPage } from '../hackathon/[id]';
 
 export const EventCard = ({ hackathonNum }) => {
   const {
-    components: { Hackathon },
+    components: { Hackathon, HackathonPrize },
     network: { singletonEntity },
   } = useMUD();
 
   const bigNum = ethers.BigNumber.from(hackathonNum);
   const paddedHexStr = '0x' + bigNum.toHexString().slice(2).padStart(64, '0');
-  // console.log(paddedHexStr);
-
   const hackathon = useComponentValue(Hackathon, paddedHexStr);
-  console.log(hackathon);
+  const hackathonPrize = useComponentValue(HackathonPrize, paddedHexStr);
 
   return (
-    <a href={'/hackathon/' + hackathonNum}>
+    <Link to={`/hackathon/${hackathonNum}`}>
       <div className="flex items-center space-x-4 custom-border h-[190px]">
         <div className="ml-3">
           <figure>
@@ -35,13 +35,15 @@ export const EventCard = ({ hackathonNum }) => {
             </button>
           </div>
           <div className="mt-2">
-            <span className="font-bold">22.5ETH</span>
+            <span className="font-bold">
+              {hackathonPrize?.deposit ? Number(hackathonPrize.deposit) : 0} ETH
+            </span>
             <span className="p-2 text-gray-600">in prizes</span>
             <span className="font-bold">243</span>
             <span className="p-2 text-gray-600">projects</span>
           </div>
         </div>
       </div>
-    </a>
+    </Link>
   );
 };

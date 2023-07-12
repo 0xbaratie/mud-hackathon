@@ -52,7 +52,7 @@ setup().then((result) => {
         >
           <Router>
             <Routes>
-              <Route path="/hackathon/:address" element={<HackathonPage />} />
+              <Route path="/hackathon/:id" element={<HackathonPage />} />
               <Route path="/project/:address" element={<ProjectPage />} />
               <Route path="/" element={<App />} />
             </Routes>

@@ -1,4 +1,5 @@
 import { useMUD } from '../MUDContext';
+import { ethers } from 'ethers';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import HackathonOverview from '../components/HackathonOverview';
@@ -7,13 +8,19 @@ import HackathonProjects from '../components/HackathonProjects';
 import HackathonSubmit from '../components/HackathonSubmit';
 import Timeline from '../components/Timeline';
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useComponentValue } from '@latticexyz/react';
 
-export const HackathonPage: React.FC = () => {
+export const HackathonPage = () => {
+  const { id } = useParams();
   const {
-    components: { Counter },
-    systemCalls: { increment },
+    components: { Hackathon, HackathonPrize },
     network: { singletonEntity },
   } = useMUD();
+  const bigNum = ethers.BigNumber.from(id);
+  const paddedHexStr = '0x' + bigNum.toHexString().slice(2).padStart(64, '0');
+  const hackathon = useComponentValue(Hackathon, paddedHexStr);
+  const hackathonPrize = useComponentValue(HackathonPrize, paddedHexStr);
 
   const [activeTab, setActiveTab] = useState(1);
 
@@ -24,19 +31,26 @@ export const HackathonPage: React.FC = () => {
   const bgImage = 'https://beiz.jp/images_T/black/black_00053.jpg';
 
   const OverviewTabContent: React.FC = () => {
-    return <HackathonOverview />;
+    return <HackathonOverview uri={hackathon.uri} />;
   };
 
+  console.log(hackathon.prizeToken);
+
   const PrizesTabContent: React.FC = () => {
-    return <HackathonPrizes />;
+    return (
+      <HackathonPrizes
+        deposit={hackathonPrize?.deposit ? Number(hackathonPrize.deposit) : 0}
+        prizeToken={hackathon.prizeToken}
+      />
+    );
+  };
+
+  const SubmitTabContent: React.FC = () => {
+    return <HackathonSubmit hackathonId={paddedHexStr} />;
   };
 
   const ProjectsTabContent: React.FC = () => {
     return <HackathonProjects />;
-  };
-
-  const SubmitTabContent: React.FC = () => {
-    return <HackathonSubmit />;
   };
 
   let activeTabContent;
@@ -46,10 +60,10 @@ export const HackathonPage: React.FC = () => {
   } else if (activeTab === 2) {
     activeTabContent = <PrizesTabContent />;
   } else if (activeTab === 3) {
+    activeTabContent = <SubmitTabContent />;
+  } else if (activeTab === 4) {
     activeTabContent = <ProjectsTabContent />;
     containerClassName = 'w-full';
-  } else if (activeTab === 4) {
-    activeTabContent = <SubmitTabContent />;
   }
 
   return (
@@ -79,7 +93,7 @@ export const HackathonPage: React.FC = () => {
             }`}
             onClick={() => handleTabClick(3)}
           >
-            Projects
+            Submit
           </a>
           <a
             className={`tab tab-lifted font-bold ${
@@ -87,13 +101,13 @@ export const HackathonPage: React.FC = () => {
             }`}
             onClick={() => handleTabClick(4)}
           >
-            Submit
+            Projects
           </a>
         </div>
       </div>
       <div className="flex mt-6 p-6">
         <div className={containerClassName}>{activeTabContent}</div>
-        {activeTab !== 3 && <Timeline />}
+        {activeTab !== 4 && <Timeline />}
       </div>
       <Footer />
     </>

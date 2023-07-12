@@ -84,6 +84,7 @@ export function defineContractComponents(world: World) {
           votes: RecsType.BigInt,
           withdrawalPrize: RecsType.BigInt,
           name: RecsType.String,
+          description: RecsType.String,
           uri: RecsType.String,
           imageUri: RecsType.String,
         },
