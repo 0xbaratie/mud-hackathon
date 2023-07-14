@@ -40,7 +40,7 @@ contract SubmissionSystemTest is MudV2Test {
     //fix
     mock.approve(address(world), 100000e6);    
     world.depositPrize(bytes32(uint256(1)), 100);
-    world.fixHackathon(bytes32(uint256(1)));
+    world.proceedPhase(bytes32(uint256(1)));
 
     //proceed HACKING
     skip(2);
@@ -78,7 +78,7 @@ contract SubmissionSystemTest is MudV2Test {
     //fix
     mock.approve(address(world), 100000e6);    
     world.depositPrize(bytes32(uint256(1)), 100);
-    world.fixHackathon(bytes32(uint256(1)));
+    world.proceedPhase(bytes32(uint256(1)));
 
     //proceed HACKING
     skip(2);
@@ -101,7 +101,7 @@ contract SubmissionSystemTest is MudV2Test {
     //fix
     mock.approve(address(world), 100000e6);    
     world.depositPrize(bytes32(uint256(1)), 100);
-    world.fixHackathon(bytes32(uint256(1)));
+    world.proceedPhase(bytes32(uint256(1)));
 
     //proceed HACKING
     skip(2);
@@ -130,7 +130,7 @@ contract SubmissionSystemTest is MudV2Test {
     //fix
     mock.approve(address(world), 100000e6);    
     world.depositPrize(bytes32(uint256(1)), 100);
-    world.fixHackathon(bytes32(uint256(1)));
+    world.proceedPhase(bytes32(uint256(1)));
 
     //proceed HACKING
     skip(2);

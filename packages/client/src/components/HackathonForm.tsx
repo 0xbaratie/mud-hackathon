@@ -22,10 +22,10 @@ const HackathonForm = () => {
     systemCalls: { createHackathon },
   } = useMUD();
   const [prizeToken, setPrizeToken] = useState(PRIZE_TOKEN.ETH);
-  const [startTimestamp, setStartTimestamp] = useState(getWeeksLater(1));
-  const [submitPeriod, setSubmitPeriod] = useState(getWeeksLater(2));
-  const [votingPeriod, setVotingPeriod] = useState(getWeeksLater(3));
-  const [withdrawalPeriod, setWithdrawalPeriod] = useState(getWeeksLater(4));
+  const [startTimestamp, setStartTimestamp] = useState(getWeeksLater(-1));
+  const [submitPeriod, setSubmitPeriod] = useState(getWeeksLater(-1));
+  const [votingPeriod, setVotingPeriod] = useState(getWeeksLater(-1));
+  const [withdrawalPeriod, setWithdrawalPeriod] = useState(getWeeksLater(-1));
   const [winnerCount, setWinnerCount] = useState(1);
   const [name, setName] = useState('Hackathon1');
   const [uri, setUri] = useState('https://url1');
@@ -51,15 +51,23 @@ const HackathonForm = () => {
         onChange={(e) => setUri(e.target.value)}
       />
       <h1 className="text-sm mb-1 mt-3 ">Prize token (Optimism chain)</h1>
-      <select
+      {/* <select
         className="select select-bordered w-full max-w-xs text-gray-900"
         value={prizeToken}
         onChange={(e) => setPrizeToken(e.target.value)}
       >
-        <option value={PRIZE_TOKEN.ETH}>ETH</option> {/* OPGoerli ETH */}
+        <option value={PRIZE_TOKEN.ETH}>ETH</option>
         <option value={PRIZE_TOKEN.USDC}>USDC</option>
         <option value={PRIZE_TOKEN.DAI}>DAI</option>
-      </select>
+      </select> */}
+      <input
+        type="text"
+        placeholder="0x"
+        className="input input-bordered w-full max-w-xs text-gray-900"
+        value={prizeToken}
+        onChange={(e) => setPrizeToken(e.target.value)}
+      />
+
       <div className="flex">
         <div className="flex-1">
           <h1 className="text-sm mb-1 mt-3">Hack start datetime</h1>

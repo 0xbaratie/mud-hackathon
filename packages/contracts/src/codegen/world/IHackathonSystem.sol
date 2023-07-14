@@ -29,8 +29,6 @@ interface IHackathonSystem {
     string memory _imageUri
   ) external;
 
-  function fixHackathon(bytes32 _hackathonId) external;
-
   function proceedPhase(bytes32 _hackathonId) external;
 
   function withdrawByOwner(bytes32 _hackathonId) external;

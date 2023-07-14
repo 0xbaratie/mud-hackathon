@@ -39,6 +39,7 @@ export const HackathonPage = () => {
   const PrizesTabContent: React.FC = () => {
     return (
       <HackathonPrizes
+        hackathonId={paddedHexStr}
         deposit={hackathonPrize?.deposit ? Number(hackathonPrize.deposit) : 0}
         prizeToken={hackathon.prizeToken}
       />
@@ -50,7 +51,12 @@ export const HackathonPage = () => {
   };
 
   const ProjectsTabContent: React.FC = () => {
-    return <HackathonProjects />;
+    return (
+      <HackathonProjects
+        hackathonId={paddedHexStr}
+        hackathonSubmitters={hackathonPrize.submitters}
+      />
+    );
   };
 
   let activeTabContent;
@@ -107,7 +113,16 @@ export const HackathonPage = () => {
       </div>
       <div className="flex mt-6 p-6">
         <div className={containerClassName}>{activeTabContent}</div>
-        {activeTab !== 4 && <Timeline />}
+        {activeTab !== 4 && (
+          <Timeline
+            hackathonId={paddedHexStr}
+            phase={hackathon.phase}
+            startTimestamp={hackathon.startTimestamp}
+            submitPeriod={hackathon.submitPeriod}
+            votingPeriod={hackathon.votingPeriod}
+            withdrawalPeriod={hackathon.withdrawalPeriod}
+          />
+        )}
       </div>
       <Footer />
     </>

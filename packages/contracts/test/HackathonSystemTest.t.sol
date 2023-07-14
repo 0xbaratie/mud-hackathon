@@ -138,29 +138,26 @@ contract HackathonSystemTest is MudV2Test {
     assertEq(Config.get(world), bytes32(uint256(1)));
   }
 
-  function testFixHackathon() public {
+  function testProceedPhase0() public {
     world.createHackathon(address(mock),1,2,3,4,1,"test1","uri1","imageUri1");
 
     //revert
-    vm.expectRevert(bytes("Deposit amount must be greater than 0."));    
-    world.fixHackathon(bytes32(uint256(1)));
+    // vm.expectRevert(bytes("Deposit amount must be greater than 0."));    
+    // world.proceedPhase(bytes32(uint256(1)));
 
     mock.approve(address(world), 100000e6);    
     world.depositPrize(bytes32(uint256(1)), 100);
-    world.fixHackathon(bytes32(uint256(1)));
+    world.proceedPhase(bytes32(uint256(1)));
     assertEq(Hackathon.get(world, bytes32(uint256(1))).phase, uint8(Phase.FIXED_PRIZE));
   }
 
   function testProceedPhase() public {
-    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1","imageUri1");
-
-    vm.expectRevert(bytes("Cannot proceed phase."));
-    world.proceedPhase(bytes32(uint256(1)));
+    world.createHackathon(address(mock),block.timestamp + 1,block.timestamp + 3,block.timestamp + 6,block.timestamp + 10,1,"test1","uri1","imageUri1");
 
     //fix
     mock.approve(address(world), 100000e6);    
     world.depositPrize(bytes32(uint256(1)), 100);
-    world.fixHackathon(bytes32(uint256(1)));
+    world.proceedPhase(bytes32(uint256(1)));
 
     //proceed HACKING
     vm.expectRevert(bytes("StartTimestamp is not passed."));
@@ -204,7 +201,7 @@ contract HackathonSystemTest is MudV2Test {
     //fix
     mock.approve(address(world), 100000e6);    
     world.depositPrize(bytes32(uint256(1)), 100);
-    world.fixHackathon(bytes32(uint256(1)));
+    world.proceedPhase(bytes32(uint256(1)));
 
     //proceed HACKING
     skip(2);
@@ -228,7 +225,7 @@ contract HackathonSystemTest is MudV2Test {
     //fix
     mock.approve(address(world), 100000e6);    
     world.depositPrize(bytes32(uint256(1)), 100);
-    world.fixHackathon(bytes32(uint256(1)));
+    world.proceedPhase(bytes32(uint256(1)));
 
     //proceed HACKING
     skip(2);
@@ -254,7 +251,7 @@ contract HackathonSystemTest is MudV2Test {
     //fix
     mock.approve(address(world), 100000e6);    
     world.depositPrize(bytes32(uint256(1)), 100);
-    world.fixHackathon(bytes32(uint256(1)));
+    world.proceedPhase(bytes32(uint256(1)));
 
     //proceed HACKING
     skip(2);
@@ -283,7 +280,7 @@ contract HackathonSystemTest is MudV2Test {
     //fix
     mock.approve(address(world), 100000e6);    
     world.depositPrize(bytes32(uint256(1)), 100);
-    world.fixHackathon(bytes32(uint256(1)));
+    world.proceedPhase(bytes32(uint256(1)));
 
     //proceed HACKING
     skip(2);
@@ -323,7 +320,7 @@ contract HackathonSystemTest is MudV2Test {
     //fix
     mock.approve(address(world), 100000e6);    
     world.depositPrize(bytes32(uint256(1)), 100);
-    world.fixHackathon(bytes32(uint256(1)));
+    world.proceedPhase(bytes32(uint256(1)));
 
     //proceed HACKING
     skip(2);

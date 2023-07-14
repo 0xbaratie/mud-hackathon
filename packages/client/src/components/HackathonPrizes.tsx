@@ -8,7 +8,7 @@ interface HackathonPrizesProps {
   prizeToken: string;
 }
 
-const HackathonPrizes = ({ deposit, prizeToken }: HackathonPrizesProps) => {
+const HackathonPrizes = ({ hackathonId, deposit, prizeToken }: HackathonPrizesProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => {
     setModalOpen(true);
@@ -17,13 +17,16 @@ const HackathonPrizes = ({ deposit, prizeToken }: HackathonPrizesProps) => {
   const closeModal = () => {
     setModalOpen(false);
   };
+  console.log('prizeToken', prizeToken);
 
-  const prizeTokenStr = Object.keys(PRIZE_TOKEN).find((key) => PRIZE_TOKEN[key] === prizeToken);
+  const prizeTokenStr = Object.keys(PRIZE_TOKEN).find(
+    (key) => PRIZE_TOKEN[key].toLowerCase() === prizeToken.toLowerCase(),
+  );
 
   return (
     <div className="mr-10">
       <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-        <DepositModal />
+        <DepositModal hackathonId={hackathonId} prizeTokenStr={prizeTokenStr} />
       </FullScreenModal>
       <div className="flex justify-between items-center ">
         <h2 className="text-2xl font-bold">Prizes</h2>
