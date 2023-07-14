@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 export const EventCards = () => {
   const {
     components: { Hackathon, Config },
-    network: { singletonEntity },
+    network: { singletonEntity, worldContract },
   } = useMUD();
   const [maxHackathonNum, setMaxHackathonNum] = useState(0);
 
@@ -21,6 +21,14 @@ export const EventCards = () => {
     }
   }, [config]);
 
+  //TODO
+  useEffect(() => {
+    (async () => {
+      const maxHackathonId = await worldContract.getMaxHackathonId();
+      console.log('maxHackathonId: ', maxHackathonId);
+    })();
+  }, []);
+
   return (
     <div
       className="bg-white mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-8"
@@ -32,3 +40,19 @@ export const EventCards = () => {
     </div>
   );
 };
+
+export const abi = [
+  {
+    inputs: [],
+    name: 'getMaxHackathonId',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+];

@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Hackathon,Config,HackathonData,HackathonPrize,Submission } from "../codegen/Tables.sol";
+import { Hackathon,Config,HackathonData,HackathonPrize,Submission,SubmissionData } from "../codegen/Tables.sol";
 import { Phase } from "../codegen/Types.sol";
 import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
@@ -14,6 +14,14 @@ contract HackathonSystem is System {
   modifier onlyOwner(bytes32 _hackathonId) {
     require(Hackathon.get(_hackathonId).owner == _msgSender(), "Only owner can call this function.");
     _;
+  }
+
+  function getMaxHackathonId() public view returns(bytes32){
+    return Config.get();
+  }
+
+  function getSubmission(bytes32 _hackathonId, address _submitter) public view returns(SubmissionData memory){
+    return Submission.get(_hackathonId, _submitter);
   }
 
   function _incrementHackathonId() internal returns(bytes32 newHackathonId_){

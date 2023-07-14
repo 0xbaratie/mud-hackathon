@@ -55,6 +55,7 @@ export const HackathonPage = () => {
       <HackathonProjects
         hackathonId={paddedHexStr}
         hackathonSubmitters={hackathonPrize.submitters}
+        phase={hackathon.phase}
       />
     );
   };

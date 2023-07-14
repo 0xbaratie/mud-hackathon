@@ -46,7 +46,7 @@ contract SubmissionSystem is System {
     require(_hackathonData.phase == uint8(Phase.VOTING), "Hackathon is not in VOTING phase.");
 
     // only NFT owners
-    require(IERC721(voteToken).ownerOf(_tokenId) == _msgSender(), "Only NFT owners can vote.");
+    // require(IERC721(voteToken).ownerOf(_tokenId) == _msgSender(), "Only NFT owners can vote.");
 
     // if already voted, revert
     require(!Vote.get(_hackathonId, _tokenId), "Already voted.");
