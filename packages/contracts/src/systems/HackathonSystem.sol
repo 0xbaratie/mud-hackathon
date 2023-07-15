@@ -69,7 +69,6 @@ contract HackathonSystem is System {
   ) public onlyOwner(_hackathonId) {
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
     require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
-
     Hackathon.set(_hackathonId,HackathonData(
       _msgSender(),
       _prizeToken,
