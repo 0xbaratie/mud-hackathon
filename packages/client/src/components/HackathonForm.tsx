@@ -29,7 +29,9 @@ const HackathonForm = () => {
   const [winnerCount, setWinnerCount] = useState(1);
   const [name, setName] = useState('Hackathon1');
   const [uri, setUri] = useState('https://url1');
-  const [imageUri, setImageUri] = useState('https://imageUrl1');
+  const [imageUri, setImageUri] = useState(
+    'https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg',
+  );
 
   return (
     <div className="p-4">

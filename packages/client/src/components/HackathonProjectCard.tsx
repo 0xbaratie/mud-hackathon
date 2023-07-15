@@ -4,9 +4,7 @@ import FullScreenModal from './FullScreenModal';
 import VoteModal from './VoteModal';
 import { useComponentValue, useEntityQuery } from '@latticexyz/react';
 import { useMUD } from '../MUDContext';
-
-const imageURL =
-  'https://storage.googleapis.com/ethglobal-api-production/projects%2F0wa8j%2Fimages%2FToronto_in_COVID-19_times_by_tour_boat.png';
+import { PHASE } from '../constants/constants';
 
 const HackathonProjects = ({ hackathonId, submitter, phase }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -61,7 +59,7 @@ const HackathonProjects = ({ hackathonId, submitter, phase }) => {
           </div>
         </div>
       </a>
-      {phase === 4 && (
+      {phase === PHASE.VOTING && (
         <div className="flex justify-center items-center">
           <a onClick={openModal}>
             <button className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg">

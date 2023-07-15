@@ -89,12 +89,6 @@ contract HackathonSystem is System {
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
 
     if(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE)){
-      //TODO 
-      // uint256 _deposit = HackathonPrize.getDeposit(_hackathonId);
-      // require(_deposit > 0, "Deposit amount must be greater than 0.");
-      Hackathon.setPhase(_hackathonId,uint8(Phase.FIXED_PRIZE));
-
-    }else if(_hackathonData.phase == uint8(Phase.FIXED_PRIZE)){
       require(_hackathonData.startTimestamp < block.timestamp, "StartTimestamp is not passed.");
       Hackathon.setPhase(_hackathonId,uint8(Phase.HACKING));
 

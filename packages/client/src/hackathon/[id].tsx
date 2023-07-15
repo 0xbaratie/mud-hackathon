@@ -54,7 +54,7 @@ export const HackathonPage = () => {
     return (
       <HackathonProjects
         hackathonId={paddedHexStr}
-        hackathonSubmitters={hackathonPrize.submitters}
+        hackathonSubmitters={hackathonPrize?.submitters}
         phase={hackathon.phase}
       />
     );

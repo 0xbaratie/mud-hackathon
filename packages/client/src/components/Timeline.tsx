@@ -1,6 +1,7 @@
 import CheckCircleIcon from '../../public/icon_check_circle.svg';
 import NotFinishedIcon from '../../public/icon_not_finished.svg';
 import { useMUD } from '../MUDContext';
+import { PHASE } from '../constants/constants';
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const timestampToDateString = (timestamp) => {
@@ -38,7 +39,7 @@ const Timeline = ({
       <div className="mt-8">
         <div className="absolute">
           <img
-            src={phase > 2 ? CheckCircleIcon : NotFinishedIcon}
+            src={phase > PHASE.PREPARE_PRIZE ? CheckCircleIcon : NotFinishedIcon}
             className=" -ml-2"
             alt="Check circle icon"
           />
@@ -51,7 +52,7 @@ const Timeline = ({
       <div className="mt-8">
         <div className="absolute">
           <img
-            src={phase > 3 ? CheckCircleIcon : NotFinishedIcon}
+            src={phase > PHASE.HACKING ? CheckCircleIcon : NotFinishedIcon}
             className=" -ml-2"
             alt="Check circle icon"
           />

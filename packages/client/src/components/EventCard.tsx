@@ -21,7 +21,7 @@ export const EventCard = ({ hackathonNum }) => {
         <div className="ml-3">
           <figure>
             <img
-              src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
+              src={hackathon.imageUri}
               alt="Shoes"
               className="w-[108px] h-[108px] object-cover "
             />

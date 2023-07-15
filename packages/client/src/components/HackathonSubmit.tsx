@@ -2,12 +2,14 @@ import React, { FC } from 'react';
 import Upload from '../../public/upload.svg';
 import { useState } from 'react';
 import { useMUD } from '../MUDContext';
+const imageURL =
+  'https://storage.googleapis.com/ethglobal-api-production/projects%2F0wa8j%2Fimages%2FToronto_in_COVID-19_times_by_tour_boat.png';
 
 const HackathonSubmit = ({ hackathonId }) => {
   const [name, setName] = useState('Your Project');
   const [description, setDescription] = useState('Short description');
   const [uri, setUri] = useState('https://yourproject');
-  const [imageUri, setImageUri] = useState('https://yourprojectimage');
+  const [imageUri, setImageUri] = useState(imageURL);
   const {
     systemCalls: { submit },
   } = useMUD();
