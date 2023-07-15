@@ -5,7 +5,6 @@ pragma solidity >=0.8.0;
 enum Phase {
   NONE,
   PREPARE_PRIZE,
-  FIXED_PRIZE,
   HACKING,
   VOTING,
   WITHDRAWING,

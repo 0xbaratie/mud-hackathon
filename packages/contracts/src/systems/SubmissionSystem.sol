@@ -20,7 +20,9 @@ contract SubmissionSystem is System {
   function submit(
     bytes32 _hackathonId,
     string memory _name,
-    string memory _uri
+    string memory _description,
+    string memory _uri,
+    string memory _imageUri
   ) public {
     //validate phase
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
@@ -33,7 +35,9 @@ contract SubmissionSystem is System {
     }
 
     Submission.setName(_hackathonId, _msgSender(), _name);
+    Submission.setDescription(_hackathonId, _msgSender(), _description);
     Submission.setUri(_hackathonId, _msgSender(), _uri);
+    Submission.setImageUri(_hackathonId, _msgSender(), _imageUri);
   }
 
   function vote(bytes32 _hackathonId, address _submitter, uint256 _tokenId) public {
@@ -42,7 +46,7 @@ contract SubmissionSystem is System {
     require(_hackathonData.phase == uint8(Phase.VOTING), "Hackathon is not in VOTING phase.");
 
     // only NFT owners
-    require(IERC721(voteToken).ownerOf(_tokenId) == _msgSender(), "Only NFT owners can vote.");
+    // require(IERC721(voteToken).ownerOf(_tokenId) == _msgSender(), "Only NFT owners can vote.");
 
     // if already voted, revert
     require(!Vote.get(_hackathonId, _tokenId), "Already voted.");

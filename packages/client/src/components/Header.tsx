@@ -2,9 +2,7 @@ import React, { ReactNode, useContext, useState, createContext } from 'react';
 import FullScreenModal from './FullScreenModal';
 import HackathonForm from './HackathonForm';
 import TitleLogo from '../../public/logo.svg';
-
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-
 
 export const Header = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -16,7 +14,6 @@ export const Header = () => {
   const closeModal = () => {
     setModalOpen(false);
   };
-
 
   return (
     <div className="navbar bg-primary-content border border-b-gray-300">

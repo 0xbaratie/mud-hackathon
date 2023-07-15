@@ -10,6 +10,7 @@
     "build:typechain": "rimraf types && typechain --target=ethers-v5 out/IWorld.sol/IWorld.json",
     "deploy:local": "pnpm run build && mud deploy",
     "deploy:testnet": "pnpm run build && mud deploy --profile=lattice-testnet",
+    "deploy:opgoerli": "pnpm run build && mud deploy --profile=opgoerli",
     "dev": "pnpm mud dev-contracts --tsgenOutput ../client/src/mud",
     "lint": "pnpm run prettier && pnpm run solhint",
     "prettier": "prettier --write 'src/**/*.sol'",
@@ -26,7 +27,8 @@
     "@latticexyz/store": "2.0.0-alpha.1.243+fc3bd590",
     "@latticexyz/world": "2.0.0-alpha.1.243+fc3bd590",
     "@openzeppelin/contracts": "^4.9.2",
-    "ethers": "^5.7.2"
+    "ethers": "^5.7.2",
+    "wagmi": "^1.3.8"
   },
   "devDependencies": {
     "@typechain/ethers-v5": "^10.2.0",

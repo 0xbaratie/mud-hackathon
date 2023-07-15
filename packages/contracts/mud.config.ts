@@ -25,6 +25,7 @@ export default mudConfig({
         winnerCount: "uint8", // prize is awarded to top N submitters
         name: "string",
         uri: "string",
+        imageUri: "string",
       },
     },
     HackathonPrize: {
@@ -38,7 +39,9 @@ export default mudConfig({
         votes: "uint256",
         withdrawalPrize: "uint256",
         name: "string",
+        description: "string",
         uri: "string",
+        imageUri: "string",
       },
       keySchema: {
         hackathonId: "bytes32",
@@ -56,6 +59,6 @@ export default mudConfig({
     },
   },
   enums: {
-    Phase: ["NONE", "PREPARE_PRIZE", "FIXED_PRIZE", "HACKING", "VOTING", "WITHDRAWING", "END"],
+    Phase: ["NONE", "PREPARE_PRIZE", "HACKING", "VOTING", "WITHDRAWING", "END"],
   },
 });

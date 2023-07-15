@@ -50,6 +50,7 @@ export function defineContractComponents(world: World) {
           winnerCount: RecsType.Number,
           name: RecsType.String,
           uri: RecsType.String,
+          imageUri: RecsType.String,
         },
         {
           metadata: {
@@ -83,7 +84,9 @@ export function defineContractComponents(world: World) {
           votes: RecsType.BigInt,
           withdrawalPrize: RecsType.BigInt,
           name: RecsType.String,
+          description: RecsType.String,
           uri: RecsType.String,
+          imageUri: RecsType.String,
         },
         {
           metadata: {

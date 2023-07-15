@@ -31,12 +31,13 @@ struct HackathonData {
   uint8 winnerCount;
   string name;
   string uri;
+  string imageUri;
 }
 
 library Hackathon {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](10);
+    SchemaType[] memory _schema = new SchemaType[](11);
     _schema[0] = SchemaType.ADDRESS;
     _schema[1] = SchemaType.ADDRESS;
     _schema[2] = SchemaType.UINT8;
@@ -47,6 +48,7 @@ library Hackathon {
     _schema[7] = SchemaType.UINT8;
     _schema[8] = SchemaType.STRING;
     _schema[9] = SchemaType.STRING;
+    _schema[10] = SchemaType.STRING;
 
     return SchemaLib.encode(_schema);
   }
@@ -60,7 +62,7 @@ library Hackathon {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](10);
+    string[] memory _fieldNames = new string[](11);
     _fieldNames[0] = "owner";
     _fieldNames[1] = "prizeToken";
     _fieldNames[2] = "phase";
@@ -71,6 +73,7 @@ library Hackathon {
     _fieldNames[7] = "winnerCount";
     _fieldNames[8] = "name";
     _fieldNames[9] = "uri";
+    _fieldNames[10] = "imageUri";
     return ("Hackathon", _fieldNames);
   }
 
@@ -604,6 +607,124 @@ library Hackathon {
     _store.updateInField(_tableId, _keyTuple, 9, _index * 1, bytes((_slice)));
   }
 
+  /** Get imageUri */
+  function getImageUri(bytes32 key) internal view returns (string memory imageUri) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 10);
+    return (string(_blob));
+  }
+
+  /** Get imageUri (using the specified store) */
+  function getImageUri(IStore _store, bytes32 key) internal view returns (string memory imageUri) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 10);
+    return (string(_blob));
+  }
+
+  /** Set imageUri */
+  function setImageUri(bytes32 key, string memory imageUri) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    StoreSwitch.setField(_tableId, _keyTuple, 10, bytes((imageUri)));
+  }
+
+  /** Set imageUri (using the specified store) */
+  function setImageUri(IStore _store, bytes32 key, string memory imageUri) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    _store.setField(_tableId, _keyTuple, 10, bytes((imageUri)));
+  }
+
+  /** Get the length of imageUri */
+  function lengthImageUri(bytes32 key) internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 10, getSchema());
+    return _byteLength / 1;
+  }
+
+  /** Get the length of imageUri (using the specified store) */
+  function lengthImageUri(IStore _store, bytes32 key) internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 10, getSchema());
+    return _byteLength / 1;
+  }
+
+  /** Get an item of imageUri (unchecked, returns invalid data if index overflows) */
+  function getItemImageUri(bytes32 key, uint256 _index) internal view returns (string memory) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes memory _blob = StoreSwitch.getFieldSlice(_tableId, _keyTuple, 10, getSchema(), _index * 1, (_index + 1) * 1);
+    return (string(_blob));
+  }
+
+  /** Get an item of imageUri (using the specified store) (unchecked, returns invalid data if index overflows) */
+  function getItemImageUri(IStore _store, bytes32 key, uint256 _index) internal view returns (string memory) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 10, getSchema(), _index * 1, (_index + 1) * 1);
+    return (string(_blob));
+  }
+
+  /** Push a slice to imageUri */
+  function pushImageUri(bytes32 key, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    StoreSwitch.pushToField(_tableId, _keyTuple, 10, bytes((_slice)));
+  }
+
+  /** Push a slice to imageUri (using the specified store) */
+  function pushImageUri(IStore _store, bytes32 key, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    _store.pushToField(_tableId, _keyTuple, 10, bytes((_slice)));
+  }
+
+  /** Pop a slice from imageUri */
+  function popImageUri(bytes32 key) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    StoreSwitch.popFromField(_tableId, _keyTuple, 10, 1);
+  }
+
+  /** Pop a slice from imageUri (using the specified store) */
+  function popImageUri(IStore _store, bytes32 key) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    _store.popFromField(_tableId, _keyTuple, 10, 1);
+  }
+
+  /** Update a slice of imageUri at `_index` */
+  function updateImageUri(bytes32 key, uint256 _index, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    StoreSwitch.updateInField(_tableId, _keyTuple, 10, _index * 1, bytes((_slice)));
+  }
+
+  /** Update a slice of imageUri (using the specified store) at `_index` */
+  function updateImageUri(IStore _store, bytes32 key, uint256 _index, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    _store.updateInField(_tableId, _keyTuple, 10, _index * 1, bytes((_slice)));
+  }
+
   /** Get the full data */
   function get(bytes32 key) internal view returns (HackathonData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
@@ -634,7 +755,8 @@ library Hackathon {
     uint256 withdrawalPeriod,
     uint8 winnerCount,
     string memory name,
-    string memory uri
+    string memory uri,
+    string memory imageUri
   ) internal {
     bytes memory _data = encode(
       owner,
@@ -646,7 +768,8 @@ library Hackathon {
       withdrawalPeriod,
       winnerCount,
       name,
-      uri
+      uri,
+      imageUri
     );
 
     bytes32[] memory _keyTuple = new bytes32[](1);
@@ -668,7 +791,8 @@ library Hackathon {
     uint256 withdrawalPeriod,
     uint8 winnerCount,
     string memory name,
-    string memory uri
+    string memory uri,
+    string memory imageUri
   ) internal {
     bytes memory _data = encode(
       owner,
@@ -680,7 +804,8 @@ library Hackathon {
       withdrawalPeriod,
       winnerCount,
       name,
-      uri
+      uri,
+      imageUri
     );
 
     bytes32[] memory _keyTuple = new bytes32[](1);
@@ -702,7 +827,8 @@ library Hackathon {
       _table.withdrawalPeriod,
       _table.winnerCount,
       _table.name,
-      _table.uri
+      _table.uri,
+      _table.imageUri
     );
   }
 
@@ -720,7 +846,8 @@ library Hackathon {
       _table.withdrawalPeriod,
       _table.winnerCount,
       _table.name,
-      _table.uri
+      _table.uri,
+      _table.imageUri
     );
   }
 
@@ -758,6 +885,10 @@ library Hackathon {
       _start = _end;
       _end += _encodedLengths.atIndex(1);
       _table.uri = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
+
+      _start = _end;
+      _end += _encodedLengths.atIndex(2);
+      _table.imageUri = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
     }
   }
 
@@ -772,11 +903,13 @@ library Hackathon {
     uint256 withdrawalPeriod,
     uint8 winnerCount,
     string memory name,
-    string memory uri
+    string memory uri,
+    string memory imageUri
   ) internal view returns (bytes memory) {
-    uint40[] memory _counters = new uint40[](2);
+    uint40[] memory _counters = new uint40[](3);
     _counters[0] = uint40(bytes(name).length);
     _counters[1] = uint40(bytes(uri).length);
+    _counters[2] = uint40(bytes(imageUri).length);
     PackedCounter _encodedLengths = PackedCounterLib.pack(_counters);
 
     return
@@ -791,7 +924,8 @@ library Hackathon {
         winnerCount,
         _encodedLengths.unwrap(),
         bytes((name)),
-        bytes((uri))
+        bytes((uri)),
+        bytes((imageUri))
       );
   }
 

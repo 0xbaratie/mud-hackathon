@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Hackathon,Config,HackathonData,HackathonPrize,Submission } from "../codegen/Tables.sol";
+import { Hackathon,Config,HackathonData,HackathonPrize,Submission,SubmissionData } from "../codegen/Tables.sol";
 import { Phase } from "../codegen/Types.sol";
 import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
@@ -16,10 +16,12 @@ contract HackathonSystem is System {
     _;
   }
 
-  modifier onlyPhasePrepare(bytes32 _hackathonId) {
-    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
-    require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
-    _;    
+  function getMaxHackathonId() public view returns(bytes32){
+    return Config.get();
+  }
+
+  function getSubmission(bytes32 _hackathonId, address _submitter) public view returns(SubmissionData memory){
+    return Submission.get(_hackathonId, _submitter);
   }
 
   function _incrementHackathonId() internal returns(bytes32 newHackathonId_){
@@ -35,7 +37,8 @@ contract HackathonSystem is System {
     uint256 _withdrawalPeriod,
     uint8 _winnerCount,
     string memory _name,
-    string memory _uri
+    string memory _uri,
+    string memory _imageUri
   ) public {
     Hackathon.set(_incrementHackathonId(),HackathonData(
       _msgSender(),
@@ -47,7 +50,8 @@ contract HackathonSystem is System {
       _withdrawalPeriod,
       _winnerCount,
       _name,
-      _uri
+      _uri,
+      _imageUri
     ));
   }
   
@@ -60,8 +64,11 @@ contract HackathonSystem is System {
     uint256 _withdrawalPeriod,
     uint8 _winnerCount,
     string memory _name,
-    string memory _uri
-  ) public onlyOwner(_hackathonId) onlyPhasePrepare(_hackathonId) {
+    string memory _uri,
+    string memory _imageUri
+  ) public onlyOwner(_hackathonId) {
+    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
+    require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
     Hackathon.set(_hackathonId,HackathonData(
       _msgSender(),
       _prizeToken,
@@ -72,36 +79,32 @@ contract HackathonSystem is System {
       _withdrawalPeriod,
       _winnerCount,
       _name,
-      _uri
+      _uri,
+      _imageUri
     ));
-  }
-
-  function fixHackathon(bytes32 _hackathonId) public onlyOwner(_hackathonId) onlyPhasePrepare(_hackathonId){
-    uint256 _deposit = HackathonPrize.getDeposit(_hackathonId);
-    require(_deposit > 0, "Deposit amount must be greater than 0.");
-    Hackathon.setPhase(_hackathonId,uint8(Phase.FIXED_PRIZE));
   }
 
   function proceedPhase(bytes32 _hackathonId) public {
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
-    if(_hackathonData.phase == uint8(Phase.FIXED_PRIZE)){
+
+    if(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE)){
       require(_hackathonData.startTimestamp < block.timestamp, "StartTimestamp is not passed.");
       Hackathon.setPhase(_hackathonId,uint8(Phase.HACKING));
 
     }else if(_hackathonData.phase == uint8(Phase.HACKING)){
       // startTimestamp + submitPeriod is past
-      require(_hackathonData.startTimestamp + _hackathonData.submitPeriod < block.timestamp, "SubmitPeriod is not passed.");
+      require(_hackathonData.submitPeriod < block.timestamp, "SubmitPeriod is not passed.");
       Hackathon.setPhase(_hackathonId,uint8(Phase.VOTING));
 
     }else if(_hackathonData.phase == uint8(Phase.VOTING)){
       // startTimestamp + submitPeriod + votingPeriod is past
-      require(_hackathonData.startTimestamp + _hackathonData.submitPeriod + _hackathonData.votingPeriod < block.timestamp, "VotingPeriod is not passed.");
+      require(_hackathonData.votingPeriod < block.timestamp, "VotingPeriod is not passed.");
       Hackathon.setPhase(_hackathonId,uint8(Phase.WITHDRAWING));
       _finishVoting(_hackathonId);
 
     }else if(_hackathonData.phase == uint8(Phase.WITHDRAWING)){
       // startTimestamp + submitPeriod + votingPeriod + withdrawalPeriod is past
-      require(_hackathonData.startTimestamp + _hackathonData.submitPeriod + _hackathonData.votingPeriod + _hackathonData.withdrawalPeriod < block.timestamp, "WithdrawalPeriod is not passed.");
+      require(_hackathonData.withdrawalPeriod < block.timestamp, "WithdrawalPeriod is not passed.");
       Hackathon.setPhase(_hackathonId,uint8(Phase.END));
 
     }else{

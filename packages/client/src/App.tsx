@@ -2,16 +2,22 @@ import { useComponentValue } from '@latticexyz/react';
 import { useMUD } from './MUDContext';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import { EventCard } from './components/EventCard';
+import { EventCards } from './components/EventCards';
 import React, { useState } from 'react';
+import { SyncState } from '@latticexyz/network';
 
 export const App = () => {
   const {
-    components: { Counter },
-    systemCalls: { increment },
+    components: { LoadingState },
     network: { singletonEntity },
   } = useMUD();
   const [activeTab, setActiveTab] = useState(1);
+
+  const loadingState = useComponentValue(LoadingState, singletonEntity, {
+    state: SyncState.CONNECTING,
+    msg: 'Connecting',
+    percentage: 0,
+  });
 
   return (
     <>
@@ -24,14 +30,21 @@ export const App = () => {
           Build products, practice skills, learn technologies, win prizes, and grow your network
         </p>
       </div>
-      <div className="bg-white mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-8" style={{minHeight: "500px"}}>
-        <EventCard />
-        <EventCard />
-        <EventCard />
-        <EventCard />
-        <EventCard />
-        <EventCard />
-      </div>
+
+      {loadingState.state !== SyncState.LIVE ? (
+        <div className="font-dot text-center mt-32">
+          {loadingState.msg}
+          <br />
+          <progress
+            className="mt-6 [&::-webkit-progress-bar]:rounded-sm [&::-webkit-progress-value]:rounded-sm [&::-webkit-progress-bar]:bg-slate-300 [&::-webkit-progress-value]:bg-violet-600 [&::-moz-progress-bar]:bg-violet-600"
+            value={Math.floor(loadingState.percentage)}
+            max="100"
+          />
+        </div>
+      ) : (
+        <EventCards />
+      )}
+
       <Footer />
     </>
   );
