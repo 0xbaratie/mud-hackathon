@@ -170,6 +170,9 @@ importers:
       ethers:
         specifier: ^5.7.2
         version: 5.7.2
+      wagmi:
+        specifier: ^1.3.8
+        version: 1.3.8(react-dom@18.2.0)(react@18.2.0)(typescript@5.1.3)(viem@1.2.10)(zod@3.21.4)
     devDependencies:
       '@typechain/ethers-v5':
         specifier: ^10.2.0
