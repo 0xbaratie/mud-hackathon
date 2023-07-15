@@ -62,6 +62,19 @@ const Timeline = ({
           <p className="text-gray-500">{timestampToDateString(votingPeriod)}</p>
         </div>
       </div>
+      <div className="mt-8">
+        <div className="absolute">
+          <img
+            src={phase > PHASE.VOTING ? CheckCircleIcon : NotFinishedIcon}
+            className=" -ml-2"
+            alt="Check circle icon"
+          />
+        </div>
+        <div className="pl-4 z-0 relative">
+          <h2 className="font-bold text-[#4D4D4D]">Withdrawing prize</h2>
+          <p className="text-gray-500">{timestampToDateString(withdrawalPeriod)}</p>
+        </div>
+      </div>
 
       <div className="mt-10">
         <button
