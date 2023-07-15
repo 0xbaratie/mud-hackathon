@@ -4,7 +4,7 @@ node_modules/
 bindings/
 artifacts/
 abi/
-types/
+# types/
 broadcast/
 
 # Ignore MUD deploy artifacts
