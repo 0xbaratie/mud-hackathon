@@ -19,7 +19,8 @@ const DateTimePicker = ({ selectedDateTime, setSelectedDateTime }) => {
           timeIntervals={15}
           timeCaption="time"
           dateFormat="MMMM d, yyyy h:mm aa"
-          className="text-gray-900"
+          className="text-gray-900 w-full"
+          wrapperClassName="w-full"
         />
       </div>
     </div>
