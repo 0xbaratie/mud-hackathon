@@ -1,11 +1,16 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import Upload from '../../public/upload.svg';
-import { useState } from 'react';
 import { useMUD } from '../MUDContext';
+import { Transition } from '@headlessui/react';
+import { ToastSuccess } from './ToastSuccess';
 const imageURL =
   'https://storage.googleapis.com/ethglobal-api-production/projects%2F0wa8j%2Fimages%2FToronto_in_COVID-19_times_by_tour_boat.png';
 
-const HackathonSubmit = ({ hackathonId }) => {
+type HackathonSubmitProps = {
+  hackathonId: string;
+};
+
+const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId }) => {
   const [name, setName] = useState('Your Project');
   const [description, setDescription] = useState('Short description');
   const [uri, setUri] = useState('https://yourproject');
@@ -14,8 +19,40 @@ const HackathonSubmit = ({ hackathonId }) => {
     systemCalls: { submit },
   } = useMUD();
 
+  const [showSuccess, setShowSuccess] = useState(false); // 成功メッセージを表示するためのステート
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+
+    if (showSuccess) {
+      timer = setTimeout(() => {
+        setShowSuccess(false);
+      }, 10000); // 10秒後に成功メッセージを非表示にする
+    }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [showSuccess]);
+
   return (
     <div className="p-6">
+      <Transition
+        show={showSuccess}
+        enter="transition-opacity duration-300"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-300"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        {showSuccess && (
+          /* 成功メッセージのワイプインとワイプアウト */
+          <ToastSuccess />
+        )}
+      </Transition> 
       <h1 className="text-md mb-2">Project title</h1>
       <input
         type="text"
@@ -121,6 +158,7 @@ const HackathonSubmit = ({ hackathonId }) => {
           onClick={async (event) => {
             event.preventDefault();
             await submit(hackathonId, name, description, uri, imageUri);
+            setShowSuccess(true); 
           }}
         >
           Submit your project
