@@ -69,15 +69,13 @@ const HackathonForm = () => {
         value={prizeToken}
         onChange={(e) => setPrizeToken(e.target.value)}
       />
-
       <div className="flex">
         <div className="flex-1">
           <h1 className="text-sm mb-1 mt-3">Hack start datetime</h1>
-          <DateTimePicker
-            selectedDateTime={startTimestamp}
-            setSelectedDateTime={setStartTimestamp}
-          />
+          <DateTimePicker selectedDateTime={startTimestamp} setSelectedDateTime={setStartTimestamp} style={{ width: '100%' }} />
         </div>
+      </div>
+      <div className="flex">
         <div className="flex-1">
           <h1 className="text-sm mb-1 mt-3">Project submit due datetime</h1>
           <DateTimePicker selectedDateTime={submitPeriod} setSelectedDateTime={setSubmitPeriod} />
@@ -88,12 +86,11 @@ const HackathonForm = () => {
           <h1 className="text-sm mb-1 mt-3">Voting due datetime</h1>
           <DateTimePicker selectedDateTime={votingPeriod} setSelectedDateTime={setVotingPeriod} />
         </div>
+      </div>
+      <div className="flex">
         <div className="flex-1">
           <h1 className="text-sm mb-1 mt-3">Withdrawing due datetime</h1>
-          <DateTimePicker
-            selectedDateTime={withdrawalPeriod}
-            setSelectedDateTime={setWithdrawalPeriod}
-          />
+          <DateTimePicker selectedDateTime={withdrawalPeriod} setSelectedDateTime={setWithdrawalPeriod} />
         </div>
       </div>
       <h1 className="text-sm mb-1 mt-3">Number of winners</h1>
