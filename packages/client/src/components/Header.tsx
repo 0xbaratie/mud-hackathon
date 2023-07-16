@@ -29,7 +29,7 @@ export const Header = () => {
           </li>
 
           <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-            <HackathonForm />
+            <HackathonForm onClose={closeModal} />
           </FullScreenModal>
           <ConnectButton />
         </ul>

@@ -4,7 +4,11 @@ import { useMUD } from '../MUDContext';
 import { useState } from 'react';
 import { PRIZE_TOKEN } from '../constants/constants';
 
-const HackathonForm = () => {
+type HackathonFormProps = {
+  onClose: () => void;
+};
+
+const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
   const getWeeksLater = (weeks: number) => {
     const date = new Date();
     date.setDate(date.getDate() + 7 * weeks);
@@ -128,9 +132,10 @@ const HackathonForm = () => {
               uri,
               imageUri,
             );
+            onClose(); 
           }}
         >
-          Create a hackathon
+          Create hackathon
         </button>
       </div>
     </div>
