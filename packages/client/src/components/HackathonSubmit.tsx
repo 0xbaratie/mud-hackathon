@@ -49,7 +49,6 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId }) => {
         leaveTo="opacity-0"
       >
         {showSuccess && (
-          /* 成功メッセージのワイプインとワイプアウト */
           <ToastSuccess />
         )}
       </Transition> 
