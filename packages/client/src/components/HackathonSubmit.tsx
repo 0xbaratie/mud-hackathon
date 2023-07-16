@@ -3,6 +3,7 @@ import Upload from '../../public/upload.svg';
 import { useMUD } from '../MUDContext';
 import { Transition } from '@headlessui/react';
 import { ToastSuccess } from './ToastSuccess';
+import { ToastError } from './ToastError';
 const imageURL =
   'https://storage.googleapis.com/ethglobal-api-production/projects%2F0wa8j%2Fimages%2FToronto_in_COVID-19_times_by_tour_boat.png';
 
@@ -19,15 +20,23 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId }) => {
     systemCalls: { submit },
   } = useMUD();
 
-  const [showSuccess, setShowSuccess] = useState(false); // 成功メッセージを表示するためのステート
+  const [showSuccess, setShowSuccess] = useState(false); 
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
+    let errorTimer: NodeJS.Timeout | null = null;
 
     if (showSuccess) {
       timer = setTimeout(() => {
         setShowSuccess(false);
-      }, 10000); // 10秒後に成功メッセージを非表示にする
+      }, 10000); 
+    }
+
+    if (error) {
+      errorTimer = setTimeout(() => {
+        setError(null);
+      }, 10000); 
     }
 
     return () => {
@@ -35,7 +44,7 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId }) => {
         clearTimeout(timer);
       }
     };
-  }, [showSuccess]);
+  }, [showSuccess, error]);
 
   return (
     <div className="p-6">
@@ -52,6 +61,20 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId }) => {
           <ToastSuccess />
         )}
       </Transition> 
+
+      <Transition
+        show={!!error && error.length > 0}
+        enter="transition-opacity duration-300"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-300"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        {error && error.length > 0 && (
+          <ToastError message={error} />
+        )}
+      </Transition>
       <h1 className="text-md mb-2">Project title</h1>
       <input
         type="text"
@@ -156,8 +179,12 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId }) => {
           className="btn bg-[#333333] text-white rounded-lg"
           onClick={async (event) => {
             event.preventDefault();
-            await submit(hackathonId, name, description, uri, imageUri);
-            setShowSuccess(true); 
+            try {
+              await submit(hackathonId, name, description, uri, imageUri);
+              setShowSuccess(true);
+            } catch (error) {
+              setError('An error occurred while submitting your project.');
+            }
           }}
         >
           Submit your project

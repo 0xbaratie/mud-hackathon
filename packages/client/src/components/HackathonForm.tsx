@@ -1,14 +1,16 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import DateTimePicker from './DateTimePicker';
 import { useMUD } from '../MUDContext';
 import { useState } from 'react';
 import { PRIZE_TOKEN } from '../constants/constants';
+import { ToastError } from './ToastError';
 
 type HackathonFormProps = {
   onClose: () => void;
 };
 
 const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
+  
   const getWeeksLater = (weeks: number) => {
     const date = new Date();
     date.setDate(date.getDate() + 7 * weeks);
@@ -36,9 +38,21 @@ const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
   const [imageUri, setImageUri] = useState(
     'https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg',
   );
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setError(null);
+    }, 10000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [error]);
 
   return (
     <div className="p-4">
+      {error && <ToastError message={error} />}
       <h1 className="text-sm mb-1">Hackathon title</h1>
       <input
         type="text"
@@ -121,18 +135,22 @@ const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
           className="btn bg-[#333333] text-white rounded-lg"
           onClick={async (event) => {
             event.preventDefault();
-            await createHackathon(
-              prizeToken,
-              getTimestampFromDate(startTimestamp),
-              getTimestampFromDate(submitPeriod),
-              getTimestampFromDate(votingPeriod),
-              getTimestampFromDate(withdrawalPeriod),
-              winnerCount,
-              name,
-              uri,
-              imageUri,
-            );
-            onClose(); 
+            try {
+              await createHackathon(
+                prizeToken,
+                getTimestampFromDate(startTimestamp),
+                getTimestampFromDate(submitPeriod),
+                getTimestampFromDate(votingPeriod),
+                getTimestampFromDate(withdrawalPeriod),
+                winnerCount,
+                name,
+                uri,
+                imageUri,
+              );
+              onClose(); 
+            } catch (error) {
+              setError('An error occurred while creating the hackathon.');
+            }
           }}
         >
           Create hackathon
