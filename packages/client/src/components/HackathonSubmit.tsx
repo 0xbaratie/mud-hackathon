@@ -47,7 +47,7 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId }) => {
   }, [showSuccess, error]);
 
   return (
-    <div className="p-6">
+    <div className="p-6 mb-40">
       <Transition
         show={showSuccess}
         enter="transition-opacity duration-300"
@@ -191,6 +191,7 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId }) => {
         </button>
       </div>
     </div>
+    
   );
 };
 
