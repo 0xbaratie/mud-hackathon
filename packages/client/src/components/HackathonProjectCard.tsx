@@ -27,7 +27,6 @@ const HackathonProjects = ({ hackathonId, submitter, phase }) => {
   const [votes, setVotes] = useState(0);
   const [prize, setPrize] = useState(0);
 
-  //TODO
   useEffect(() => {
     (async () => {
       const submittion = await worldContract.getSubmission(hackathonId, submitter);

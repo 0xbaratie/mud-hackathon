@@ -6,26 +6,29 @@ import { useState, useEffect } from 'react';
 
 export const EventCards = () => {
   const {
-    components: { Hackathon, Config },
+    // components: { Hackathon, Config },
     network: { singletonEntity, worldContract },
   } = useMUD();
   const [maxHackathonNum, setMaxHackathonNum] = useState(0);
 
-  const config = useComponentValue(Config, singletonEntity);
+  // const config = useComponentValue(Config, singletonEntity);
 
-  useEffect(() => {
-    if (config && config.maxHackathonId) {
-      const bigNum = ethers.BigNumber.from(config.maxHackathonId);
-      console.log('bigNum: ', bigNum);
-      setMaxHackathonNum(bigNum.toNumber());
-    }
-  }, [config]);
+  // useEffect(() => {
+  //   if (config && config.maxHackathonId) {
+  //     const bigNum = ethers.BigNumber.from(config.maxHackathonId);
+  //     console.log('bigNum: ', bigNum);
+  //     setMaxHackathonNum(bigNum.toNumber());
+  //   }
+  // }, [config]);
 
   //TODO
   useEffect(() => {
     (async () => {
       const maxHackathonId = await worldContract.getMaxHackathonId();
       console.log('maxHackathonId: ', maxHackathonId);
+      const bigNum = ethers.BigNumber.from(maxHackathonId);
+      console.log('bigNum: ', bigNum);
+      setMaxHackathonNum(bigNum.toNumber());
     })();
   }, []);
 

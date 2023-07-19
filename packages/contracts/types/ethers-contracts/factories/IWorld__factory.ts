@@ -599,6 +599,113 @@ const _abi = [
     inputs: [
       {
         internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+    ],
+    name: "getHackathon",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "prizeToken",
+            type: "address",
+          },
+          {
+            internalType: "uint8",
+            name: "phase",
+            type: "uint8",
+          },
+          {
+            internalType: "uint256",
+            name: "startTimestamp",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "submitPeriod",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "votingPeriod",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "withdrawalPeriod",
+            type: "uint256",
+          },
+          {
+            internalType: "uint8",
+            name: "winnerCount",
+            type: "uint8",
+          },
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "uri",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "imageUri",
+            type: "string",
+          },
+        ],
+        internalType: "struct HackathonData",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+    ],
+    name: "getHackathonPrize",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "deposit",
+            type: "uint256",
+          },
+          {
+            internalType: "address[]",
+            name: "submitters",
+            type: "address[]",
+          },
+        ],
+        internalType: "struct HackathonPrizeData",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
         name: "table",
         type: "bytes32",
       },
@@ -750,6 +857,30 @@ const _abi = [
         internalType: "struct SubmissionData",
         name: "",
         type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "getVote",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
       },
     ],
     stateMutability: "view",

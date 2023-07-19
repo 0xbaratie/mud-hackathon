@@ -7,18 +7,6 @@ import React, { useState } from 'react';
 import { SyncState } from '@latticexyz/network';
 
 export const App = () => {
-  const {
-    components: { LoadingState },
-    network: { singletonEntity },
-  } = useMUD();
-  const [activeTab, setActiveTab] = useState(1);
-
-  const loadingState = useComponentValue(LoadingState, singletonEntity, {
-    state: SyncState.CONNECTING,
-    msg: 'Connecting',
-    percentage: 0,
-  });
-
   return (
     <>
       <Header />
@@ -31,19 +19,7 @@ export const App = () => {
         </p>
       </div>
 
-      {loadingState.state !== SyncState.LIVE ? (
-        <div className="font-dot text-center mt-32">
-          {loadingState.msg}
-          <br />
-          <progress
-            className="mt-6 [&::-webkit-progress-bar]:rounded-sm [&::-webkit-progress-value]:rounded-sm [&::-webkit-progress-bar]:bg-slate-300 [&::-webkit-progress-value]:bg-violet-600 [&::-moz-progress-bar]:bg-violet-600"
-            value={Math.floor(loadingState.percentage)}
-            max="100"
-          />
-        </div>
-      ) : (
-        <EventCards />
-      )}
+      <EventCards />
 
       <Footer />
     </>

@@ -16,14 +16,6 @@ contract HackathonSystem is System {
     _;
   }
 
-  function getMaxHackathonId() public view returns(bytes32){
-    return Config.get();
-  }
-
-  function getSubmission(bytes32 _hackathonId, address _submitter) public view returns(SubmissionData memory){
-    return Submission.get(_hackathonId, _submitter);
-  }
-
   function _incrementHackathonId() internal returns(bytes32 newHackathonId_){
     newHackathonId_ = bytes32(uint256(Config.get()) + 1);
     Config.set(newHackathonId_);
