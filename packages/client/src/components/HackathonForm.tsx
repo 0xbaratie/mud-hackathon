@@ -10,7 +10,6 @@ type HackathonFormProps = {
 };
 
 const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
-  
   const getWeeksLater = (weeks: number) => {
     const date = new Date();
     date.setDate(date.getDate() + 7 * weeks);
@@ -36,7 +35,7 @@ const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
   const [name, setName] = useState('Hackathon1');
   const [uri, setUri] = useState('https://url1');
   const [imageUri, setImageUri] = useState(
-    'https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg',
+    'https://pbs.twimg.com/profile_images/1642968539719163904/xbrZ4_Om_400x400.jpg',
   );
   const [error, setError] = useState<string | null>(null);
 
@@ -90,7 +89,11 @@ const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
       <div className="flex">
         <div className="flex-1">
           <h1 className="text-sm mb-1 mt-3">Hack start datetime</h1>
-          <DateTimePicker selectedDateTime={startTimestamp} setSelectedDateTime={setStartTimestamp} style={{ width: '100%' }} />
+          <DateTimePicker
+            selectedDateTime={startTimestamp}
+            setSelectedDateTime={setStartTimestamp}
+            style={{ width: '100%' }}
+          />
         </div>
       </div>
       <div className="flex">
@@ -108,7 +111,10 @@ const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
       <div className="flex">
         <div className="flex-1">
           <h1 className="text-sm mb-1 mt-3">Withdrawing due datetime</h1>
-          <DateTimePicker selectedDateTime={withdrawalPeriod} setSelectedDateTime={setWithdrawalPeriod} />
+          <DateTimePicker
+            selectedDateTime={withdrawalPeriod}
+            setSelectedDateTime={setWithdrawalPeriod}
+          />
         </div>
       </div>
       <h1 className="text-sm mb-1 mt-3">Number of winners</h1>
@@ -147,7 +153,7 @@ const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
                 uri,
                 imageUri,
               );
-              onClose(); 
+              onClose();
             } catch (error) {
               setError('An error occurred while creating the hackathon.');
             }

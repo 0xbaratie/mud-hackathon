@@ -5,7 +5,7 @@ import { Transition } from '@headlessui/react';
 import { ToastSuccess } from './ToastSuccess';
 import { ToastError } from './ToastError';
 const imageURL =
-  'https://storage.googleapis.com/ethglobal-api-production/projects%2F0wa8j%2Fimages%2FToronto_in_COVID-19_times_by_tour_boat.png';
+  'https://storage.googleapis.com/ethglobal-api-production/projects%2Fppup5%2Fimages%2F%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202023-05-22%2023.50.42.png';
 
 type HackathonSubmitProps = {
   hackathonId: string;
@@ -20,7 +20,7 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId }) => {
     systemCalls: { submit },
   } = useMUD();
 
-  const [showSuccess, setShowSuccess] = useState(false); 
+  const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -30,13 +30,13 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId }) => {
     if (showSuccess) {
       timer = setTimeout(() => {
         setShowSuccess(false);
-      }, 10000); 
+      }, 10000);
     }
 
     if (error) {
       errorTimer = setTimeout(() => {
         setError(null);
-      }, 10000); 
+      }, 10000);
     }
 
     return () => {
@@ -57,10 +57,8 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId }) => {
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        {showSuccess && (
-          <ToastSuccess />
-        )}
-      </Transition> 
+        {showSuccess && <ToastSuccess />}
+      </Transition>
 
       <Transition
         show={!!error && error.length > 0}
@@ -71,9 +69,7 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId }) => {
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        {error && error.length > 0 && (
-          <ToastError message={error} />
-        )}
+        {error && error.length > 0 && <ToastError message={error} />}
       </Transition>
       <h1 className="text-md mb-2">Project title</h1>
       <input
@@ -191,7 +187,6 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId }) => {
         </button>
       </div>
     </div>
-    
   );
 };
 
