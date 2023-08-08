@@ -11,7 +11,8 @@ type HackathonSubmitProps = {
   hackathonId: string;
 };
 
-const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId }) => {
+const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId, counter, setCounter }) => {
+  //TODO 自分のSubmit情報取得
   const [name, setName] = useState('Your Project');
   const [description, setDescription] = useState('Short description');
   const [uri, setUri] = useState('https://yourproject');
@@ -177,6 +178,7 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId }) => {
             event.preventDefault();
             try {
               await submit(hackathonId, name, description, uri, imageUri);
+              setCounter(counter + 1);
               setShowSuccess(true);
             } catch (error) {
               setError('An error occurred while submitting your project.');

@@ -3,61 +3,72 @@ import { ethers } from 'ethers';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import HackathonOverview from '../components/HackathonOverview';
-import HackathonPrizes from '../components/HackathonPrizes';
-import HackathonProjects from '../components/HackathonProjects';
+// import HackathonPrizes from '../components/HackathonPrizes';
 import HackathonSubmit from '../components/HackathonSubmit';
+import HackathonProjects from '../components/HackathonProjects';
 import Timeline from '../components/Timeline';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useComponentValue } from '@latticexyz/react';
+const bgImage = '../../../public/cover.png';
 
 export const HackathonPage = () => {
   const { id } = useParams();
   const {
-    components: { Hackathon, HackathonPrize },
-    network: { singletonEntity },
+    network: { worldContract },
   } = useMUD();
   const bigNum = ethers.BigNumber.from(id);
   const paddedHexStr = '0x' + bigNum.toHexString().slice(2).padStart(64, '0');
-  const hackathon = useComponentValue(Hackathon, paddedHexStr);
-  const hackathonPrize = useComponentValue(HackathonPrize, paddedHexStr);
+  // const hackathonPrize = useComponentValue(HackathonPrize, paddedHexStr);
 
+  const [counter, setCounter] = useState(0); //only used for re-rendering HackathonSubmit
   const [activeTab, setActiveTab] = useState(1);
+  const [name, setName] = useState('');
+  const [uri, setUri] = useState('');
+  const [prizeToken, setPrizeToken] = useState('');
+  const [phase, setPhase] = useState(0);
+  const [startTimestamp, setStartTimestamp] = useState(0);
+  const [submitPeriod, setSubmitPeriod] = useState(0);
+  const [votingPeriod, setVotingPeriod] = useState(0);
+  const [withdrawalPeriod, setWithdrawalPeriod] = useState(0);
 
   const handleTabClick = (tabIndex: number) => {
     setActiveTab(tabIndex);
   };
 
-  const bgImage = '../../../public/cover.png';
+  useEffect(() => {
+    (async () => {
+      const hackathon = await worldContract.getHackathon(paddedHexStr);
+      setName(hackathon.name);
+      setUri(hackathon.uri);
+      setPrizeToken(hackathon.prizeToken);
+      setPhase(hackathon.phase);
+      setStartTimestamp(hackathon.startTimestamp);
+      setSubmitPeriod(hackathon.submitPeriod);
+      setVotingPeriod(hackathon.votingPeriod);
+      setWithdrawalPeriod(hackathon.withdrawalPeriod);
+    })();
+  }, [counter]);
 
   const OverviewTabContent: React.FC = () => {
-    return <HackathonOverview uri={hackathon.uri} name={hackathon.name} />;
+    return <HackathonOverview uri={uri} name={name} />;
   };
-
-  console.log(hackathon.prizeToken);
 
   const PrizesTabContent: React.FC = () => {
     return (
       <HackathonPrizes
         hackathonId={paddedHexStr}
-        deposit={hackathonPrize?.deposit ? Number(hackathonPrize.deposit) : 0}
-        prizeToken={hackathon.prizeToken}
+        // deposit={hackathonPrize?.deposit ? Number(hackathonPrize.deposit) : 0}
+        prizeToken={prizeToken}
       />
     );
   };
 
   const SubmitTabContent: React.FC = () => {
-    return <HackathonSubmit hackathonId={paddedHexStr} />;
+    return <HackathonSubmit hackathonId={paddedHexStr} counter={counter} setCounter={setCounter} />;
   };
 
   const ProjectsTabContent: React.FC = () => {
-    return (
-      <HackathonProjects
-        hackathonId={paddedHexStr}
-        hackathonSubmitters={hackathonPrize?.submitters}
-        phase={hackathon.phase}
-      />
-    );
+    return <HackathonProjects hackathonId={paddedHexStr} phase={phase} />;
   };
 
   let activeTabContent;
@@ -120,11 +131,12 @@ export const HackathonPage = () => {
         {activeTab !== 4 && (
           <Timeline
             hackathonId={paddedHexStr}
-            phase={hackathon.phase}
-            startTimestamp={hackathon.startTimestamp}
-            submitPeriod={hackathon.submitPeriod}
-            votingPeriod={hackathon.votingPeriod}
-            withdrawalPeriod={hackathon.withdrawalPeriod}
+            phase={phase}
+            startTimestamp={startTimestamp}
+            submitPeriod={submitPeriod}
+            votingPeriod={votingPeriod}
+            withdrawalPeriod={withdrawalPeriod}
+            setPhase={setPhase}
           />
         )}
       </div>

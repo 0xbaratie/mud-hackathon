@@ -20,7 +20,9 @@ const Timeline = ({
   submitPeriod,
   votingPeriod,
   withdrawalPeriod,
+  setPhase,
 }) => {
+  console.log('phase hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', phase);
   const {
     systemCalls: { proceedPhase },
   } = useMUD();
@@ -82,6 +84,7 @@ const Timeline = ({
           onClick={async (event) => {
             event.preventDefault();
             await proceedPhase(hackathonId);
+            setPhase(phase + 1);
           }}
         >
           Proceed Phase

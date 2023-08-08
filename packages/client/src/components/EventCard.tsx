@@ -48,9 +48,9 @@ export const EventCard = ({ hackathonNum }) => {
           <div className="mt-2">
             <span className="font-bold">{deposit ? Number(deposit) : 0} ETH</span>
             <span className="p-2 text-gray-600">in prizes</span>
-            <span className="font-bold">
+            {/* <span className="font-bold">
               {hackathonPrize?.submitters.length ? hackathonPrize.submitters.length : 0}
-            </span>
+            </span> */}
             <span className="p-2 text-gray-600">projects</span>
           </div>
         </div>

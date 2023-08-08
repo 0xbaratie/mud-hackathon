@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useMUD } from '../MUDContext';
 import FullScreenModal from './FullScreenModal';
 import DepositModal from './DepositModal';
 import { PRIZE_TOKEN } from '../constants/constants';
@@ -8,7 +9,19 @@ interface HackathonPrizesProps {
   prizeToken: string;
 }
 
-const HackathonPrizes = ({ hackathonId, deposit, prizeToken }: HackathonPrizesProps) => {
+const HackathonPrizes = ({ hackathonId, prizeToken }: HackathonPrizesProps) => {
+  const {
+    network: { worldContract },
+  } = useMUD();
+
+  const [deposit, setDeposit] = useState(0);
+  useEffect(() => {
+    (async () => {
+      const hackathonPrize = await worldContract.getHackathonPrize(hackathonId);
+      setDeposit(hackathonPrize?.deposit ? Number(hackathonPrize.deposit) : 0);
+    })();
+  }, []);
+
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => {
     setModalOpen(true);
@@ -17,7 +30,6 @@ const HackathonPrizes = ({ hackathonId, deposit, prizeToken }: HackathonPrizesPr
   const closeModal = () => {
     setModalOpen(false);
   };
-  console.log('prizeToken', prizeToken);
 
   const prizeTokenStr = Object.keys(PRIZE_TOKEN).find(
     (key) => PRIZE_TOKEN[key].toLowerCase() === prizeToken.toLowerCase(),

@@ -1,9 +1,21 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useEffect } from 'react';
+import { useMUD } from '../MUDContext';
 import VotingBox from '../../public/voting_box.svg';
 import HackathonProjectCard from './HackathonProjectCard';
 const imageURL =
   'https://storage.googleapis.com/ethglobal-api-production/projects%2F0wa8j%2Fimages%2FToronto_in_COVID-19_times_by_tour_boat.png';
-const HackathonProjects = ({ hackathonId, hackathonSubmitters, phase }) => {
+const HackathonProjects = ({ hackathonId, phase }) => {
+  const {
+    network: { worldContract },
+  } = useMUD();
+
+  const [hackathonSubmitters, setHackathonSubmitters] = useState([]);
+  useEffect(() => {
+    (async () => {
+      const hackathonPrize = await worldContract.getHackathonPrize(hackathonId);
+      setHackathonSubmitters(hackathonPrize?.submitters);
+    })();
+  }, []);
   console.log(hackathonSubmitters);
   return (
     <div className="flex flex-wrap justify-center mb-40">
