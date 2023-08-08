@@ -1,11 +1,17 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import Upload from '../../public/upload.svg';
-import { useState } from 'react';
 import { useMUD } from '../MUDContext';
+import { Transition } from '@headlessui/react';
+import { ToastSuccess } from './ToastSuccess';
+import { ToastError } from './ToastError';
 const imageURL =
-  'https://storage.googleapis.com/ethglobal-api-production/projects%2F0wa8j%2Fimages%2FToronto_in_COVID-19_times_by_tour_boat.png';
+  'https://storage.googleapis.com/ethglobal-api-production/projects%2Fppup5%2Fimages%2F%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202023-05-22%2023.50.42.png';
 
-const HackathonSubmit = ({ hackathonId }) => {
+type HackathonSubmitProps = {
+  hackathonId: string;
+};
+
+const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId }) => {
   const [name, setName] = useState('Your Project');
   const [description, setDescription] = useState('Short description');
   const [uri, setUri] = useState('https://yourproject');
@@ -14,8 +20,57 @@ const HackathonSubmit = ({ hackathonId }) => {
     systemCalls: { submit },
   } = useMUD();
 
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+    let errorTimer: NodeJS.Timeout | null = null;
+
+    if (showSuccess) {
+      timer = setTimeout(() => {
+        setShowSuccess(false);
+      }, 10000);
+    }
+
+    if (error) {
+      errorTimer = setTimeout(() => {
+        setError(null);
+      }, 10000);
+    }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [showSuccess, error]);
+
   return (
-    <div className="p-6">
+    <div className="p-6 mb-40">
+      <Transition
+        show={showSuccess}
+        enter="transition-opacity duration-300"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-300"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        {showSuccess && <ToastSuccess />}
+      </Transition>
+
+      <Transition
+        show={!!error && error.length > 0}
+        enter="transition-opacity duration-300"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-300"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        {error && error.length > 0 && <ToastError message={error} />}
+      </Transition>
       <h1 className="text-md mb-2">Project title</h1>
       <input
         type="text"
@@ -120,7 +175,12 @@ const HackathonSubmit = ({ hackathonId }) => {
           className="btn bg-[#333333] text-white rounded-lg"
           onClick={async (event) => {
             event.preventDefault();
-            await submit(hackathonId, name, description, uri, imageUri);
+            try {
+              await submit(hackathonId, name, description, uri, imageUri);
+              setShowSuccess(true);
+            } catch (error) {
+              setError('An error occurred while submitting your project.');
+            }
           }}
         >
           Submit your project

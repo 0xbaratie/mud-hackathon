@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
 
 export const Footer: React.FC = () => {
-
   return (
-    <footer className="footer mt-20 p-10 flex justify-center bg-gray-100" >
+    <footer className="footer mt-20 p-2 flex justify-center bg-gray-100 fixed bottom-0 left-0 w-full">
       <div className="">
         <div className="grid grid-flow-col gap-4">
           <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/AW_house">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
+              width="18"
+              height="18"
               viewBox="0 0 24 24"
               className="fill-current"
             >

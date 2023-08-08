@@ -13,6 +13,7 @@
   "dependencies": {
     "@emotion/styled": "^11.11.0",
     "@ethersproject/providers": "^5.7.2",
+    "@headlessui/react": "^1.7.15",
     "@latticexyz/common": "2.0.0-alpha.1.243+fc3bd590",
     "@latticexyz/dev-tools": "2.0.0-alpha.1.243+fc3bd590",
     "@latticexyz/network": "2.0.0-alpha.1.243+fc3bd590",

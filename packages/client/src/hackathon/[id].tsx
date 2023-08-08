@@ -28,10 +28,10 @@ export const HackathonPage = () => {
     setActiveTab(tabIndex);
   };
 
-  const bgImage = 'https://beiz.jp/images_T/black/black_00053.jpg';
+  const bgImage = '../../../public/cover.png';
 
   const OverviewTabContent: React.FC = () => {
-    return <HackathonOverview uri={hackathon.uri} />;
+    return <HackathonOverview uri={hackathon.uri} name={hackathon.name} />;
   };
 
   console.log(hackathon.prizeToken);
@@ -76,8 +76,11 @@ export const HackathonPage = () => {
   return (
     <>
       <Header />
-      <div className="w-full h-60 relative" style={{ backgroundImage: `url(${bgImage})` }}>
-        <div className="ml-4 tabs bg-black bg-opacity-70 absolute bottom-0 left-0 right-0">
+      <div>
+        <div>
+          <img src={bgImage} className="w-full" />
+        </div>
+        <div className="ml-4 tabs bg-black bg-opacity-70">
           <a
             className={`tab tab-lifted font-bold ${
               activeTab === 1 ? 'tab-active bg-white text-black' : 'text-white '
