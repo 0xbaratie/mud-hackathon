@@ -7,6 +7,7 @@ import { PRIZE_TOKEN } from '../constants/constants';
 interface HackathonPrizesProps {
   deposit: number;
   prizeToken: string;
+  hackathonId: string;
 }
 
 const HackathonPrizes = ({ hackathonId, prizeToken }: HackathonPrizesProps) => {
@@ -38,7 +39,7 @@ const HackathonPrizes = ({ hackathonId, prizeToken }: HackathonPrizesProps) => {
   return (
     <div className="mr-10">
       <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-        <DepositModal hackathonId={hackathonId} prizeTokenStr={prizeTokenStr} />
+        <DepositModal hackathonId={hackathonId} prizeTokenStr={prizeTokenStr || ""} />
       </FullScreenModal>
       <div className="flex justify-between items-center ">
         <h2 className="text-2xl font-bold">Prizes</h2>

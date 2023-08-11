@@ -92,7 +92,6 @@ const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
           <DateTimePicker
             selectedDateTime={startTimestamp}
             setSelectedDateTime={setStartTimestamp}
-            style={{ width: '100%' }}
           />
         </div>
       </div>
@@ -123,7 +122,7 @@ const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
         placeholder="1"
         className="input input-bordered w-full max-w-xs text-gray-900"
         value={winnerCount}
-        onChange={(e) => setWinnerCount(e.target.value)}
+        onChange={(e) => setWinnerCount(parseFloat(e.target.value))}
       />
       <h1 className="text-sm mb-1 mt-3">Cover image</h1>
       <p className="text-sm text-gray-500 mb-1">

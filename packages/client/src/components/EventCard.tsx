@@ -5,7 +5,11 @@ import { Link } from 'react-router-dom';
 import { HackathonPage } from '../hackathon/[id]';
 import { useState, useEffect } from 'react';
 
-export const EventCard = ({ hackathonNum }) => {
+interface EventcardProps {
+  hackathonNum: number;
+}
+
+export const EventCard = ({ hackathonNum }: EventcardProps) => {
   const {
     // components: { Hackathon, HackathonPrize },
     network: { singletonEntity, worldContract },
