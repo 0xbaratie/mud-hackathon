@@ -8,10 +8,18 @@ const imageURL =
   'https://storage.googleapis.com/ethglobal-api-production/projects%2Fppup5%2Fimages%2F%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202023-05-22%2023.50.42.png';
 
 type HackathonSubmitProps = {
+  onClose: () => void;
   hackathonId: string;
+  counter: number;
+  setCounter: (counter: number) => void;
 };
 
-const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId, counter, setCounter }) => {
+const HackathonSubmit: FC<HackathonSubmitProps> = ({
+  onClose,
+  hackathonId,
+  counter,
+  setCounter,
+}) => {
   //TODO 自分のSubmit情報取得
   const [name, setName] = useState('Your Project');
   const [description, setDescription] = useState('Short description');
@@ -180,6 +188,7 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ hackathonId, counter, setCo
               await submit(hackathonId, name, description, uri, imageUri);
               setCounter(counter + 1);
               setShowSuccess(true);
+              onClose();
             } catch (error) {
               setError('An error occurred while submitting your project.');
             }

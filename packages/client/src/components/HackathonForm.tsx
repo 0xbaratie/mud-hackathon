@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import DateTimePicker from './DateTimePicker';
 import { useMUD } from '../MUDContext';
 import { useState } from 'react';
@@ -7,9 +7,15 @@ import { ToastError } from './ToastError';
 
 type HackathonFormProps = {
   onClose: () => void;
+  maxHackathonNum: number;
+  setMaxHackathonNum: (num: number) => void;
 };
 
-const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
+const HackathonForm: FC<HackathonFormProps> = ({
+  onClose,
+  maxHackathonNum,
+  setMaxHackathonNum,
+}) => {
   const getWeeksLater = (weeks: number) => {
     const date = new Date();
     date.setDate(date.getDate() + 7 * weeks);
@@ -153,6 +159,8 @@ const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
                 uri,
                 imageUri,
               );
+              const newMaxHackathonNum = maxHackathonNum + 1;
+              setMaxHackathonNum(newMaxHackathonNum);
               onClose();
             } catch (error) {
               setError('An error occurred while creating the hackathon.');

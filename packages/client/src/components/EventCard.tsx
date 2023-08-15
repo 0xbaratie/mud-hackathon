@@ -1,14 +1,12 @@
-import { useComponentValue } from '@latticexyz/react';
 import { BigNumber, ethers } from 'ethers';
 import { useMUD } from '../MUDContext';
 import { Link } from 'react-router-dom';
-import { HackathonPage } from '../hackathon/[id]';
 import { useState, useEffect } from 'react';
 
 export const EventCard = ({ hackathonNum }) => {
   const {
     // components: { Hackathon, HackathonPrize },
-    network: { singletonEntity, worldContract },
+    network: { worldContract },
   } = useMUD();
   const [imageUri, setImageUri] = useState('');
   const [name, setName] = useState('');

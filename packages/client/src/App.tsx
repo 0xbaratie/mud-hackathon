@@ -1,12 +1,36 @@
-import { useComponentValue } from '@latticexyz/react';
 import { useMUD } from './MUDContext';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { EventCards } from './components/EventCards';
-import React, { useState } from 'react';
-import { SyncState } from '@latticexyz/network';
+// import { SyncState } from '@latticexyz/network';
+import FullScreenModal from './components/FullScreenModal';
+import HackathonForm from './components/HackathonForm';
+import { ethers } from 'ethers';
+import { useState, useEffect } from 'react';
 
 export const App = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const {
+    // components: { Hackathon, Config },
+    network: { worldContract },
+  } = useMUD();
+  const [maxHackathonNum, setMaxHackathonNum] = useState(0);
+  useEffect(() => {
+    (async () => {
+      const maxHackathonId = await worldContract.getMaxHackathonId();
+      console.log('maxHackathonId: ', maxHackathonId);
+      const bigNum = ethers.BigNumber.from(maxHackathonId);
+      setMaxHackathonNum(bigNum.toNumber());
+    })();
+  }, [maxHackathonNum]);
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
   return (
     <>
       <Header />
@@ -32,7 +56,22 @@ export const App = () => {
       ) : (
         <EventCards />
       )} */}
-      <EventCards />
+
+      <div className="text-center">
+        <a onClick={openModal}>
+          <button className="btn bg-[#333333] text-white rounded-lg">Create a hackathon</button>
+        </a>
+      </div>
+
+      <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
+        <HackathonForm
+          onClose={closeModal}
+          maxHackathonNum={maxHackathonNum}
+          setMaxHackathonNum={setMaxHackathonNum}
+        />
+      </FullScreenModal>
+
+      <EventCards maxHackathonNum={maxHackathonNum} />
 
       <Footer />
     </>

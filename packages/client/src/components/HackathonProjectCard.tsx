@@ -1,8 +1,7 @@
-import React, { ReactNode, useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import VotingBox from '../../public/voting_box.svg';
 import FullScreenModal from './FullScreenModal';
 import VoteModal from './VoteModal';
-import { useComponentValue, useEntityQuery } from '@latticexyz/react';
 import { useMUD } from '../MUDContext';
 import { PHASE } from '../constants/constants';
 
@@ -68,7 +67,10 @@ const HackathonProjects = ({ hackathonId, submitter, phase }) => {
         </div>
       ) : (
         <div className="flex justify-center items-center">
-          <button className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg bg-gray-400" disabled>
+          <button
+            className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg bg-gray-400"
+            disabled
+          >
             Vote (outside the period)
           </button>
         </div>

@@ -3,8 +3,7 @@ import { ethers } from 'ethers';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import HackathonOverview from '../components/HackathonOverview';
-// import HackathonPrizes from '../components/HackathonPrizes';
-import HackathonSubmit from '../components/HackathonSubmit';
+import HackathonPrizes from '../components/HackathonPrizes';
 import HackathonProjects from '../components/HackathonProjects';
 import Timeline from '../components/Timeline';
 import React, { useState, useEffect } from 'react';
@@ -18,7 +17,6 @@ export const HackathonPage = () => {
   } = useMUD();
   const bigNum = ethers.BigNumber.from(id);
   const paddedHexStr = '0x' + bigNum.toHexString().slice(2).padStart(64, '0');
-  // const hackathonPrize = useComponentValue(HackathonPrize, paddedHexStr);
 
   const [counter, setCounter] = useState(0); //only used for re-rendering HackathonSubmit
   const [activeTab, setActiveTab] = useState(1);
@@ -54,21 +52,18 @@ export const HackathonPage = () => {
   };
 
   const PrizesTabContent: React.FC = () => {
-    return (
-      <HackathonPrizes
-        hackathonId={paddedHexStr}
-        // deposit={hackathonPrize?.deposit ? Number(hackathonPrize.deposit) : 0}
-        prizeToken={prizeToken}
-      />
-    );
-  };
-
-  const SubmitTabContent: React.FC = () => {
-    return <HackathonSubmit hackathonId={paddedHexStr} counter={counter} setCounter={setCounter} />;
+    return <HackathonPrizes hackathonId={paddedHexStr} prizeToken={prizeToken} />;
   };
 
   const ProjectsTabContent: React.FC = () => {
-    return <HackathonProjects hackathonId={paddedHexStr} phase={phase} />;
+    return (
+      <HackathonProjects
+        hackathonId={paddedHexStr}
+        phase={phase}
+        counter={counter}
+        setCounter={setCounter}
+      />
+    );
   };
 
   let activeTabContent;
@@ -78,8 +73,6 @@ export const HackathonPage = () => {
   } else if (activeTab === 2) {
     activeTabContent = <PrizesTabContent />;
   } else if (activeTab === 3) {
-    activeTabContent = <SubmitTabContent />;
-  } else if (activeTab === 4) {
     activeTabContent = <ProjectsTabContent />;
     containerClassName = 'w-full';
   }
@@ -114,21 +107,13 @@ export const HackathonPage = () => {
             }`}
             onClick={() => handleTabClick(3)}
           >
-            Submit
-          </a>
-          <a
-            className={`tab tab-lifted font-bold ${
-              activeTab === 4 ? 'tab-active bg-white text-black' : 'text-white '
-            }`}
-            onClick={() => handleTabClick(4)}
-          >
             Projects
           </a>
         </div>
       </div>
       <div className="flex mt-6 p-6">
         <div className={containerClassName}>{activeTabContent}</div>
-        {activeTab !== 4 && (
+        {activeTab !== 3 && (
           <Timeline
             hackathonId={paddedHexStr}
             phase={phase}
