@@ -71,11 +71,20 @@ export type HackathonDataStructOutput = [
 export type HackathonPrizeDataStruct = {
   deposit: PromiseOrValue<BigNumberish>;
   submitters: PromiseOrValue<string>[];
+  voteNft: PromiseOrValue<string>;
+  voteNftSnapshot: PromiseOrValue<BigNumberish>;
 };
 
-export type HackathonPrizeDataStructOutput = [BigNumber, string[]] & {
+export type HackathonPrizeDataStructOutput = [
+  BigNumber,
+  string[],
+  string,
+  BigNumber
+] & {
   deposit: BigNumber;
   submitters: string[];
+  voteNft: string;
+  voteNftSnapshot: BigNumber;
 };
 
 export type SubmissionDataStruct = {

@@ -693,6 +693,16 @@ const _abi = [
             name: "submitters",
             type: "address[]",
           },
+          {
+            internalType: "address",
+            name: "voteNft",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "voteNftSnapshot",
+            type: "uint256",
+          },
         ],
         internalType: "struct HackathonPrizeData",
         name: "",

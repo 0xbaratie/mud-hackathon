@@ -67,6 +67,8 @@ export function defineContractComponents(world: World) {
         {
           deposit: RecsType.BigInt,
           submitters: RecsType.StringArray,
+          voteNft: RecsType.String,
+          voteNftSnapshot: RecsType.BigInt,
         },
         {
           metadata: {

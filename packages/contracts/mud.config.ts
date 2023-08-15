@@ -32,6 +32,8 @@ export default mudConfig({
       schema: {
         deposit: "uint256",
         submitters: "address[]",
+        voteNft: "address",
+        voteNftSnapshot: "uint256",
       },
     },
     Submission: {
