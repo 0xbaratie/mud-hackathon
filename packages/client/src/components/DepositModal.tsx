@@ -3,7 +3,12 @@ import { useMUD } from '../MUDContext';
 import { useState } from 'react';
 import { ethers } from 'ethers';
 
-const DepositModal = ({ hackathonId, prizeTokenStr }) => {
+interface DepositProps {
+  prizeTokenStr: string;
+  hackathonId: string;
+}
+
+const DepositModal = ({ hackathonId, prizeTokenStr }: DepositProps) => {
   const [amount, setAmount] = useState(0);
   const {
     systemCalls: { depositPrize, depositPrizeEth },
@@ -18,7 +23,7 @@ const DepositModal = ({ hackathonId, prizeTokenStr }) => {
           placeholder="0.0"
           className="input input-bordered w-full text-gray-900"
           value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          onChange={(e) => setAmount(parseFloat(e.target.value))}
         />
         <button
           className="btn bg-[#333333] text-white rounded-lg"

@@ -7,7 +7,7 @@ export const EventCards = ({ maxHackathonNum }) => {
       style={{ minHeight: '500px' }}
     >
       {Array.from({ length: maxHackathonNum }, (_, i) => i + 1).map((hackathonNum) => (
-        <EventCard hackathonNum={hackathonNum} />
+        <EventCard key={hackathonNum} hackathonNum={hackathonNum} />
       ))}
     </div>
   );

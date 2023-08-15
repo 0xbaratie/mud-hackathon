@@ -3,6 +3,7 @@ import { useMUD } from '../MUDContext';
 import FullScreenModal from './FullScreenModal';
 import DepositModal from './DepositModal';
 import { PRIZE_TOKEN } from '../constants/constants';
+import { ethers } from 'ethers';
 
 interface HackathonPrizesProps {
   hackathonId: number;
@@ -23,7 +24,7 @@ const HackathonPrizes = ({ hackathonId, prizeToken }: HackathonPrizesProps) => {
   const [deposit, setDeposit] = useState(0);
   useEffect(() => {
     (async () => {
-      const bigNum = ethers.BigNumber.from(id);
+      const bigNum = ethers.BigNumber.from(hackathonId);
       const paddedHexStr = '0x' + bigNum.toHexString().slice(2).padStart(64, '0');
       const hackathonPrize = await worldContract.getHackathonPrize(paddedHexStr);
       setDeposit(hackathonPrize?.deposit ? Number(hackathonPrize.deposit) : 0);

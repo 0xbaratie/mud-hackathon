@@ -3,7 +3,11 @@ import { useMUD } from '../MUDContext';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
-export const EventCard = ({ hackathonNum }) => {
+interface EventcardProps {
+  hackathonNum: number;
+}
+
+export const EventCard = ({ hackathonNum }: EventcardProps) => {
   const {
     // components: { Hackathon, HackathonPrize },
     network: { worldContract },

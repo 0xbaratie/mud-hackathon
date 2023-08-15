@@ -1,4 +1,9 @@
-const HackathonOverview = ({ uri, name }) => {
+interface HackathonOverviewProps {
+  uri: string;
+  name: string;
+}
+
+const HackathonOverview = ({ uri, name }: HackathonOverviewProps) => {
   return (
     <div className="">
       <div className="flex">
