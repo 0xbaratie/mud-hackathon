@@ -1,6 +1,6 @@
 import React, { ReactNode, useContext, useState, createContext } from 'react';
 import TitleLogo from '../../public/logo.svg';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+// import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 export const Header = () => {
   return (
@@ -10,9 +10,7 @@ export const Header = () => {
           <img src={TitleLogo} className="" alt="AW Hackathon logo" />
         </a>
       </div>
-      <div className="flex-none">
-        <ConnectButton />
-      </div>
+      <div className="flex-none">{/* <ConnectButton /> */}</div>
     </div>
   );
 };

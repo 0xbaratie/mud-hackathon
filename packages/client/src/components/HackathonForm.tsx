@@ -162,6 +162,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
               setMaxHackathonNum(newMaxHackathonNum);
               onClose();
             } catch (error) {
+              console.error(error);
               setError('An error occurred while creating the hackathon.');
             }
           }}

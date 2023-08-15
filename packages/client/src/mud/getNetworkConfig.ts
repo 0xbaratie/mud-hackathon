@@ -20,19 +20,6 @@ export async function getNetworkConfig(): Promise<NetworkConfig> {
     throw new Error(`Chain ${chainId} not found`);
   }
 
-  const jsonRpcUrl =
-    params.get('rpc') ??
-    (chainId == 420
-      ? chain.rpcUrls.alchemy.http[0] + '/' + import.meta.env.VITE_ALCHEMY_ID
-      : chain.rpcUrls.default.http[0]);
-  const wsRpcUrl =
-    params.get('wsRpc') ??
-    (chainId == 420
-      ? chain.rpcUrls.alchemy.webSocket![0] + '/' + import.meta.env.VITE_ALCHEMY_ID
-      : chain.rpcUrls.default.webSocket![0]);
-  // console.log('jsonRpcUrl', jsonRpcUrl);
-  // console.log('wsRpcUrl', wsRpcUrl);
-
   const world = worlds[chain.id.toString()];
   const worldAddress = params.get('worldAddress') || world?.address;
   if (!worldAddress) {
@@ -51,8 +38,8 @@ export async function getNetworkConfig(): Promise<NetworkConfig> {
     },
     provider: {
       chainId,
-      jsonRpcUrl: jsonRpcUrl,
-      wsRpcUrl: wsRpcUrl,
+      jsonRpcUrl: params.get('rpc') ?? chain.rpcUrls.default.http[0],
+      wsRpcUrl: params.get('wsRpc') ?? chain.rpcUrls.default.webSocket?.[0],
     },
     privateKey: getBurnerWallet().value,
     chainId,
