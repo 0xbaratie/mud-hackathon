@@ -381,6 +381,24 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "_voteNft",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_voteNftSnapshot",
+        type: "uint256",
+      },
+    ],
+    name: "createHackathonPrize",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "bytes32",
         name: "table",
         type: "bytes32",

@@ -40,6 +40,17 @@ export function createSystemCalls(
     await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
+  const createHackathonPrize = async (
+    _voteNft: string,
+    _voteNftSnapshot: number,
+  ) => {
+    const tx = await worldSend('createHackathonPrize', [
+      _voteNft,
+      _voteNftSnapshot
+    ]);
+    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+  };
+
   const updateHackathon = async (
     _hackathonId: string,
     _prizeToken: string,
@@ -111,6 +122,7 @@ export function createSystemCalls(
   return {
     increment,
     createHackathon,
+    createHackathonPrize,
     updateHackathon,
     proceedPhase,
     depositPrize,
