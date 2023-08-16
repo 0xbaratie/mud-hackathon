@@ -2,12 +2,32 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { HackathonPrize,Hackathon,Config,HackathonData } from "../codegen/Tables.sol";
+import { HackathonPrize,HackathonPrizeData,Hackathon,Config,HackathonData } from "../codegen/Tables.sol";
 import { Phase } from "../codegen/Types.sol";
 import { SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 contract HackathonPrizeSystem is System {
   using SafeERC20 for IERC20;
+
+  function _incrementHackathonId() internal returns(bytes32 newHackathonId_){
+    newHackathonId_ = bytes32(uint256(Config.get()) + 1);
+    Config.set(newHackathonId_);
+  }
+
+  function createHackathonPrize(
+    address _voteNft,
+    uint256 _voteNftSnapshot
+  ) public {
+    HackathonPrize.set(
+      _incrementHackathonId(),
+      HackathonPrizeData(
+        0,
+        new address[](0),
+        _voteNft,
+        _voteNftSnapshot
+      )
+    );
+  }
 
   function depositPrize(
     bytes32 _hackathonId,

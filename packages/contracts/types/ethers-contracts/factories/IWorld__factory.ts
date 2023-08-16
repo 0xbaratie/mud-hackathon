@@ -328,6 +328,24 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "bytes",
+        name: "_requestResult",
+        type: "bytes",
+      },
+      {
+        internalType: "bytes",
+        name: "_callbackExtraData",
+        type: "bytes",
+      },
+    ],
+    name: "continueVote",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "_prizeToken",
         type: "address",
@@ -374,6 +392,24 @@ const _abi = [
       },
     ],
     name: "createHackathon",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_voteNft",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_voteNftSnapshot",
+        type: "uint256",
+      },
+    ],
+    name: "createHackathonPrize",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -693,6 +729,16 @@ const _abi = [
             name: "submitters",
             type: "address[]",
           },
+          {
+            internalType: "address",
+            name: "voteNft",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "voteNftSnapshot",
+            type: "uint256",
+          },
         ],
         internalType: "struct HackathonPrizeData",
         name: "",
@@ -870,9 +916,9 @@ const _abi = [
         type: "bytes32",
       },
       {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
+        internalType: "address",
+        name: "_voter",
+        type: "address",
       },
     ],
     name: "getVote",
@@ -1731,11 +1777,6 @@ const _abi = [
         internalType: "address",
         name: "_submitter",
         type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
       },
     ],
     name: "vote",

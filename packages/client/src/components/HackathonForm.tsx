@@ -30,7 +30,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
   };
 
   const {
-    systemCalls: { createHackathon },
+    systemCalls: { createHackathon, createHackathonPrize },
   } = useMUD();
   const [prizeToken, setPrizeToken] = useState(PRIZE_TOKEN.ETH);
   const [startTimestamp, setStartTimestamp] = useState(getWeeksLater(-1));
@@ -157,6 +157,11 @@ const HackathonForm: FC<HackathonFormProps> = ({
                 name,
                 uri,
                 imageUri,
+              );
+              await createHackathonPrize(
+                // TODO: voteNFT and voteSnapshotId
+                "0xb1008c037aa0db479b9d5b0e49a27337fb29d72e",
+                17928076,
               );
               const newMaxHackathonNum = maxHackathonNum + 1;
               setMaxHackathonNum(newMaxHackathonNum);
