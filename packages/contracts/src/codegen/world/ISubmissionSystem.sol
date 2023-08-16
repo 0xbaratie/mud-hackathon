@@ -14,7 +14,9 @@ interface ISubmissionSystem {
     string memory _imageUri
   ) external;
 
-  function vote(bytes32 _hackathonId, address _submitter, uint256 _tokenId) external;
+  function vote(bytes32 _hackathonId, address _submitter) external;
+
+  function continueVote(bytes memory _requestResult, bytes memory _callbackExtraData) external;
 
   function withdrawPrize(bytes32 _hackathonId) external;
 }

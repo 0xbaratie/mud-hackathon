@@ -24,7 +24,7 @@ library Vote {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](1);
-    _schema[0] = SchemaType.BOOL;
+    _schema[0] = SchemaType.UINT256;
 
     return SchemaLib.encode(_schema);
   }
@@ -32,7 +32,7 @@ library Vote {
   function getKeySchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](2);
     _schema[0] = SchemaType.BYTES32;
-    _schema[1] = SchemaType.UINT256;
+    _schema[1] = SchemaType.ADDRESS;
 
     return SchemaLib.encode(_schema);
   }
@@ -40,7 +40,7 @@ library Vote {
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
     string[] memory _fieldNames = new string[](1);
-    _fieldNames[0] = "voted";
+    _fieldNames[0] = "count";
     return ("Vote", _fieldNames);
   }
 
@@ -66,77 +66,71 @@ library Vote {
     _store.setMetadata(_tableId, _tableName, _fieldNames);
   }
 
-  /** Get voted */
-  function get(bytes32 hackathonId, uint256 tokenId) internal view returns (bool voted) {
+  /** Get count */
+  function get(bytes32 hackathonId, address voter) internal view returns (uint256 count) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(tokenId));
+    _keyTuple[1] = bytes32(uint256(uint160(voter)));
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
-    return (_toBool(uint8(Bytes.slice1(_blob, 0))));
+    return (uint256(Bytes.slice32(_blob, 0)));
   }
 
-  /** Get voted (using the specified store) */
-  function get(IStore _store, bytes32 hackathonId, uint256 tokenId) internal view returns (bool voted) {
+  /** Get count (using the specified store) */
+  function get(IStore _store, bytes32 hackathonId, address voter) internal view returns (uint256 count) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(tokenId));
+    _keyTuple[1] = bytes32(uint256(uint160(voter)));
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
-    return (_toBool(uint8(Bytes.slice1(_blob, 0))));
+    return (uint256(Bytes.slice32(_blob, 0)));
   }
 
-  /** Set voted */
-  function set(bytes32 hackathonId, uint256 tokenId, bool voted) internal {
+  /** Set count */
+  function set(bytes32 hackathonId, address voter, uint256 count) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(tokenId));
+    _keyTuple[1] = bytes32(uint256(uint160(voter)));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((voted)));
+    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((count)));
   }
 
-  /** Set voted (using the specified store) */
-  function set(IStore _store, bytes32 hackathonId, uint256 tokenId, bool voted) internal {
+  /** Set count (using the specified store) */
+  function set(IStore _store, bytes32 hackathonId, address voter, uint256 count) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(tokenId));
+    _keyTuple[1] = bytes32(uint256(uint160(voter)));
 
-    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((voted)));
+    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((count)));
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(bool voted) internal view returns (bytes memory) {
-    return abi.encodePacked(voted);
+  function encode(uint256 count) internal view returns (bytes memory) {
+    return abi.encodePacked(count);
   }
 
   /** Encode keys as a bytes32 array using this table's schema */
-  function encodeKeyTuple(bytes32 hackathonId, uint256 tokenId) internal pure returns (bytes32[] memory _keyTuple) {
+  function encodeKeyTuple(bytes32 hackathonId, address voter) internal pure returns (bytes32[] memory _keyTuple) {
     _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(tokenId));
+    _keyTuple[1] = bytes32(uint256(uint160(voter)));
   }
 
   /* Delete all data for given keys */
-  function deleteRecord(bytes32 hackathonId, uint256 tokenId) internal {
+  function deleteRecord(bytes32 hackathonId, address voter) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(tokenId));
+    _keyTuple[1] = bytes32(uint256(uint160(voter)));
 
     StoreSwitch.deleteRecord(_tableId, _keyTuple);
   }
 
   /* Delete all data for given keys (using the specified store) */
-  function deleteRecord(IStore _store, bytes32 hackathonId, uint256 tokenId) internal {
+  function deleteRecord(IStore _store, bytes32 hackathonId, address voter) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
-    _keyTuple[1] = bytes32(uint256(tokenId));
+    _keyTuple[1] = bytes32(uint256(uint160(voter)));
 
     _store.deleteRecord(_tableId, _keyTuple);
-  }
-}
-
-function _toBool(uint8 value) pure returns (bool result) {
-  assembly {
-    result := value
   }
 }

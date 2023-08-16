@@ -14,5 +14,5 @@ interface IViewSystem {
 
   function getSubmission(bytes32 _hackathonId, address _submitter) external view returns (SubmissionData memory);
 
-  function getVote(bytes32 _hackathonId, uint256 _tokenId) external view returns (bool);
+  function getVote(bytes32 _hackathonId, address _voter) external view returns (bool);
 }

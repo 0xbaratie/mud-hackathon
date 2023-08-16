@@ -52,11 +52,11 @@ export default mudConfig({
     },
     Vote: {
       schema: {
-        voted: "bool",
+        count: "uint256",
       },
       keySchema: {
         hackathonId: "bytes32",
-        tokenId: "uint256",
+        voter: "address",
       },
     },
   },

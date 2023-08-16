@@ -11,7 +11,7 @@ import {
   Submission,
   SubmissionData,
   Vote
-   } from "../codegen/Tables.sol";
+} from "../codegen/Tables.sol";
 import { Phase } from "../codegen/Types.sol";
 
 contract ViewSystem is System {
@@ -31,8 +31,9 @@ contract ViewSystem is System {
     return Submission.get(_hackathonId, _submitter);
   }
 
-  function getVote(bytes32 _hackathonId, uint256 _tokenId)  public view returns(bool){
-    return Vote.get(_hackathonId, _tokenId);
+  function getVote(bytes32 _hackathonId, address _voter)  public view returns(bool){
+    uint256 result = Vote.get(_hackathonId, _voter);
+    return result > 0;
   }
 
 }

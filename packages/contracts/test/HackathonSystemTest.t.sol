@@ -282,9 +282,9 @@ contract HackathonSystemTest is MudV2Test {
     //proceed VOTING
     skip(2);
     world.proceedPhase(bytes32(uint256(1)));
-    world.vote(bytes32(uint256(1)), address(this), 1);
-    world.vote(bytes32(uint256(1)), address(1), 2);
-    world.vote(bytes32(uint256(1)), address(2), 3);
+    world.vote(bytes32(uint256(1)), address(this));
+    world.vote(bytes32(uint256(1)), address(1));
+    world.vote(bytes32(uint256(1)), address(2));
 
     //proceed WITHDRAWING
     skip(3);

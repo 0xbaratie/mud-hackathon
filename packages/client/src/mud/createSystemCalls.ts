@@ -109,8 +109,8 @@ export function createSystemCalls(
     await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
-  const vote = async (_hackathonId: string, _submitter: string, _tokenId: number) => {
-    const tx = await worldSend('vote', [_hackathonId, _submitter, _tokenId]);
+  const vote = async (_hackathonId: string, _submitter: string) => {
+    const tx = await worldSend('vote', [_hackathonId, _submitter]);
     await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
