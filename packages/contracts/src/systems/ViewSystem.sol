@@ -10,7 +10,8 @@ import {
   HackathonPrizeData,
   Submission,
   SubmissionData,
-  Vote
+  Vote,
+  VoteData
 } from "../codegen/Tables.sol";
 import { Phase } from "../codegen/Types.sol";
 
@@ -31,9 +32,8 @@ contract ViewSystem is System {
     return Submission.get(_hackathonId, _submitter);
   }
 
-  function getVote(bytes32 _hackathonId, address _voter)  public view returns(bool){
-    uint256 result = Vote.get(_hackathonId, _voter);
-    return result > 0;
+  function getVote(bytes32 _hackathonId, address _voter)  public view returns(VoteData memory){
+    return Vote.get(_hackathonId, _voter);
   }
 
 }

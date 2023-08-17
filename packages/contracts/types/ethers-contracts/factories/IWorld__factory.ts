@@ -924,9 +924,21 @@ const _abi = [
     name: "getVote",
     outputs: [
       {
-        internalType: "bool",
+        components: [
+          {
+            internalType: "uint256",
+            name: "count",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "voted",
+            type: "bool",
+          },
+        ],
+        internalType: "struct VoteData",
         name: "",
-        type: "bool",
+        type: "tuple",
       },
     ],
     stateMutability: "view",

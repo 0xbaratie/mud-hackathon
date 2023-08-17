@@ -112,6 +112,16 @@ export type SubmissionDataStructOutput = [
   imageUri: string;
 };
 
+export type VoteDataStruct = {
+  count: PromiseOrValue<BigNumberish>;
+  voted: PromiseOrValue<boolean>;
+};
+
+export type VoteDataStructOutput = [BigNumber, boolean] & {
+  count: BigNumber;
+  voted: boolean;
+};
+
 export interface IWorldInterface extends utils.Interface {
   functions: {
     "call(bytes16,bytes16,bytes)": FunctionFragment;
@@ -1057,7 +1067,7 @@ export interface IWorld extends BaseContract {
       _hackathonId: PromiseOrValue<BytesLike>,
       _voter: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    ): Promise<[VoteDataStructOutput]>;
 
     grantAccess(
       namespace: PromiseOrValue<BytesLike>,
@@ -1448,7 +1458,7 @@ export interface IWorld extends BaseContract {
     _hackathonId: PromiseOrValue<BytesLike>,
     _voter: PromiseOrValue<string>,
     overrides?: CallOverrides
-  ): Promise<boolean>;
+  ): Promise<VoteDataStructOutput>;
 
   grantAccess(
     namespace: PromiseOrValue<BytesLike>,
@@ -1839,7 +1849,7 @@ export interface IWorld extends BaseContract {
       _hackathonId: PromiseOrValue<BytesLike>,
       _voter: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<boolean>;
+    ): Promise<VoteDataStructOutput>;
 
     grantAccess(
       namespace: PromiseOrValue<BytesLike>,
