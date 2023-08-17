@@ -2,10 +2,10 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Hackathon, HackathonData,Submission,SubmissionData,HackathonPrize,Config,Vote } from "../codegen/Tables.sol";
+import { Hackathon, HackathonData, Submission, SubmissionData, HackathonPrize, Config, Vote, VoteData} from "../codegen/Tables.sol";
 import { Phase } from "../codegen/Types.sol";
-import { SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import { IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import { IERC721 } from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 struct StateQuery {
     uint32 chainId;
@@ -40,7 +40,7 @@ contract SubmissionSystem is System {
   uint32 public chainId = 1;
   uint64 public snapshotBlock;
 
-  mapping(address => uint256) public addrToVote;
+  mapping(bytes32 => mapping(address => uint256)) public voteCount;
 
   //TODO
   function setVoteToken(address _voteToken) public {
@@ -71,9 +71,7 @@ contract SubmissionSystem is System {
     Submission.setImageUri(_hackathonId, _msgSender(), _imageUri);
   }
 
-  function vote(bytes32 _hackathonId, address _submitter) public {
-    address holder = msg.sender;
-    
+  function vote(bytes32 _hackathonId, address _submitter) public {    
     //validate phase
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
     require(_hackathonData.phase == uint8(Phase.VOTING), "Hackathon is not in VOTING phase.");
@@ -84,38 +82,39 @@ contract SubmissionSystem is System {
         blockNumber: snapshotBlock,
         fromAddress: address(0),
         toAddress: addressERC721,
-        toCalldata: abi.encodeWithSelector(IERC721.balanceOf.selector, holder)
+        toCalldata: abi.encodeWithSelector(IERC721.balanceOf.selector, _submitter)
     });
-    IStateQueryGateway(STATE_QUERY_GATEWAY).requestStateQuery(
-        stateQuery,
-        SubmissionSystem.continueVote.selector, // Which function to call after async call is done
-        abi.encode(_hackathonId, holder) // What other data to pass to the callback
-    );
-    uint256 feePerRequest = 0.003 ether + 100000 gwei;
-    IFeeVault(FEE_VAULT).depositNative{value: feePerRequest}(address(this));
+    require(_submitter == STATE_QUERY_GATEWAY);
+    if (voteCount[_hackathonId][_submitter] == 0) {
+      IStateQueryGateway(STATE_QUERY_GATEWAY).requestStateQuery(
+          stateQuery,
+          SubmissionSystem.continueVote.selector, // Which function to call after async call is done
+          abi.encode(_hackathonId, _submitter) // What other data to pass to the callback
+      );
+      uint256 feePerRequest = 0.003 ether + 100000 gwei;
+      IFeeVault(FEE_VAULT).depositNative{value: feePerRequest}(address(this));
+    }
 
     //validate submission
     SubmissionData memory _submissionData = Submission.get(_hackathonId, _submitter);
-    // VoteData memory _voteData = Vote.get(_hackathonId, holder);
+    VoteData memory _voteData = Vote.get(_hackathonId, _submitter);
     require(bytes(_submissionData.name).length > 0, "Submission does not exist.");
-
+    require(voteCount[_hackathonId][_submitter] > _voteData.count, "Your voting numbers had already exceed.");
     //increment votes
     Submission.setVotes(_hackathonId, _submitter, _submissionData.votes + 1);
 
     //set Vote
-    //TODO: The number of votes cast must be counted.
-    Vote.set(_hackathonId, holder, 1);
+    Vote.set(_hackathonId, _submitter, _voteData.count + 1, false);
   }
 
   function continueVote(bytes memory _requestResult, bytes memory _callbackExtraData) external {
-      require(msg.sender == STATE_QUERY_GATEWAY);
       uint256 balance = abi.decode(_requestResult, (uint256));
-      (uint256 _hackathonId, address holder) = abi.decode(_callbackExtraData, (uint256, address));
-      //TODO: Allow each HackathonID to vote for as many balances as they have.
+      // (uint256 _hackathonId, address _submitter) = abi.decode(_callbackExtraData, (uint256, address));
+      (bytes32 _hackathonId, address _submitter) = abi.decode(_callbackExtraData, (bytes32, address));
       if (balance >= 1) {
-          addrToVote[holder] = _hackathonId;
+        voteCount[_hackathonId][_submitter] = balance;
       }
-      emit Voted(holder);
+      emit Voted(_submitter);
   }
 
   function withdrawPrize(bytes32 _hackathonId) public {
