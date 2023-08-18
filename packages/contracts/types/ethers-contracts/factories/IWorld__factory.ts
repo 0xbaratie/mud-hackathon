@@ -399,9 +399,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "address",
+        internalType: "string",
         name: "_voteNft",
-        type: "address",
+        type: "string",
       },
       {
         internalType: "uint256",

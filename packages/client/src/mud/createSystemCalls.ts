@@ -26,29 +26,39 @@ export function createSystemCalls(
     _uri: string,
     _imageUri: string,
   ) => {
-    const tx = await worldSend('createHackathon', [
-      _prizeToken,
-      _startTimestamp,
-      _submitPeriod,
-      _votingPeriod,
-      _withdrawalPeriod,
-      _winnerCount,
-      _name,
-      _uri,
-      _imageUri,
-    ]);
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    console.log("@@@@")
+    try {
+      const tx = await worldSend('createHackathon', [
+        _prizeToken,
+        _startTimestamp,
+        _submitPeriod,
+        _votingPeriod,
+        _withdrawalPeriod,
+        _winnerCount,
+        _name,
+        _uri,
+        _imageUri,
+      ]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } catch (error) {
+      console.log("@@@", error);
+    }
   };
 
   const createHackathonPrize = async (
     _voteNft: string,
     _voteNftSnapshot: number,
   ) => {
-    const tx = await worldSend('createHackathonPrize', [
-      _voteNft,
-      _voteNftSnapshot
-    ]);
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    console.log("@@@@")
+    try {
+      const tx = await worldSend('createHackathonPrize', [
+        _voteNft,
+        _voteNftSnapshot
+      ]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } catch (error) {
+      console.log("@@@", error);
+    }
   };
 
   const updateHackathon = async (
@@ -126,7 +136,6 @@ export function createSystemCalls(
     updateHackathon,
     proceedPhase,
     depositPrize,
-    depositPrizeEth,
     setVoteToken,
     submit,
     vote,

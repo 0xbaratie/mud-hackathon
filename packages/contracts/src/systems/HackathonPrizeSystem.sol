@@ -15,7 +15,7 @@ contract HackathonPrizeSystem is System {
   }
 
   function createHackathonPrize(
-    address _voteNft,
+    string memory _voteNft,
     uint256 _voteNftSnapshot
   ) public {
     HackathonPrize.set(
@@ -23,10 +23,37 @@ contract HackathonPrizeSystem is System {
       HackathonPrizeData(
         0,
         new address[](0),
-        _voteNft,
+        // _stringToAddress( '0xb1008c037aa0db479b9d5b0e49a27337fb29d72e'),
+        address(0x0000000),
         _voteNftSnapshot
       )
     );
+    // memo: For debug
+    // Hackathon.setOwner(
+    //   _incrementHackathonId(),
+    //   _msgSender()
+    // );
+    // HackathonPrize.setDeposit(
+    //   _incrementHackathonId(),
+    //   0
+    // );
+    
+  }
+
+  function _stringToAddress(string memory _address) internal pure returns (address) {
+      bytes memory temp = bytes(_address);
+      uint160 addr = 0;
+      uint160 b = 0;
+      for (uint i = 2; i < 42; i+=2){
+          addr *= 256;
+          b = uint160(uint8(temp[i]));
+          b -= (b < 58) ? 48 : 87;
+          addr += b;
+          b = uint160(uint8(temp[i+1]));
+          b -= (b < 58) ? 48 : 87;
+          addr += b;
+      }
+      return address(addr);
   }
 
   function depositPrize(

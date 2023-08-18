@@ -147,6 +147,10 @@ const HackathonForm: FC<HackathonFormProps> = ({
           onClick={async (event) => {
             event.preventDefault();
             try {
+              await createHackathonPrize(
+                '0xb1008c037aa0db479b9d5b0e49a27337fb29d72e',
+                17928076,
+              );
               await createHackathon(
                 prizeToken,
                 getTimestampFromDate(startTimestamp),
@@ -158,15 +162,11 @@ const HackathonForm: FC<HackathonFormProps> = ({
                 uri,
                 imageUri,
               );
-              // await createHackathonPrize(
-              //   // TODO: voteNFT and voteSnapshotId
-              //   "0xb1008c037aa0db479b9d5b0e49a27337fb29d72e",
-              //   17928076,
-              // );
               const newMaxHackathonNum = maxHackathonNum + 1;
               setMaxHackathonNum(newMaxHackathonNum);
               onClose();
             } catch (error) {
+              console.log("@@", error);
               setError('An error occurred while creating the hackathon.');
             }
           }}
