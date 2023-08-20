@@ -32,6 +32,10 @@ export default mudConfig({
       schema: {
         deposit: "uint256",
         submitters: "address[]",
+      },
+    },
+    HackathonVoteNft: {
+      schema: {
         voteNft: "address",
         voteNftSnapshot: "uint256",
       },

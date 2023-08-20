@@ -9,26 +9,6 @@ import { SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/Safe
 contract HackathonPrizeSystem is System {
   using SafeERC20 for IERC20;
 
-  function _incrementHackathonId() internal returns(bytes32 newHackathonId_){
-    newHackathonId_ = bytes32(uint256(Config.get()) + 1);
-    Config.set(newHackathonId_);
-  }
-
-  function createHackathonPrize(
-    address _voteNft,
-    uint256 _voteNftSnapshot
-  ) public {
-    HackathonPrize.set(
-      _incrementHackathonId(),
-      HackathonPrizeData(
-        0,
-        new address[](0),
-        _voteNft,
-        _voteNftSnapshot
-      )
-    );
-  }
-
   function depositPrize(
     bytes32 _hackathonId,
     uint256 _amount

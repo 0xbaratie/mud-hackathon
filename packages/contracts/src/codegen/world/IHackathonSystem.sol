@@ -13,7 +13,9 @@ interface IHackathonSystem {
     uint8 _winnerCount,
     string memory _name,
     string memory _uri,
-    string memory _imageUri
+    string memory _imageUri,
+    address _voteNft,
+    uint256 _voteNftSnapshot
   ) external;
 
   function updateHackathon(
@@ -26,7 +28,9 @@ interface IHackathonSystem {
     uint8 _winnerCount,
     string memory _name,
     string memory _uri,
-    string memory _imageUri
+    string memory _imageUri,
+    address _voteNft,
+    uint256 _voteNftSnapshot
   ) external;
 
   function proceedPhase(bytes32 _hackathonId) external;

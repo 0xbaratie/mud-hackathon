@@ -23,18 +23,14 @@ bytes32 constant HackathonPrizeTableId = _tableId;
 struct HackathonPrizeData {
   uint256 deposit;
   address[] submitters;
-  address voteNft;
-  uint256 voteNftSnapshot;
 }
 
 library HackathonPrize {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](4);
+    SchemaType[] memory _schema = new SchemaType[](2);
     _schema[0] = SchemaType.UINT256;
     _schema[1] = SchemaType.ADDRESS_ARRAY;
-    _schema[2] = SchemaType.ADDRESS;
-    _schema[3] = SchemaType.UINT256;
 
     return SchemaLib.encode(_schema);
   }
@@ -48,11 +44,9 @@ library HackathonPrize {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](4);
+    string[] memory _fieldNames = new string[](2);
     _fieldNames[0] = "deposit";
     _fieldNames[1] = "submitters";
-    _fieldNames[2] = "voteNft";
-    _fieldNames[3] = "voteNftSnapshot";
     return ("HackathonPrize", _fieldNames);
   }
 
@@ -230,74 +224,6 @@ library HackathonPrize {
     _store.updateInField(_tableId, _keyTuple, 1, _index * 20, abi.encodePacked((_element)));
   }
 
-  /** Get voteNft */
-  function getVoteNft(bytes32 key) internal view returns (address voteNft) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
-    return (address(Bytes.slice20(_blob, 0)));
-  }
-
-  /** Get voteNft (using the specified store) */
-  function getVoteNft(IStore _store, bytes32 key) internal view returns (address voteNft) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
-    return (address(Bytes.slice20(_blob, 0)));
-  }
-
-  /** Set voteNft */
-  function setVoteNft(bytes32 key, address voteNft) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    StoreSwitch.setField(_tableId, _keyTuple, 2, abi.encodePacked((voteNft)));
-  }
-
-  /** Set voteNft (using the specified store) */
-  function setVoteNft(IStore _store, bytes32 key, address voteNft) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.setField(_tableId, _keyTuple, 2, abi.encodePacked((voteNft)));
-  }
-
-  /** Get voteNftSnapshot */
-  function getVoteNftSnapshot(bytes32 key) internal view returns (uint256 voteNftSnapshot) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 3);
-    return (uint256(Bytes.slice32(_blob, 0)));
-  }
-
-  /** Get voteNftSnapshot (using the specified store) */
-  function getVoteNftSnapshot(IStore _store, bytes32 key) internal view returns (uint256 voteNftSnapshot) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 3);
-    return (uint256(Bytes.slice32(_blob, 0)));
-  }
-
-  /** Set voteNftSnapshot */
-  function setVoteNftSnapshot(bytes32 key, uint256 voteNftSnapshot) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    StoreSwitch.setField(_tableId, _keyTuple, 3, abi.encodePacked((voteNftSnapshot)));
-  }
-
-  /** Set voteNftSnapshot (using the specified store) */
-  function setVoteNftSnapshot(IStore _store, bytes32 key, uint256 voteNftSnapshot) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.setField(_tableId, _keyTuple, 3, abi.encodePacked((voteNftSnapshot)));
-  }
-
   /** Get the full data */
   function get(bytes32 key) internal view returns (HackathonPrizeData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
@@ -317,14 +243,8 @@ library HackathonPrize {
   }
 
   /** Set the full data using individual values */
-  function set(
-    bytes32 key,
-    uint256 deposit,
-    address[] memory submitters,
-    address voteNft,
-    uint256 voteNftSnapshot
-  ) internal {
-    bytes memory _data = encode(deposit, submitters, voteNft, voteNftSnapshot);
+  function set(bytes32 key, uint256 deposit, address[] memory submitters) internal {
+    bytes memory _data = encode(deposit, submitters);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -333,15 +253,8 @@ library HackathonPrize {
   }
 
   /** Set the full data using individual values (using the specified store) */
-  function set(
-    IStore _store,
-    bytes32 key,
-    uint256 deposit,
-    address[] memory submitters,
-    address voteNft,
-    uint256 voteNftSnapshot
-  ) internal {
-    bytes memory _data = encode(deposit, submitters, voteNft, voteNftSnapshot);
+  function set(IStore _store, bytes32 key, uint256 deposit, address[] memory submitters) internal {
+    bytes memory _data = encode(deposit, submitters);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -351,30 +264,26 @@ library HackathonPrize {
 
   /** Set the full data using the data struct */
   function set(bytes32 key, HackathonPrizeData memory _table) internal {
-    set(key, _table.deposit, _table.submitters, _table.voteNft, _table.voteNftSnapshot);
+    set(key, _table.deposit, _table.submitters);
   }
 
   /** Set the full data using the data struct (using the specified store) */
   function set(IStore _store, bytes32 key, HackathonPrizeData memory _table) internal {
-    set(_store, key, _table.deposit, _table.submitters, _table.voteNft, _table.voteNftSnapshot);
+    set(_store, key, _table.deposit, _table.submitters);
   }
 
   /** Decode the tightly packed blob using this table's schema */
   function decode(bytes memory _blob) internal view returns (HackathonPrizeData memory _table) {
-    // 84 is the total byte length of static data
-    PackedCounter _encodedLengths = PackedCounter.wrap(Bytes.slice32(_blob, 84));
+    // 32 is the total byte length of static data
+    PackedCounter _encodedLengths = PackedCounter.wrap(Bytes.slice32(_blob, 32));
 
     _table.deposit = (uint256(Bytes.slice32(_blob, 0)));
 
-    _table.voteNft = (address(Bytes.slice20(_blob, 32)));
-
-    _table.voteNftSnapshot = (uint256(Bytes.slice32(_blob, 52)));
-
     // Store trims the blob if dynamic fields are all empty
-    if (_blob.length > 84) {
+    if (_blob.length > 32) {
       uint256 _start;
       // skip static data length + dynamic lengths word
-      uint256 _end = 116;
+      uint256 _end = 64;
 
       _start = _end;
       _end += _encodedLengths.atIndex(0);
@@ -383,18 +292,12 @@ library HackathonPrize {
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(
-    uint256 deposit,
-    address[] memory submitters,
-    address voteNft,
-    uint256 voteNftSnapshot
-  ) internal view returns (bytes memory) {
+  function encode(uint256 deposit, address[] memory submitters) internal view returns (bytes memory) {
     uint40[] memory _counters = new uint40[](1);
     _counters[0] = uint40(submitters.length * 20);
     PackedCounter _encodedLengths = PackedCounterLib.pack(_counters);
 
-    return
-      abi.encodePacked(deposit, voteNft, voteNftSnapshot, _encodedLengths.unwrap(), EncodeArray.encode((submitters)));
+    return abi.encodePacked(deposit, _encodedLengths.unwrap(), EncodeArray.encode((submitters)));
   }
 
   /** Encode keys as a bytes32 array using this table's schema */

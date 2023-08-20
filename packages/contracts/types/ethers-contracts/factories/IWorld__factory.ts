@@ -390,14 +390,6 @@ const _abi = [
         name: "_imageUri",
         type: "string",
       },
-    ],
-    name: "createHackathon",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
       {
         internalType: "address",
         name: "_voteNft",
@@ -409,7 +401,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "createHackathonPrize",
+    name: "createHackathon",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -728,16 +720,6 @@ const _abi = [
             internalType: "address[]",
             name: "submitters",
             type: "address[]",
-          },
-          {
-            internalType: "address",
-            name: "voteNft",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "voteNftSnapshot",
-            type: "uint256",
           },
         ],
         internalType: "struct HackathonPrizeData",
@@ -1688,6 +1670,16 @@ const _abi = [
         internalType: "string",
         name: "_imageUri",
         type: "string",
+      },
+      {
+        internalType: "address",
+        name: "_voteNft",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_voteNftSnapshot",
+        type: "uint256",
       },
     ],
     name: "updateHackathon",

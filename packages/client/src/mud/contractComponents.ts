@@ -67,6 +67,20 @@ export function defineContractComponents(world: World) {
         {
           deposit: RecsType.BigInt,
           submitters: RecsType.StringArray,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    HackathonVoteNft: (() => {
+      const tableId = new TableId("", "HackathonVoteNft");
+      return defineComponent(
+        world,
+        {
           voteNft: RecsType.String,
           voteNftSnapshot: RecsType.BigInt,
         },

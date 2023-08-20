@@ -157,10 +157,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
                 name,
                 uri,
                 imageUri,
-              );
-              await createHackathonPrize(
-                // TODO: voteNFT and voteSnapshotId
-                "0xb1008c037aa0db479b9d5b0e49a27337fb29d72e",
+                '0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E',
                 17928076,
               );
               const newMaxHackathonNum = maxHackathonNum + 1;
