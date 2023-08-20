@@ -43,6 +43,12 @@ const HackathonForm: FC<HackathonFormProps> = ({
   const [imageUri, setImageUri] = useState(
     'https://pbs.twimg.com/profile_images/1642968539719163904/xbrZ4_Om_400x400.jpg',
   );
+  const [voteNft, setVoteNft] = useState(
+    '0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E',
+  );
+  const [voteNftSnapshot, setVoteNftSnapshot] = useState(
+    17928076,
+  );
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -56,7 +62,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
   }, [error]);
 
   return (
-    <div className="p-4">
+    <div className="p-4 overflow-y-auto max-h-[800px]">
       {error && <ToastError message={error} />}
       <h1 className="text-sm mb-1">Hackathon title</h1>
       <input
@@ -141,6 +147,26 @@ const HackathonForm: FC<HackathonFormProps> = ({
         value={imageUri}
         onChange={(e) => setImageUri(e.target.value)}
       />
+      <h1 className="text-sm mb-1 mt-3">Vote NFT Address</h1>
+      <p className="text-sm text-gray-500 mb-1">
+        This vote contract is only ERC721 on L1 only.
+      </p>
+      <input
+        type="text"
+        className="input input-bordered w-full max-w-xs text-gray-900"
+        value={voteNft}
+        onChange={(e) => setVoteNft(e.target.value)}
+      />
+      <h1 className="text-sm mb-1 mt-3">Vote NFT Snapshot</h1>
+      <p className="text-sm text-gray-500 mb-1">
+        You need to decide which block ID you want to use to implement the timing of your ownership
+      </p>
+      <input
+        type="text"
+        className="input input-bordered w-full max-w-xs text-gray-900"
+        value={voteNftSnapshot}
+        onChange={(e) => setVoteNftSnapshot(parseInt(e.target.value))}
+      />
       <div className="mt-3">
         <button
           className="btn bg-[#333333] text-white rounded-lg"
@@ -157,8 +183,8 @@ const HackathonForm: FC<HackathonFormProps> = ({
                 name,
                 uri,
                 imageUri,
-                '0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E',
-                17928076,
+                voteNft,
+                voteNftSnapshot,
               );
               const newMaxHackathonNum = maxHackathonNum + 1;
               setMaxHackathonNum(newMaxHackathonNum);
