@@ -118,6 +118,7 @@ export function defineContractComponents(world: World) {
         world,
         {
           count: RecsType.BigInt,
+          voted: RecsType.Boolean,
         },
         {
           metadata: {

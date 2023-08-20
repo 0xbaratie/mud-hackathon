@@ -20,11 +20,17 @@ import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCou
 bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16(""), bytes16("Vote")));
 bytes32 constant VoteTableId = _tableId;
 
+struct VoteData {
+  uint256 count;
+  bool voted;
+}
+
 library Vote {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](1);
+    SchemaType[] memory _schema = new SchemaType[](2);
     _schema[0] = SchemaType.UINT256;
+    _schema[1] = SchemaType.BOOL;
 
     return SchemaLib.encode(_schema);
   }
@@ -39,8 +45,9 @@ library Vote {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](1);
+    string[] memory _fieldNames = new string[](2);
     _fieldNames[0] = "count";
+    _fieldNames[1] = "voted";
     return ("Vote", _fieldNames);
   }
 
@@ -67,7 +74,7 @@ library Vote {
   }
 
   /** Get count */
-  function get(bytes32 hackathonId, address voter) internal view returns (uint256 count) {
+  function getCount(bytes32 hackathonId, address voter) internal view returns (uint256 count) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
     _keyTuple[1] = bytes32(uint256(uint160(voter)));
@@ -77,7 +84,7 @@ library Vote {
   }
 
   /** Get count (using the specified store) */
-  function get(IStore _store, bytes32 hackathonId, address voter) internal view returns (uint256 count) {
+  function getCount(IStore _store, bytes32 hackathonId, address voter) internal view returns (uint256 count) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
     _keyTuple[1] = bytes32(uint256(uint160(voter)));
@@ -87,7 +94,7 @@ library Vote {
   }
 
   /** Set count */
-  function set(bytes32 hackathonId, address voter, uint256 count) internal {
+  function setCount(bytes32 hackathonId, address voter, uint256 count) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
     _keyTuple[1] = bytes32(uint256(uint160(voter)));
@@ -96,7 +103,7 @@ library Vote {
   }
 
   /** Set count (using the specified store) */
-  function set(IStore _store, bytes32 hackathonId, address voter, uint256 count) internal {
+  function setCount(IStore _store, bytes32 hackathonId, address voter, uint256 count) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
     _keyTuple[1] = bytes32(uint256(uint160(voter)));
@@ -104,9 +111,106 @@ library Vote {
     _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((count)));
   }
 
+  /** Get voted */
+  function getVoted(bytes32 hackathonId, address voter) internal view returns (bool voted) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(voter)));
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
+    return (_toBool(uint8(Bytes.slice1(_blob, 0))));
+  }
+
+  /** Get voted (using the specified store) */
+  function getVoted(IStore _store, bytes32 hackathonId, address voter) internal view returns (bool voted) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(voter)));
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
+    return (_toBool(uint8(Bytes.slice1(_blob, 0))));
+  }
+
+  /** Set voted */
+  function setVoted(bytes32 hackathonId, address voter, bool voted) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(voter)));
+
+    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((voted)));
+  }
+
+  /** Set voted (using the specified store) */
+  function setVoted(IStore _store, bytes32 hackathonId, address voter, bool voted) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(voter)));
+
+    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((voted)));
+  }
+
+  /** Get the full data */
+  function get(bytes32 hackathonId, address voter) internal view returns (VoteData memory _table) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(voter)));
+
+    bytes memory _blob = StoreSwitch.getRecord(_tableId, _keyTuple, getSchema());
+    return decode(_blob);
+  }
+
+  /** Get the full data (using the specified store) */
+  function get(IStore _store, bytes32 hackathonId, address voter) internal view returns (VoteData memory _table) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(voter)));
+
+    bytes memory _blob = _store.getRecord(_tableId, _keyTuple, getSchema());
+    return decode(_blob);
+  }
+
+  /** Set the full data using individual values */
+  function set(bytes32 hackathonId, address voter, uint256 count, bool voted) internal {
+    bytes memory _data = encode(count, voted);
+
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(voter)));
+
+    StoreSwitch.setRecord(_tableId, _keyTuple, _data);
+  }
+
+  /** Set the full data using individual values (using the specified store) */
+  function set(IStore _store, bytes32 hackathonId, address voter, uint256 count, bool voted) internal {
+    bytes memory _data = encode(count, voted);
+
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = hackathonId;
+    _keyTuple[1] = bytes32(uint256(uint160(voter)));
+
+    _store.setRecord(_tableId, _keyTuple, _data);
+  }
+
+  /** Set the full data using the data struct */
+  function set(bytes32 hackathonId, address voter, VoteData memory _table) internal {
+    set(hackathonId, voter, _table.count, _table.voted);
+  }
+
+  /** Set the full data using the data struct (using the specified store) */
+  function set(IStore _store, bytes32 hackathonId, address voter, VoteData memory _table) internal {
+    set(_store, hackathonId, voter, _table.count, _table.voted);
+  }
+
+  /** Decode the tightly packed blob using this table's schema */
+  function decode(bytes memory _blob) internal pure returns (VoteData memory _table) {
+    _table.count = (uint256(Bytes.slice32(_blob, 0)));
+
+    _table.voted = (_toBool(uint8(Bytes.slice1(_blob, 32))));
+  }
+
   /** Tightly pack full data using this table's schema */
-  function encode(uint256 count) internal view returns (bytes memory) {
-    return abi.encodePacked(count);
+  function encode(uint256 count, bool voted) internal view returns (bytes memory) {
+    return abi.encodePacked(count, voted);
   }
 
   /** Encode keys as a bytes32 array using this table's schema */
@@ -132,5 +236,11 @@ library Vote {
     _keyTuple[1] = bytes32(uint256(uint160(voter)));
 
     _store.deleteRecord(_tableId, _keyTuple);
+  }
+}
+
+function _toBool(uint8 value) pure returns (bool result) {
+  assembly {
+    result := value
   }
 }
