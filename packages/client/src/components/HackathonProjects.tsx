@@ -8,7 +8,7 @@ import { PHASE } from '../constants/constants';
 
 const imageURL =
   'https://storage.googleapis.com/ethglobal-api-production/projects%2F0wa8j%2Fimages%2FToronto_in_COVID-19_times_by_tour_boat.png';
-const HackathonProjects = ({ hackathonId, phase, counter, setCounter }) => {
+const HackathonProjects = ({ hackathonId, phase, counter, setCounter }: any) => {
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => {
     setModalOpen(true);
@@ -24,6 +24,7 @@ const HackathonProjects = ({ hackathonId, phase, counter, setCounter }) => {
   useEffect(() => {
     (async () => {
       const hackathonPrize = await worldContract.getHackathonPrize(hackathonId);
+      //TODO: To be fixed
       setHackathonSubmitters(hackathonPrize?.submitters);
     })();
   }, []);

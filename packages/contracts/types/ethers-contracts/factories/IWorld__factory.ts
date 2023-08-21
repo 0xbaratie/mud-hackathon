@@ -468,6 +468,24 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+    ],
+    name: "depositPrizeEth",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "bytes16",
         name: "namespace",
         type: "bytes16",

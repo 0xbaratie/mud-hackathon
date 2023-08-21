@@ -44,7 +44,7 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
   return (
     <div className="mr-10">
       <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-        <DepositModal hackathonId={hackathonId} prizeTokenStr={getKeyByValue(prizeToken)} />
+        <DepositModal hackathonId={hackathonId.toString()} prizeTokenStr={getKeyByValue(prizeToken) || ""} />
       </FullScreenModal>
       <div className="flex justify-between items-center ">
         <h2 className="text-2xl font-bold">Prizes</h2>

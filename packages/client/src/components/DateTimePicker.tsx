@@ -3,7 +3,12 @@ import DatePicker from 'react-datepicker';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-const DateTimePicker = ({ selectedDateTime, setSelectedDateTime }) => {
+interface DateTimePickerProps {
+  selectedDateTime: string;
+  setSelectedDateTime: string;
+}
+
+const DateTimePicker = ({ selectedDateTime, setSelectedDateTime }: any) => {  
   const handleDateTimeChange = (dateTime: any) => {
     setSelectedDateTime(dateTime);
   };

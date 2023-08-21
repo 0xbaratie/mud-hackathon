@@ -5,7 +5,13 @@ import VoteModal from './VoteModal';
 import { useMUD } from '../MUDContext';
 import { PHASE } from '../constants/constants';
 
-const HackathonProjects = ({ hackathonId, submitter, phase }) => {
+interface HackathonPrizesProps {
+  hackathonId: string;
+  submitter: string;
+  phase: number;
+}
+
+const HackathonProjects = ({ hackathonId, submitter, phase }: HackathonPrizesProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => {
     setModalOpen(true);

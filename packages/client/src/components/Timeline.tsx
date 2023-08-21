@@ -4,9 +4,9 @@ import { useMUD } from '../MUDContext';
 import { PHASE } from '../constants/constants';
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const timestampToDateString = (timestamp) => {
+const timestampToDateString = (timestamp: any) => {
   const date = new Date(Number(timestamp) * 1000);
-  let formattedDate = `${
+  const formattedDate = `${
     months[date.getMonth()]
   } ${date.getDate()}, ${date.getFullYear()}, ${date.getHours()}:${('0' + date.getMinutes()).slice(
     -2,
@@ -21,8 +21,8 @@ const Timeline = ({
   votingPeriod,
   withdrawalPeriod,
   setPhase,
-}) => {
-  console.log('phase hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', phase);
+}: any) => {
+  console.log('phase', phase);
   const {
     systemCalls: { proceedPhase },
   } = useMUD();

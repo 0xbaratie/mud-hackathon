@@ -2,7 +2,12 @@ import React, { FC } from 'react';
 import DateTimePicker from './DateTimePicker';
 import { useMUD } from '../MUDContext';
 
-const VoteModal = ({ hackathonId, submitter }) => {
+interface VoteModalProps {
+  hackathonId: string;
+  submitter: string;
+}
+
+const VoteModal = ({ hackathonId, submitter }: VoteModalProps) => {
   const {
     systemCalls: { vote },
   } = useMUD();
