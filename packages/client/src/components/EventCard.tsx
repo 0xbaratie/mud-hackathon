@@ -14,6 +14,7 @@ export const EventCard = ({ hackathonNum }: EventcardProps) => {
   } = useMUD();
   const [imageUri, setImageUri] = useState('');
   const [name, setName] = useState('');
+  const [projectsSum, setProjectsSum] = useState(0);
   const [submitPeriod, setSubmitPeriod] = useState(BigNumber.from(0));
   const [deposit, setDeposit] = useState(BigNumber.from(0));
 
@@ -27,8 +28,10 @@ export const EventCard = ({ hackathonNum }: EventcardProps) => {
       setName(hackathon.name);
       setSubmitPeriod(hackathon.submitPeriod);
 
-      const hakcathonPrize = await worldContract.getHackathonPrize(paddedHexStr);
-      setDeposit(hakcathonPrize.deposit);
+      const hackathonPrize = await worldContract.getHackathonPrize(paddedHexStr);
+      setDeposit(hackathonPrize.deposit);
+      const projectSum = hackathonPrize?.submitters.length ? hackathonPrize.submitters.length : 0;
+      setProjectsSum(projectSum)
     })();
   }, []);
 
@@ -50,9 +53,9 @@ export const EventCard = ({ hackathonNum }: EventcardProps) => {
           <div className="mt-2">
             <span className="font-bold">{deposit ? Number(deposit) : 0} ETH</span>
             <span className="p-2 text-gray-600">in prizes</span>
-            {/* <span className="font-bold">
-              {hackathonPrize?.submitters.length ? hackathonPrize.submitters.length : 0}
-            </span> */}
+            <span className="font-bold">
+              {projectsSum}
+            </span>
             <span className="p-2 text-gray-600">projects</span>
           </div>
         </div>

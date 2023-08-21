@@ -22,6 +22,7 @@ export const HackathonPage = () => {
   const [activeTab, setActiveTab] = useState(1);
   const [name, setName] = useState('');
   const [uri, setUri] = useState('');
+  const [owner, setOwner] = useState('');
   const [prizeToken, setPrizeToken] = useState('');
   const [phase, setPhase] = useState(0);
   const [startTimestamp, setStartTimestamp] = useState(0);
@@ -38,6 +39,7 @@ export const HackathonPage = () => {
       const hackathon = await worldContract.getHackathon(paddedHexStr);
       setName(hackathon.name);
       setUri(hackathon.uri);
+      setOwner(hackathon.owner);
       setPrizeToken(hackathon.prizeToken);
       setPhase(hackathon.phase);
       setStartTimestamp(hackathon.startTimestamp);
@@ -48,7 +50,7 @@ export const HackathonPage = () => {
   }, [counter]);
 
   const OverviewTabContent: React.FC = () => {
-    return <HackathonOverview uri={uri} name={name} />;
+    return <HackathonOverview uri={uri} name={name} owner={owner}  />;
   };
 
   const PrizesTabContent: React.FC = () => {
