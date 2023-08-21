@@ -328,6 +328,24 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "bytes",
+        name: "_requestResult",
+        type: "bytes",
+      },
+      {
+        internalType: "bytes",
+        name: "_callbackExtraData",
+        type: "bytes",
+      },
+    ],
+    name: "continueVote",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "_prizeToken",
         type: "address",
@@ -371,6 +389,16 @@ const _abi = [
         internalType: "string",
         name: "_imageUri",
         type: "string",
+      },
+      {
+        internalType: "address",
+        name: "_voteNft",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_voteNftSnapshot",
+        type: "uint256",
       },
     ],
     name: "createHackathon",
@@ -870,17 +898,29 @@ const _abi = [
         type: "bytes32",
       },
       {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
+        internalType: "address",
+        name: "_voter",
+        type: "address",
       },
     ],
     name: "getVote",
     outputs: [
       {
-        internalType: "bool",
+        components: [
+          {
+            internalType: "uint256",
+            name: "count",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "voted",
+            type: "bool",
+          },
+        ],
+        internalType: "struct VoteData",
         name: "",
-        type: "bool",
+        type: "tuple",
       },
     ],
     stateMutability: "view",
@@ -1643,6 +1683,16 @@ const _abi = [
         name: "_imageUri",
         type: "string",
       },
+      {
+        internalType: "address",
+        name: "_voteNft",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_voteNftSnapshot",
+        type: "uint256",
+      },
     ],
     name: "updateHackathon",
     outputs: [],
@@ -1731,11 +1781,6 @@ const _abi = [
         internalType: "address",
         name: "_submitter",
         type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
       },
     ],
     name: "vote",

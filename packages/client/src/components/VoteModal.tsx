@@ -16,8 +16,7 @@ const VoteModal = ({ hackathonId, submitter }) => {
           className="btn bg-black text-white rounded-lg w-80"
           onClick={async (event) => {
             event.preventDefault();
-            //TODO tokenID
-            await vote(hackathonId, submitter, 1);
+            await vote(hackathonId, submitter);
           }}
         >
           Vote

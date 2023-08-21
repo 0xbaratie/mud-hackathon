@@ -34,6 +34,12 @@ export default mudConfig({
         submitters: "address[]",
       },
     },
+    HackathonVoteNft: {
+      schema: {
+        voteNft: "address",
+        voteNftSnapshot: "uint256",
+      },
+    },
     Submission: {
       schema: {
         votes: "uint256",
@@ -50,11 +56,12 @@ export default mudConfig({
     },
     Vote: {
       schema: {
+        count: "uint256",
         voted: "bool",
       },
       keySchema: {
         hackathonId: "bytes32",
-        tokenId: "uint256",
+        voter: "address",
       },
     },
   },

@@ -30,7 +30,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
   };
 
   const {
-    systemCalls: { createHackathon },
+    systemCalls: { createHackathon, createHackathonPrize },
   } = useMUD();
   const [prizeToken, setPrizeToken] = useState(PRIZE_TOKEN.ETH);
   const [startTimestamp, setStartTimestamp] = useState(getWeeksLater(-1));
@@ -157,6 +157,8 @@ const HackathonForm: FC<HackathonFormProps> = ({
                 name,
                 uri,
                 imageUri,
+                '0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E',
+                17928076,
               );
               const newMaxHackathonNum = maxHackathonNum + 1;
               setMaxHackathonNum(newMaxHackathonNum);
