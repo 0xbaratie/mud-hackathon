@@ -8,6 +8,7 @@ import { ethers } from 'ethers';
 interface HackathonPrizesProps {
   hackathonId: number;
   prizeToken: string;
+  winnerCount: number;
 }
 
 const getKeyByValue = (input: string): string | undefined => {
@@ -16,7 +17,7 @@ const getKeyByValue = (input: string): string | undefined => {
   );
 };
 
-const HackathonPrizes = ({ hackathonId, prizeToken }: HackathonPrizesProps) => {
+const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPrizesProps) => {
   const {
     network: { worldContract },
   } = useMUD();
@@ -53,7 +54,7 @@ const HackathonPrizes = ({ hackathonId, prizeToken }: HackathonPrizesProps) => {
       </div>
 
       <p>
-        {deposit} {getKeyByValue(prizeToken)} will be distributed to the top 5 winners.
+        {deposit} {getKeyByValue(prizeToken)} will be distributed to the top {winnerCount} winners.
       </p>
       {/* <h2 className="text-2xl font-bold mt-4">Transactions</h2>
       <div className="grid grid-cols-4 p-4 rounded-md shadow-md">

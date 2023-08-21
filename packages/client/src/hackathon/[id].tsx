@@ -25,6 +25,7 @@ export const HackathonPage = () => {
   const [owner, setOwner] = useState('');
   const [prizeToken, setPrizeToken] = useState('');
   const [phase, setPhase] = useState(0);
+  const [winnerCount, setWinnerCount] = useState(0);
   const [startTimestamp, setStartTimestamp] = useState(0);
   const [submitPeriod, setSubmitPeriod] = useState(0);
   const [votingPeriod, setVotingPeriod] = useState(0);
@@ -42,6 +43,7 @@ export const HackathonPage = () => {
       setOwner(hackathon.owner);
       setPrizeToken(hackathon.prizeToken);
       setPhase(hackathon.phase);
+      setWinnerCount(hackathon.winnerCount);
       setStartTimestamp(hackathon.startTimestamp);
       setSubmitPeriod(hackathon.submitPeriod);
       setVotingPeriod(hackathon.votingPeriod);
@@ -54,7 +56,7 @@ export const HackathonPage = () => {
   };
 
   const PrizesTabContent: React.FC = () => {
-    return <HackathonPrizes hackathonId={paddedHexStr} prizeToken={prizeToken} />;
+    return <HackathonPrizes hackathonId={paddedHexStr} prizeToken={prizeToken} winnerCount={winnerCount} />;
   };
 
   const ProjectsTabContent: React.FC = () => {
