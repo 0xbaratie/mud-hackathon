@@ -12,7 +12,7 @@ export function createSystemCalls(
 ) {
   const increment = async () => {
     const tx = await worldSend('increment', []);
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
     return getComponentValue(Counter, singletonEntity);
   };
   const createHackathon = async (
@@ -41,12 +41,12 @@ export function createSystemCalls(
       _voteNft,
       _voteNftSnapshot,
     ]);
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
   const createHackathonPrize = async (_voteNft: string, _voteNftSnapshot: number) => {
     const tx = await worldSend('createHackathonPrize', [_voteNft, _voteNftSnapshot]);
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
   const updateHackathon = async (
@@ -77,27 +77,27 @@ export function createSystemCalls(
       _voteNft,
       _voteNftSnapshot,
     ]);
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
   const proceedPhase = async (_hackathonId: string) => {
     const tx = await worldSend('proceedPhase', [_hackathonId]);
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
   const depositPrize = async (_hackathonId: string, _amount: ethers.BigNumber) => {
     const tx = await worldSend('depositPrize', [_hackathonId, _amount]);
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
   const depositPrizeEth = async (_hackathonId: string, _amount: ethers.BigNumber) => {
     const tx = await worldSend('depositPrizeEth', [_hackathonId, _amount]);
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
   const setVoteToken = async (_voteToken: string) => {
     const tx = await worldSend('setVoteToken', [_voteToken]);
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
   const submit = async (
@@ -108,17 +108,17 @@ export function createSystemCalls(
     _imageUri: string,
   ) => {
     const tx = await worldSend('submit', [_hackathonId, _name, _description, _uri, _imageUri]);
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
   const vote = async (_hackathonId: string, _submitter: string) => {
     const tx = await worldSend('vote', [_hackathonId, _submitter]);
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
   const withdrawPrize = async (_hackathonId: string) => {
     const tx = await worldSend('withdrawPrize', [_hackathonId]);
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
   return {
