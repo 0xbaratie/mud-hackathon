@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Hackathon,Config,HackathonData,HackathonPrize,Submission,SubmissionData,HackathonVoteNft,HackathonVoteNftData } from "../codegen/Tables.sol";
+import { Hackathon,Config,HackathonData,HackathonPrize,HackathonPrizeData,Submission,SubmissionData,HackathonVoteNft,HackathonVoteNftData } from "../codegen/Tables.sol";
 import { Phase } from "../codegen/Types.sol";
 import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
@@ -50,6 +50,9 @@ contract HackathonSystem is System {
     ));
     HackathonVoteNft.set(_hackathonId,
       HackathonVoteNftData(_voteNft,_voteNftSnapshot)
+    );
+    HackathonPrize.set(_hackathonId,
+      HackathonPrizeData( 0, new address[](0))
     );
   }
   
