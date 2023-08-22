@@ -30,7 +30,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
   };
 
   const {
-    systemCalls: { createHackathon, createHackathonPrize },
+    systemCalls: { createHackathon },
   } = useMUD();
   const [prizeToken, setPrizeToken] = useState(PRIZE_TOKEN.ETH);
   const [startTimestamp, setStartTimestamp] = useState(getWeeksLater(-1));

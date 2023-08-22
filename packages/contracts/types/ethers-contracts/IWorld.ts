@@ -121,6 +121,7 @@ export interface IWorldInterface extends utils.Interface {
     "deleteRecord(bytes32,bytes32[])": FunctionFragment;
     "deleteRecord(bytes16,bytes16,bytes32[])": FunctionFragment;
     "depositPrize(bytes32,uint256)": FunctionFragment;
+    "depositPrizeEth(bytes32,uint256)": FunctionFragment;
     "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)": FunctionFragment;
     "emitEphemeralRecord(bytes32,bytes32[],bytes)": FunctionFragment;
     "getField(bytes32,bytes32[],uint8)": FunctionFragment;
@@ -180,6 +181,7 @@ export interface IWorldInterface extends utils.Interface {
       | "deleteRecord(bytes32,bytes32[])"
       | "deleteRecord(bytes16,bytes16,bytes32[])"
       | "depositPrize"
+      | "depositPrizeEth"
       | "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)"
       | "emitEphemeralRecord(bytes32,bytes32[],bytes)"
       | "getField"
@@ -273,6 +275,10 @@ export interface IWorldInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "depositPrize",
+    values: [PromiseOrValue<BytesLike>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "depositPrizeEth",
     values: [PromiseOrValue<BytesLike>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -644,6 +650,10 @@ export interface IWorldInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "depositPrizeEth",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)",
     data: BytesLike
   ): Result;
@@ -958,6 +968,12 @@ export interface IWorld extends BaseContract {
     ): Promise<ContractTransaction>;
 
     depositPrize(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      _amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    depositPrizeEth(
       _hackathonId: PromiseOrValue<BytesLike>,
       _amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1352,6 +1368,12 @@ export interface IWorld extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  depositPrizeEth(
+    _hackathonId: PromiseOrValue<BytesLike>,
+    _amount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)"(
     namespace: PromiseOrValue<BytesLike>,
     name: PromiseOrValue<BytesLike>,
@@ -1736,6 +1758,12 @@ export interface IWorld extends BaseContract {
     ): Promise<void>;
 
     depositPrize(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      _amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    depositPrizeEth(
       _hackathonId: PromiseOrValue<BytesLike>,
       _amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -2175,6 +2203,12 @@ export interface IWorld extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    depositPrizeEth(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      _amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)"(
       namespace: PromiseOrValue<BytesLike>,
       name: PromiseOrValue<BytesLike>,
@@ -2560,6 +2594,12 @@ export interface IWorld extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     depositPrize(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      _amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    depositPrizeEth(
       _hackathonId: PromiseOrValue<BytesLike>,
       _amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }

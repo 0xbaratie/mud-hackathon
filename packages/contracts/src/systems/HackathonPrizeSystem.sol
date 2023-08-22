@@ -24,5 +24,23 @@ contract HackathonPrizeSystem is System {
     //transfer prize token
     IERC20(_hackathonData.prizeToken).safeTransferFrom(_msgSender(), address(this), _amount);
   }  
+  
+
+  //TODO: TO be updated
+  function depositPrizeEth(
+    bytes32 _hackathonId,
+    uint256 _amount
+  ) public  {
+    //validate phase
+    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
+    require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
+
+    //set deposit amount
+    uint256 _deposit = HackathonPrize.getDeposit(_hackathonId);
+    HackathonPrize.setDeposit(_hackathonId, _deposit + _amount);
+
+    //transfer prize token
+    IERC20(_hackathonData.prizeToken).safeTransferFrom(_msgSender(), address(this), _amount);
+  }  
 
 }
