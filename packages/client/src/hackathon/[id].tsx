@@ -1,6 +1,5 @@
 import { useMUD } from '../MUDContext';
 import { ethers } from 'ethers';
-import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import HackathonOverview from '../components/HackathonOverview';
 import HackathonPrizes from '../components/HackathonPrizes';
@@ -52,11 +51,17 @@ export const HackathonPage = () => {
   }, [counter]);
 
   const OverviewTabContent: React.FC = () => {
-    return <HackathonOverview uri={uri} name={name} owner={owner}  />;
+    return <HackathonOverview uri={uri} name={name} owner={owner} />;
   };
 
   const PrizesTabContent: React.FC = () => {
-    return <HackathonPrizes hackathonId={parseInt(paddedHexStr)} prizeToken={prizeToken} winnerCount={winnerCount} />;
+    return (
+      <HackathonPrizes
+        hackathonId={parseInt(paddedHexStr)}
+        prizeToken={prizeToken}
+        winnerCount={winnerCount}
+      />
+    );
   };
 
   const ProjectsTabContent: React.FC = () => {
@@ -83,7 +88,6 @@ export const HackathonPage = () => {
 
   return (
     <>
-      <Header />
       <div>
         <div>
           <img src={bgImage} className="w-full" />

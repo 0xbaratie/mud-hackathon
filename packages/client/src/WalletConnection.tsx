@@ -3,6 +3,7 @@ import { Button, Container, Grid, SvgIcon, Typography, Menu, MenuItem, Box } fro
 import MetaMaskIcon from './MetaMaskIcon';
 import './index.css';
 import { ethers } from 'ethers';
+import TitleLogo from '../public/logo.svg';
 
 const chainIdFromEnv = import.meta.env.VITE_CHAIN_ID; // Gets the value from .env with Vite
 const chainIdNumber = Number(chainIdFromEnv);
@@ -30,6 +31,9 @@ const WalletConnection = ({ children }: Props) => {
 
   // Fetch the current network when the component is mounted
   useEffect(() => {
+    (async () => {
+      handleConnect();
+    })();
     if (window.ethereum) {
       window.ethereum.request({ method: 'eth_chainId' }).then((currentChainId: string) => {
         setNetwork(currentChainId);
@@ -47,7 +51,7 @@ const WalletConnection = ({ children }: Props) => {
     };
   }, []);
 
-  const switchToEthereumMainnet = async () => {
+  const switchToNetwork = async () => {
     try {
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
@@ -86,69 +90,64 @@ const WalletConnection = ({ children }: Props) => {
 
   return (
     <>
-      <Box sx={{ backgroundColor: 'background.paper' }}>
-        <Container>
-          <Grid
-            container
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            sx={{ p: 2, mb: 4 }}
-          >
-            <Typography variant="h6">MUD Increment Count</Typography>
-
-            {wallet.accounts.length > 0 ? (
-              <>
-                <Button
-                  variant="outlined"
-                  id="basic-button"
-                  aria-controls={open ? 'basic-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? 'true' : undefined}
-                  onClick={handleClick}
-                  startIcon={<SvgIcon component={MetaMaskIcon} viewBox="0 0 300 300" />}
-                >
-                  {(wallet.accounts[0] as string)?.slice(0, 5)}...
-                  {(wallet.accounts[0] as string)?.slice(-5)}
-                </Button>
-              </>
-            ) : network !== NETWORK_ID ? (
-              <>
-                <Button
-                  variant="outlined"
-                  onClick={switchToEthereumMainnet}
-                  startIcon={<SvgIcon component={MetaMaskIcon} viewBox="0 0 300 300" />}
-                  sx={{ color: 'red', borderColor: 'red' }} // Change text and border color to red
-                >
-                  Wrong Network
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  variant="outlined"
-                  onClick={handleConnect}
-                  startIcon={<SvgIcon component={MetaMaskIcon} viewBox="0 0 300 300" />}
-                  disabled={!isMetaMask}
-                >
-                  connect
-                </Button>
-              </>
-            )}
-          </Grid>
-        </Container>
-      </Box>
+      <div className="navbar bg-primary-content border border-b-gray-300">
+        <div className="flex-1 ml-32">
+          <a href="/" className="ml-4 normal-case">
+            <img src={TitleLogo} className="" alt="AW Hackathon logo" />
+          </a>
+        </div>
+        <div className="flex-none mr-36">
+          {wallet.accounts.length > 0 && network === NETWORK_ID ? (
+            <>
+              <Button
+                variant="outlined"
+                id="basic-button"
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+                startIcon={<SvgIcon component={MetaMaskIcon} viewBox="0 0 300 300" />}
+              >
+                {(wallet.accounts[0] as string)?.slice(0, 5)}...
+                {(wallet.accounts[0] as string)?.slice(-5)}
+              </Button>
+            </>
+          ) : network === NETWORK_ID ? (
+            <>
+              <Button
+                variant="outlined"
+                onClick={handleConnect}
+                startIcon={<SvgIcon component={MetaMaskIcon} viewBox="0 0 300 300" />}
+                disabled={!isMetaMask}
+              >
+                connect
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                variant="outlined"
+                onClick={switchToNetwork}
+                startIcon={<SvgIcon component={MetaMaskIcon} viewBox="0 0 300 300" />}
+                sx={{ color: 'red', borderColor: 'red' }} // Change text and border color to red
+              >
+                Wrong Network
+              </Button>
+            </>
+          )}
+        </div>
+      </div>
       <Container>
         {isMetaMask ? (
-          wallet.accounts.length > 0 ? (
+          wallet.accounts.length > 0 && network === NETWORK_ID ? (
             <>
               <walletContext.Provider value={{ wallet }}>{children}</walletContext.Provider>
             </>
           ) : (
-            <>Please connect to Metamask</>
+            <></>
           )
         ) : (
-          <>Please Install Metamask</>
+          <div className="mt-8">Please Install Metamask</div>
         )}
       </Container>
       <Menu

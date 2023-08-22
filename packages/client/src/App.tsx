@@ -33,7 +33,6 @@ export const App = () => {
   };
   return (
     <>
-      <Header />
       <div className="text-center mt-12 mb-6">
         <h1 className="font-bold text-3xl">
           Autonomous World <br /> hackathons for future
