@@ -4,6 +4,8 @@ import FullScreenModal from './FullScreenModal';
 import VoteModal from './VoteModal';
 import { useMUD } from '../MUDContext';
 import { PHASE } from '../constants/constants';
+import { ToastError } from './ToastError';
+import { ToastSuccess } from './ToastSuccess';
 
 interface HackathonPrizesProps {
   hackathonId: string;
@@ -45,10 +47,30 @@ const HackathonProjects = ({ hackathonId, submitter, phase }: HackathonPrizesPro
     })();
   }, []);
 
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setError(null);
+      setSuccess(null);
+    }, 10000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [error, success]);
+
   return (
     <div className="mt-10 w-[390px] mx-auto">
+      {error && <ToastError message={error} />}
+      {success && <ToastSuccess message={success} />}
       <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-        <VoteModal hackathonId={hackathonId} submitter={submitter} />
+        <VoteModal 
+          hackathonId={hackathonId} 
+          submitter={submitter}
+          setError={setError}
+          setSuccess={setSuccess}
+        />
       </FullScreenModal>
       <a href={url} target="blank">
         <div className="border rounded-md shadow-md h-[438px] relative">

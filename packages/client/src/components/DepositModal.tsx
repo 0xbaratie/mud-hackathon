@@ -6,9 +6,11 @@ import { ethers } from 'ethers';
 interface DepositProps {
   prizeTokenStr: string;
   hackathonId: string;
+  setError: (error: string | null) => void; 
+  setSuccess: (success: string | null) => void;
 }
 
-const DepositModal = ({ hackathonId, prizeTokenStr }: DepositProps) => {
+const DepositModal = ({ hackathonId, prizeTokenStr, setError, setSuccess}: DepositProps) => {
   const [amount, setAmount] = useState(0);
   const {
     systemCalls: { depositPrize, depositPrizeEth },
@@ -29,8 +31,14 @@ const DepositModal = ({ hackathonId, prizeTokenStr }: DepositProps) => {
           className="btn bg-[#333333] text-white rounded-lg"
           onClick={async (event) => {
             event.preventDefault();
-            //TODO decimal if USDC or DAI
-            await depositPrizeEth(hackathonId, ethers.utils.parseEther('0.1'));
+            
+            try {
+              //TODO decimal if USDC or DAI
+              await depositPrizeEth(hackathonId, ethers.utils.parseEther('0.1'));
+              setSuccess('Your hackathon has been created!.');
+            } catch (error) {
+              setError('An error occurred while creating the hackathon.');
+            }
           }}
         >
           Deposit

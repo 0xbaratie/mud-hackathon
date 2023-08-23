@@ -1,5 +1,5 @@
 import { useMUD } from './MUDContext';
-import { Header } from './components/Header';
+// import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { EventCards } from './components/EventCards';
 // import { SyncState } from '@latticexyz/network';

@@ -4,6 +4,8 @@ import FullScreenModal from './FullScreenModal';
 import DepositModal from './DepositModal';
 import { PRIZE_TOKEN } from '../constants/constants';
 import { ethers } from 'ethers';
+import { ToastError } from './ToastError';
+import { ToastSuccess } from './ToastSuccess';
 
 interface HackathonPrizesProps {
   hackathonId: number;
@@ -41,10 +43,25 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
     setModalOpen(false);
   };
 
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setError(null);
+      setSuccess(null);
+    }, 10000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [error, success]);
+
   return (
     <div className="mr-10">
+      {error && <ToastError message={error} />}
+      {success && <ToastSuccess message={success} />}
       <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-        <DepositModal hackathonId={hackathonId.toString()} prizeTokenStr={getKeyByValue(prizeToken) || ""} />
+        <DepositModal hackathonId={hackathonId.toString()} prizeTokenStr={getKeyByValue(prizeToken) || ""} setError={setError} setSuccess={setSuccess} />
       </FullScreenModal>
       <div className="flex justify-between items-center ">
         <h2 className="text-2xl font-bold">Prizes</h2>
