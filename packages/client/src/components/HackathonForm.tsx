@@ -3,18 +3,21 @@ import DateTimePicker from './DateTimePicker';
 import { useMUD } from '../MUDContext';
 import { useState } from 'react';
 import { PRIZE_TOKEN } from '../constants/constants';
-import { ToastError } from './ToastError';
 
 type HackathonFormProps = {
   onClose: () => void;
   maxHackathonNum: number;
   setMaxHackathonNum: (num: number) => void;
+  setError: (error: string | null) => void; 
+  setSuccess: (success: string | null) => void;
 };
 
 const HackathonForm: FC<HackathonFormProps> = ({
   onClose,
   maxHackathonNum,
   setMaxHackathonNum,
+  setError,
+  setSuccess
 }) => {
   const getWeeksLater = (weeks: number) => {
     const date = new Date();
@@ -49,21 +52,10 @@ const HackathonForm: FC<HackathonFormProps> = ({
   const [voteNftSnapshot, setVoteNftSnapshot] = useState(
     17928076,
   );
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setError(null);
-    }, 10000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [error]);
 
   return (
     <div className="p-4 overflow-y-auto max-h-[800px]">
-      {error && <ToastError message={error} />}
+      
       <h1 className="text-sm mb-1">Hackathon title</h1>
       <input
         type="text"
@@ -189,6 +181,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
               const newMaxHackathonNum = maxHackathonNum + 1;
               setMaxHackathonNum(newMaxHackathonNum);
               onClose();
+              setSuccess('Your hackathon has been created!.');
             } catch (error) {
               console.error(error);
               setError('An error occurred while creating the hackathon.');

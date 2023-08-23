@@ -7,6 +7,8 @@ import FullScreenModal from './components/FullScreenModal';
 import HackathonForm from './components/HackathonForm';
 import { ethers } from 'ethers';
 import { useState, useEffect } from 'react';
+import { ToastError } from './components/ToastError';
+import { ToastSuccess } from './components/ToastSuccess';
 
 export const App = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -24,6 +26,19 @@ export const App = () => {
     })();
   }, [maxHackathonNum]);
 
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setError(null);
+      setSuccess(null);
+    }, 10000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [error, success]);
+
   const openModal = () => {
     setModalOpen(true);
   };
@@ -33,6 +48,8 @@ export const App = () => {
   };
   return (
     <>
+      {error && <ToastError message={error} />}
+      {success && <ToastSuccess message={success} />}
       <div className="text-center mt-12 mb-6">
         <h1 className="font-bold text-3xl">
           Autonomous World <br /> hackathons for future
@@ -67,6 +84,8 @@ export const App = () => {
           onClose={closeModal}
           maxHackathonNum={maxHackathonNum}
           setMaxHackathonNum={setMaxHackathonNum}
+          setError={setError}
+          setSuccess={setSuccess}
         />
       </FullScreenModal>
 

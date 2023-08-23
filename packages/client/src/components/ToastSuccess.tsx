@@ -1,10 +1,14 @@
 import React from 'react';
 
-export const ToastSuccess = () => {
+type ToastSuccessProps = {
+  message: string;
+};
+
+export const ToastSuccess: React.FC<ToastSuccessProps> = ({ message }) => {
   return (
-    <div className="toast">
+    <div className="toast mb-6">
       <div className="alert alert-success">
-        <span className="text-white">Your project submit successfully.</span>
+        <span className="text-white">{message}</span>
       </div>
     </div>
   );
