@@ -75,7 +75,6 @@ contract SubmissionSystem is System {
     //validate phase
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
     HackathonVoteNftData memory _hackathonNftData = HackathonVoteNft.get(_hackathonId);
-    // TODO: Error to be fixed
     require(uint8(_hackathonData.phase) == uint8(Phase.VOTING), "Hackathon is not in VOTING phase.");
 
     snapshotBlock = _hackathonNftData.voteNftSnapshot;
@@ -91,22 +90,22 @@ contract SubmissionSystem is System {
     });
     
     // TODO: To be fixed after
-    // if (voteCount[_hackathonId][_msgSender()] == 0) {
+    // if (voteCount[_hackathonId][address(_msgSender())] == 0) {
     //   IStateQueryGateway(STATE_QUERY_GATEWAY).requestStateQuery(
     //       stateQuery,
     //       SubmissionSystem.continueVote.selector,
-    //       abi.encode(_hackathonId, _msgSender())
+    //       abi.encode(_hackathonId, address(_msgSender()))
     //   );
     //   uint256 feePerRequest = 0.003 ether + 100000 gwei;
     //   IFeeVault(FEE_VAULT).depositNative{value: feePerRequest}(address(this));
     // }
-    voteCount[_hackathonId][_msgSender()] = 1;
+    voteCount[_hackathonId][address(_msgSender())] = 1;
 
     // validate submission
     SubmissionData memory _submissionData = Submission.get(_hackathonId, _submitter);
-    VoteData memory _voteData = Vote.get(_hackathonId, _msgSender());
+    VoteData memory _voteData = Vote.get(_hackathonId, address(_msgSender()));
     require(bytes(_submissionData.name).length > 0, "Submission does not exist.");
-    require(voteCount[_hackathonId][_msgSender()] > _voteData.count, "Your voting numbers had already exceed.");
+    require(voteCount[_hackathonId][address(_msgSender())] > _voteData.count, "Your voting numbers had already exceed.");
     //increment votes
     Submission.setVotes(_hackathonId, _submitter, _submissionData.votes + 1);
 
