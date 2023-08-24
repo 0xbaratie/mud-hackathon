@@ -32,7 +32,7 @@ contract HackathonSystem is System {
     string memory _uri,
     string memory _imageUri,
     address _voteNft,
-    uint256 _voteNftSnapshot
+    uint64 _voteNftSnapshot
   ) public {
     bytes32 _hackathonId = _incrementHackathonId();
     Hackathon.set(_hackathonId,HackathonData(
@@ -68,7 +68,7 @@ contract HackathonSystem is System {
     string memory _uri,
     string memory _imageUri,
     address _voteNft,
-    uint256 _voteNftSnapshot
+    uint64 _voteNftSnapshot
   ) public onlyOwner(_hackathonId) {
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
     require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");

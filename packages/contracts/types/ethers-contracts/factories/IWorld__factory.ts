@@ -396,9 +396,9 @@ const _abi = [
         type: "address",
       },
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "_voteNftSnapshot",
-        type: "uint256",
+        type: "uint64",
       },
     ],
     name: "createHackathon",
@@ -1707,9 +1707,9 @@ const _abi = [
         type: "address",
       },
       {
-        internalType: "uint256",
+        internalType: "uint64",
         name: "_voteNftSnapshot",
-        type: "uint256",
+        type: "uint64",
       },
     ],
     name: "updateHackathon",

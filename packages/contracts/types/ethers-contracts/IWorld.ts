@@ -117,7 +117,7 @@ export interface IWorldInterface extends utils.Interface {
   functions: {
     "call(bytes16,bytes16,bytes)": FunctionFragment;
     "continueVote(bytes,bytes)": FunctionFragment;
-    "createHackathon(address,uint256,uint256,uint256,uint256,uint8,string,string,string,address,uint256)": FunctionFragment;
+    "createHackathon(address,uint256,uint256,uint256,uint256,uint8,string,string,string,address,uint64)": FunctionFragment;
     "deleteRecord(bytes32,bytes32[])": FunctionFragment;
     "deleteRecord(bytes16,bytes16,bytes32[])": FunctionFragment;
     "depositPrize(bytes32,uint256)": FunctionFragment;
@@ -165,7 +165,7 @@ export interface IWorldInterface extends utils.Interface {
     "setRecord(bytes32,bytes32[],bytes)": FunctionFragment;
     "setVoteToken(address)": FunctionFragment;
     "submit(bytes32,string,string,string,string)": FunctionFragment;
-    "updateHackathon(bytes32,address,uint256,uint256,uint256,uint256,uint8,string,string,string,address,uint256)": FunctionFragment;
+    "updateHackathon(bytes32,address,uint256,uint256,uint256,uint256,uint8,string,string,string,address,uint64)": FunctionFragment;
     "updateInField(bytes32,bytes32[],uint8,uint256,bytes)": FunctionFragment;
     "updateInField(bytes16,bytes16,bytes32[],uint8,uint256,bytes)": FunctionFragment;
     "vote(bytes32,address)": FunctionFragment;

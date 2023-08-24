@@ -34,7 +34,7 @@ const HackathonProjects = ({ hackathonId, phase, counter, setCounter }: any) => 
       {phase === PHASE.HACKING ? (
         <div className="text-center">
           <a onClick={openModal}>
-            <button className="btn bg-[#333333] text-white rounded-lg">Create a hackathon</button>
+            <button className="btn bg-[#333333] text-white rounded-lg">Submit project</button>
           </a>
         </div>
       ) : (
@@ -43,7 +43,7 @@ const HackathonProjects = ({ hackathonId, phase, counter, setCounter }: any) => 
             className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg bg-gray-400"
             disabled
           >
-            Create a hackathon
+            Submit project
           </button>
         </div>
       )}
