@@ -180,12 +180,12 @@ const HackathonForm: FC<HackathonFormProps> = ({
               );
               const newMaxHackathonNum = maxHackathonNum + 1;
               setMaxHackathonNum(newMaxHackathonNum);
-              onClose();
               setSuccess('Your hackathon has been created!.');
             } catch (error) {
               console.error(error);
               setError('An error occurred while creating the hackathon.');
             }
+            onClose();
           }}
         >
           Create hackathon

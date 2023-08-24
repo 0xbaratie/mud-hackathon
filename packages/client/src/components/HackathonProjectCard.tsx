@@ -65,7 +65,8 @@ const HackathonProjects = ({ hackathonId, submitter, phase }: HackathonPrizesPro
       {error && <ToastError message={error} />}
       {success && <ToastSuccess message={success} />}
       <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-        <VoteModal 
+        <VoteModal
+          onClose={closeModal}
           hackathonId={hackathonId} 
           submitter={submitter}
           setError={setError}

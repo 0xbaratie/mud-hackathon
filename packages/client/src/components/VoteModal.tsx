@@ -3,13 +3,14 @@ import DateTimePicker from './DateTimePicker';
 import { useMUD } from '../MUDContext';
 
 interface VoteModalProps {
+  onClose: () => void;
   hackathonId: string;
   submitter: string;
   setError: (error: string | null) => void; 
   setSuccess: (success: string | null) => void;
 }
 
-const VoteModal = ({ hackathonId, submitter, setError, setSuccess}: VoteModalProps) => {
+const VoteModal = ({ onClose, hackathonId, submitter, setError, setSuccess}: VoteModalProps) => {
   const {
     systemCalls: { vote },
   } = useMUD();
@@ -27,9 +28,9 @@ const VoteModal = ({ hackathonId, submitter, setError, setSuccess}: VoteModalPro
               await vote(hackathonId, submitter);
               setSuccess('Your vote has been cast!.');
             } catch (error) {
-              console.error(error);
               setError('An error occurred while voting.');
             }
+            onClose();
           }}
         >
           Vote
