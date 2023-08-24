@@ -6,7 +6,7 @@ import { PRIZE_TOKEN } from '../constants/constants';
 import { ethers } from 'ethers';
 
 interface HackathonPrizesProps {
-  hackathonId: number;
+  hackathonId: string;
   prizeToken: string;
   winnerCount: number;
 }
@@ -25,9 +25,7 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
   const [deposit, setDeposit] = useState(0);
   useEffect(() => {
     (async () => {
-      const bigNum = ethers.BigNumber.from(hackathonId);
-      const paddedHexStr = '0x' + bigNum.toHexString().slice(2).padStart(64, '0');
-      const hackathonPrize = await worldContract.getHackathonPrize(paddedHexStr);
+      const hackathonPrize = await worldContract.getHackathonPrize(hackathonId);
       setDeposit(hackathonPrize?.deposit ? Number(hackathonPrize.deposit) : 0);
     })();
   }, []);
@@ -44,7 +42,11 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
   return (
     <div className="mr-10">
       <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-        <DepositModal hackathonId={hackathonId.toString()} prizeTokenStr={getKeyByValue(prizeToken) || ""} />
+        <DepositModal
+          hackathonId={hackathonId}
+          prizeTokenStr={getKeyByValue(prizeToken) || ''}
+          prizeToken={prizeToken}
+        />
       </FullScreenModal>
       <div className="flex justify-between items-center ">
         <h2 className="text-2xl font-bold">Prizes</h2>

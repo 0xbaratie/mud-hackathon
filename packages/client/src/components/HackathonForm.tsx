@@ -2,7 +2,7 @@ import { FC, useEffect } from 'react';
 import DateTimePicker from './DateTimePicker';
 import { useMUD } from '../MUDContext';
 import { useState } from 'react';
-import { PRIZE_TOKEN } from '../constants/constants';
+import { PRIZE_TOKEN, PRIZE_TOKEN_TEST } from '../constants/constants';
 import { ToastError } from './ToastError';
 
 type HackathonFormProps = {
@@ -16,6 +16,8 @@ const HackathonForm: FC<HackathonFormProps> = ({
   maxHackathonNum,
   setMaxHackathonNum,
 }) => {
+  const prizeTokens = import.meta.env.VITE_CHAIN_ID == 10 ? PRIZE_TOKEN : PRIZE_TOKEN_TEST;
+
   const getWeeksLater = (weeks: number) => {
     const date = new Date();
     date.setDate(date.getDate() + 7 * weeks);
@@ -32,7 +34,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
   const {
     systemCalls: { createHackathon },
   } = useMUD();
-  const [prizeToken, setPrizeToken] = useState(PRIZE_TOKEN.ETH);
+  const [prizeToken, setPrizeToken] = useState(prizeTokens.ETH);
   const [startTimestamp, setStartTimestamp] = useState(getWeeksLater(-1));
   const [submitPeriod, setSubmitPeriod] = useState(getWeeksLater(-1));
   const [votingPeriod, setVotingPeriod] = useState(getWeeksLater(-1));
@@ -43,12 +45,8 @@ const HackathonForm: FC<HackathonFormProps> = ({
   const [imageUri, setImageUri] = useState(
     'https://pbs.twimg.com/profile_images/1642968539719163904/xbrZ4_Om_400x400.jpg',
   );
-  const [voteNft, setVoteNft] = useState(
-    '0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E',
-  );
-  const [voteNftSnapshot, setVoteNftSnapshot] = useState(
-    17928076,
-  );
+  const [voteNft, setVoteNft] = useState('0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E');
+  const [voteNftSnapshot, setVoteNftSnapshot] = useState(17928076);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -82,22 +80,22 @@ const HackathonForm: FC<HackathonFormProps> = ({
         onChange={(e) => setUri(e.target.value)}
       />
       <h1 className="text-sm mb-1 mt-3 ">Prize token (Optimism chain)</h1>
-      {/* <select
+      <select
         className="select select-bordered w-full max-w-xs text-gray-900"
         value={prizeToken}
         onChange={(e) => setPrizeToken(e.target.value)}
       >
-        <option value={PRIZE_TOKEN.ETH}>ETH</option>
-        <option value={PRIZE_TOKEN.USDC}>USDC</option>
-        <option value={PRIZE_TOKEN.DAI}>DAI</option>
-      </select> */}
-      <input
+        <option value={prizeTokens.ETH}>ETH</option>
+        <option value={prizeTokens.USDC}>USDC</option>
+        <option value={prizeTokens.DAI}>DAI</option>
+      </select>
+      {/* <input
         type="text"
         placeholder="0x"
         className="input input-bordered w-full max-w-xs text-gray-900"
         value={prizeToken}
         onChange={(e) => setPrizeToken(e.target.value)}
-      />
+      /> */}
       <div className="flex">
         <div className="flex-1">
           <h1 className="text-sm mb-1 mt-3">Hack start datetime</h1>
@@ -148,9 +146,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
         onChange={(e) => setImageUri(e.target.value)}
       />
       <h1 className="text-sm mb-1 mt-3">Vote NFT Address</h1>
-      <p className="text-sm text-gray-500 mb-1">
-        This vote contract is only ERC721 on L1 only.
-      </p>
+      <p className="text-sm text-gray-500 mb-1">This vote contract is only ERC721 on L1 only.</p>
       <input
         type="text"
         className="input input-bordered w-full max-w-xs text-gray-900"
