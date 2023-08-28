@@ -2,6 +2,7 @@ import { BigNumber, ethers } from 'ethers';
 import { useMUD } from '../MUDContext';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { getPrizeTokenSymbol } from '../utils/common';
 
 interface EventcardProps {
   hackathonNum: number;
@@ -10,13 +11,14 @@ interface EventcardProps {
 export const EventCard = ({ hackathonNum }: EventcardProps) => {
   const {
     // components: { Hackathon, HackathonPrize },
-    network: { worldContract },
+    network: { worldContract, chainId },
   } = useMUD();
   const [imageUri, setImageUri] = useState('');
   const [name, setName] = useState('');
   const [projectsSum, setProjectsSum] = useState(0);
   const [submitPeriod, setSubmitPeriod] = useState(BigNumber.from(0));
   const [deposit, setDeposit] = useState(BigNumber.from(0));
+  const [prizeToken, setPrizeToken] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -27,11 +29,13 @@ export const EventCard = ({ hackathonNum }: EventcardProps) => {
       setImageUri(hackathon.imageUri);
       setName(hackathon.name);
       setSubmitPeriod(hackathon.submitPeriod);
+      setPrizeToken(hackathon.prizeToken);
+      console.log('prizeToken', prizeToken);
 
       const hackathonPrize = await worldContract.getHackathonPrize(paddedHexStr);
       setDeposit(hackathonPrize.deposit);
       const projectSum = hackathonPrize?.submitters.length ? hackathonPrize.submitters.length : 0;
-      setProjectsSum(projectSum)
+      setProjectsSum(projectSum);
     })();
   }, []);
 
@@ -51,11 +55,11 @@ export const EventCard = ({ hackathonNum }: EventcardProps) => {
             </button>
           </div>
           <div className="mt-2">
-            <span className="font-bold">{deposit ? Number(deposit) : 0} ETH</span>
-            <span className="p-2 text-gray-600">in prizes</span>
             <span className="font-bold">
-              {projectsSum}
+              {deposit ? Number(deposit) : 0} {getPrizeTokenSymbol(prizeToken, chainId)}
             </span>
+            <span className="p-2 text-gray-600">in prizes</span>
+            <span className="font-bold">{projectsSum}</span>
             <span className="p-2 text-gray-600">projects</span>
           </div>
         </div>

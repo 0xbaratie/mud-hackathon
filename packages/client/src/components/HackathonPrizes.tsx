@@ -4,6 +4,7 @@ import FullScreenModal from './FullScreenModal';
 import DepositModal from './DepositModal';
 import { PRIZE_TOKEN } from '../constants/constants';
 import { ethers } from 'ethers';
+import { getPrizeTokenSymbol } from '../utils/common';
 
 interface HackathonPrizesProps {
   hackathonId: string;
@@ -11,15 +12,9 @@ interface HackathonPrizesProps {
   winnerCount: number;
 }
 
-const getKeyByValue = (input: string): string | undefined => {
-  return Object.keys(PRIZE_TOKEN).find(
-    (key) => PRIZE_TOKEN[key].toLowerCase() === input.toLowerCase(),
-  );
-};
-
 const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPrizesProps) => {
   const {
-    network: { worldContract },
+    network: { worldContract, chainId },
   } = useMUD();
 
   const [deposit, setDeposit] = useState(0);
@@ -42,21 +37,20 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
   return (
     <div className="mr-10">
       <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-        <DepositModal
-          hackathonId={hackathonId}
-          prizeTokenStr={getKeyByValue(prizeToken) || ''}
-          prizeToken={prizeToken}
-        />
+        <DepositModal hackathonId={hackathonId} prizeToken={prizeToken} />
       </FullScreenModal>
       <div className="flex justify-between items-center ">
         <h2 className="text-2xl font-bold">Prizes</h2>
-        <button className="bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl">
-          <a onClick={openModal}>Donate {getKeyByValue(prizeToken)}</a>
-        </button>
+        <a onClick={openModal}>
+          <button className="bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl">
+            Donate {getPrizeTokenSymbol(prizeToken, chainId)}
+          </button>
+        </a>
       </div>
 
       <p>
-        {deposit} {getKeyByValue(prizeToken)} will be distributed to the top {winnerCount} winners.
+        {deposit} {getPrizeTokenSymbol(prizeToken, chainId)} will be distributed to the top{' '}
+        {winnerCount} winners.
       </p>
       {/* <h2 className="text-2xl font-bold mt-4">Transactions</h2>
       <div className="grid grid-cols-4 p-4 rounded-md shadow-md">

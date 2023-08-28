@@ -102,5 +102,6 @@ export async function setupNetwork() {
     worldSend: bindFastTxExecute(worldContract),
     fastTxExecutor,
     signerOrProvider,
+    chainId: networkConfig.chainId,
   };
 }
