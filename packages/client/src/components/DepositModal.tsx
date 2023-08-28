@@ -3,57 +3,7 @@ import { useMUD } from '../MUDContext';
 import { useState } from 'react';
 import { utils, Contract, BigNumber } from 'ethers';
 import { getPrizeTokenSymbol } from '../utils/common';
-
-const abi = [
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'spender',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
-    ],
-    name: 'approve',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'owner',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: 'spender',
-        type: 'address',
-      },
-    ],
-    name: 'allowance',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-];
+import { erc20abi } from '../constants/erc20abi';
 
 interface DepositProps {
   hackathonId: string;
@@ -61,14 +11,15 @@ interface DepositProps {
 }
 
 const DepositModal = ({ hackathonId, prizeToken }: DepositProps) => {
-  const [amount, setAmount] = useState(0);
   const {
     systemCalls: { depositPrize, depositPrizeEth },
     network: { worldContract, signerOrProvider, chainId },
   } = useMUD();
+  const [amount, setAmount] = useState(0);
   const [allowance, setAllowance] = useState(BigNumber.from('0'));
+  const [decimal, setDecimal] = useState(0);
 
-  const prizeTokenERC20 = new Contract(prizeToken, abi, signerOrProvider);
+  const prizeTokenERC20 = new Contract(prizeToken, erc20abi, signerOrProvider);
 
   const stringToBigNumber = (amount: number, decimal: number): BigNumber => {
     // console.log('amount', amount.toString());
@@ -83,6 +34,13 @@ const DepositModal = ({ hackathonId, prizeToken }: DepositProps) => {
     // console.log('bigNumber', bigNumber.toNumber());
     return bigNumber;
   };
+
+  useEffect(() => {
+    (async () => {
+      const decimal = await prizeTokenERC20.decimals();
+      setDecimal(decimal.toNumber());
+    })();
+  }, []);
 
   //Timer
   useEffect(() => {
@@ -115,7 +73,7 @@ const DepositModal = ({ hackathonId, prizeToken }: DepositProps) => {
         />
 
         <div className="text-center">
-          {amount && allowance < stringToBigNumber(amount, 6) ? (
+          {amount && allowance < stringToBigNumber(amount, decimal) ? (
             <button
               className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2  bg-[#333333] text-white rounded-lg"
               onClick={async (event) => {
@@ -137,7 +95,7 @@ const DepositModal = ({ hackathonId, prizeToken }: DepositProps) => {
         </div>
 
         <div className="text-center">
-          {amount && allowance >= stringToBigNumber(amount, 6) ? (
+          {amount && allowance >= stringToBigNumber(amount, decimal) ? (
             <button
               className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2  bg-[#333333] text-white rounded-lg"
               onClick={async (event) => {
