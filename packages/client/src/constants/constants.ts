@@ -4,6 +4,12 @@ export const PRIZE_TOKEN: { [key: string]: string } = {
   DAI: '0x0000000000000000000000000000000000000000',
 };
 
+export const PRIZE_TOKEN_TEST: { [key: string]: string } = {
+  ETH: '0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000',
+  USDC: '0x0000000000000000000000000000000000000000',
+  DAI: '0xBEEFD1a1C516D7CE215330BB8973cB976F7BfD07',
+};
+
 export const PHASE = {
   NONE: 0,
   PREPARE_PRIZE: 1,

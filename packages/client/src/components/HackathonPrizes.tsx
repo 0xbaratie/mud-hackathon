@@ -2,34 +2,23 @@ import { useState, useEffect } from 'react';
 import { useMUD } from '../MUDContext';
 import FullScreenModal from './FullScreenModal';
 import DepositModal from './DepositModal';
-import { PRIZE_TOKEN } from '../constants/constants';
-import { ethers } from 'ethers';
-import { ToastError } from './ToastError';
-import { ToastSuccess } from './ToastSuccess';
+import { getPrizeTokenSymbol } from '../utils/common';
 
 interface HackathonPrizesProps {
-  hackathonId: number;
+  hackathonId: string;
   prizeToken: string;
   winnerCount: number;
 }
 
-const getKeyByValue = (input: string): string | undefined => {
-  return Object.keys(PRIZE_TOKEN).find(
-    (key) => PRIZE_TOKEN[key].toLowerCase() === input.toLowerCase(),
-  );
-};
-
 const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPrizesProps) => {
   const {
-    network: { worldContract },
+    network: { worldContract, chainId },
   } = useMUD();
 
   const [deposit, setDeposit] = useState(0);
   useEffect(() => {
     (async () => {
-      const bigNum = ethers.BigNumber.from(hackathonId);
-      const paddedHexStr = '0x' + bigNum.toHexString().slice(2).padStart(64, '0');
-      const hackathonPrize = await worldContract.getHackathonPrize(paddedHexStr);
+      const hackathonPrize = await worldContract.getHackathonPrize(hackathonId);
       setDeposit(hackathonPrize?.deposit ? Number(hackathonPrize.deposit) : 0);
     })();
   }, []);
@@ -58,20 +47,26 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
 
   return (
     <div className="mr-10">
-      {error && <ToastError message={error} />}
-      {success && <ToastSuccess message={success} />}
       <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-        <DepositModal hackathonId={hackathonId.toString()} prizeTokenStr={getKeyByValue(prizeToken) || ""} setError={setError} setSuccess={setSuccess} />
+        <DepositModal
+          hackathonId={hackathonId}
+          prizeToken={prizeToken}
+          setError={setError}
+          setSuccess={setSuccess}
+        />
       </FullScreenModal>
       <div className="flex justify-between items-center ">
         <h2 className="text-2xl font-bold">Prizes</h2>
-        <button className="bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl">
-          <a onClick={openModal}>Donate {getKeyByValue(prizeToken)}</a>
-        </button>
+        <a onClick={openModal}>
+          <button className="bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl">
+            Donate {getPrizeTokenSymbol(prizeToken, chainId)}
+          </button>
+        </a>
       </div>
 
       <p>
-        {deposit} {getKeyByValue(prizeToken)} will be distributed to the top {winnerCount} winners.
+        {deposit} {getPrizeTokenSymbol(prizeToken, chainId)} will be distributed to the top{' '}
+        {winnerCount} winners.
       </p>
       {/* <h2 className="text-2xl font-bold mt-4">Transactions</h2>
       <div className="grid grid-cols-4 p-4 rounded-md shadow-md">

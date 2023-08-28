@@ -57,7 +57,7 @@ export const HackathonPage = () => {
   const PrizesTabContent: React.FC = () => {
     return (
       <HackathonPrizes
-        hackathonId={parseInt(paddedHexStr)}
+        hackathonId={paddedHexStr}
         prizeToken={prizeToken}
         winnerCount={winnerCount}
       />
