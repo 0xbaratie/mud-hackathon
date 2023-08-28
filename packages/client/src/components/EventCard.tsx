@@ -40,6 +40,7 @@ export const EventCard = ({ hackathonNum }: EventcardProps) => {
   }, []);
 
   return (
+    name ? (
     <Link to={`/hackathon/${hackathonNum}`}>
       <div className="flex items-center space-x-4 custom-border h-[190px]">
         <div className="ml-3">
@@ -65,5 +66,6 @@ export const EventCard = ({ hackathonNum }: EventcardProps) => {
         </div>
       </div>
     </Link>
+    ) : null
   );
 };

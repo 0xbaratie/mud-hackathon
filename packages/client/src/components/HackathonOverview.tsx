@@ -1,10 +1,28 @@
+import { useMUD } from '../MUDContext';
+import { useState, useEffect } from 'react';
+import { Navigate } from "react-router-dom";
+
 interface HackathonOverviewProps {
   uri: string;
   name: string;
   owner: string;
+  hackathonId: string;
 }
 
-const HackathonOverview = ({ uri, name, owner }: HackathonOverviewProps) => {
+const HackathonOverview = ({ uri, name, owner, hackathonId }: HackathonOverviewProps) => {
+  
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+  
+  const {
+    systemCalls: { deleteHackathon },
+  } = useMUD();
+
+  if (shouldRedirect) {
+    return <Navigate to="/" replace={true} />;
+  }
+
   return (
     <div className="">
       <div className="ml-2 font-bold"><p className="text-2xl">{name}</p></div>
@@ -31,10 +49,28 @@ const HackathonOverview = ({ uri, name, owner }: HackathonOverviewProps) => {
         </p>
       </div> */}
 
-      <button className="mt-6 bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl">
+      <button className="mt-6 bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl mr-2">
         <a href={uri} target="_blank" rel="noopener noreferrer">
           Detail
         </a>
+      </button>
+      <button 
+        className="mt-6 bg-white text-[#333333] border border-[#333333] pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl"
+        onClick={async (event) => {
+          event.preventDefault();
+          try {
+            await deleteHackathon(hackathonId);
+            setSuccess('Your hackathon successfully deleted!.');
+            setShouldRedirect(true);
+          } catch (error) {
+            console.error(error);
+            setError('An error occurred while delete.');
+          }
+        }}
+      >
+          
+          Delete hackathon
+          
       </button>
     </div>
   );

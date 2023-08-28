@@ -75,6 +75,11 @@ export function createSystemCalls(
     // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
+  const deleteHackathon = async (_hackathonId: string) => {
+    const tx = await worldSend('deleteHackathon', [_hackathonId]);
+    // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+  };
+
   const proceedPhase = async (_hackathonId: string) => {
     const tx = await worldSend('proceedPhase', [_hackathonId]);
     // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
@@ -120,6 +125,7 @@ export function createSystemCalls(
     increment,
     createHackathon,
     updateHackathon,
+    deleteHackathon,
     proceedPhase,
     depositPrize,
     depositPrizeEth,

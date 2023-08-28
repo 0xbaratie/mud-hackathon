@@ -33,6 +33,8 @@ interface IHackathonSystem {
     uint64 _voteNftSnapshot
   ) external;
 
+  function deleteHackathon(bytes32 _hackathonId) external;
+
   function proceedPhase(bytes32 _hackathonId) external;
 
   function withdrawByOwner(bytes32 _hackathonId) external;

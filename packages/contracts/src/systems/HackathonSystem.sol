@@ -93,6 +93,16 @@ contract HackathonSystem is System {
     );
   }
 
+  function deleteHackathon(bytes32 _hackathonId) public onlyOwner(_hackathonId) {
+    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
+    require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
+
+    Hackathon.deleteRecord(_hackathonId);
+    HackathonVoteNft.deleteRecord(_hackathonId);
+    HackathonPrize.deleteRecord(_hackathonId);
+
+  }
+
   function proceedPhase(bytes32 _hackathonId) public {
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
 

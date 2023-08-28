@@ -29,6 +29,7 @@ export const HackathonPage = () => {
   const [submitPeriod, setSubmitPeriod] = useState(0);
   const [votingPeriod, setVotingPeriod] = useState(0);
   const [withdrawalPeriod, setWithdrawalPeriod] = useState(0);
+  const [productId, setProductId] = useState('');
 
   const handleTabClick = (tabIndex: number) => {
     setActiveTab(tabIndex);
@@ -47,11 +48,12 @@ export const HackathonPage = () => {
       setSubmitPeriod(hackathon.submitPeriod.toNumber());
       setVotingPeriod(hackathon.votingPeriod.toNumber());
       setWithdrawalPeriod(hackathon.withdrawalPeriod.toNumber());
+      setProductId(paddedHexStr);
     })();
   }, [counter]);
 
   const OverviewTabContent: React.FC = () => {
-    return <HackathonOverview uri={uri} name={name} owner={owner} />;
+    return <HackathonOverview uri={uri} name={name} owner={owner} hackathonId={productId} />;
   };
 
   const PrizesTabContent: React.FC = () => {
