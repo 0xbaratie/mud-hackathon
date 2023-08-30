@@ -9,38 +9,36 @@ import { SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/Safe
 contract HackathonPrizeSystem is System {
   using SafeERC20 for IERC20;
 
+  modifier deposit(
+    bytes32 _hackathonId,
+    uint256 _amount
+  ){
+    //validate phase
+    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
+    require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
+
+    //set deposit amount
+    uint256 _deposit = HackathonPrize.getDeposit(_hackathonId);
+    HackathonPrize.setDeposit(_hackathonId, _deposit + _amount);
+
+    _;
+  }
+
   function depositPrize(
     bytes32 _hackathonId,
     uint256 _amount
-  ) public  {
-    //validate phase
-    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
-    require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
-
-    //set deposit amount
-    uint256 _deposit = HackathonPrize.getDeposit(_hackathonId);
-    HackathonPrize.setDeposit(_hackathonId, _deposit + _amount);
-
+  ) public deposit(_hackathonId, _amount) {
     //transfer prize token
+    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
     IERC20(_hackathonData.prizeToken).safeTransferFrom(_msgSender(), address(this), _amount);
   }  
   
-
-  //TODO: TO be updated
   function depositPrizeEth(
     bytes32 _hackathonId,
     uint256 _amount
-  ) public  {
-    //validate phase
-    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
-    require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
-
-    //set deposit amount
-    uint256 _deposit = HackathonPrize.getDeposit(_hackathonId);
-    HackathonPrize.setDeposit(_hackathonId, _deposit + _amount);
-
-    //transfer prize token
-    IERC20(_hackathonData.prizeToken).safeTransferFrom(_msgSender(), address(this), _amount);
+  ) public payable deposit(_hackathonId, _amount) {
+    //transfer ETH
+    require(msg.value == _amount, "ETH amount is not equal to the amount specified.");
   }  
 
 }

@@ -86,7 +86,9 @@ export function createSystemCalls(
   };
 
   const depositPrizeEth = async (_hackathonId: string, _amount: ethers.BigNumber) => {
-    const tx = await worldSend('depositPrizeEth', [_hackathonId, _amount]);
+    const tx = await worldSend('depositPrizeEth', [_hackathonId, _amount], {
+      value: _amount.toNumber(),
+    });
     // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 

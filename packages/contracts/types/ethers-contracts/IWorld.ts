@@ -976,7 +976,7 @@ export interface IWorld extends BaseContract {
     depositPrizeEth(
       _hackathonId: PromiseOrValue<BytesLike>,
       _amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)"(
@@ -1371,7 +1371,7 @@ export interface IWorld extends BaseContract {
   depositPrizeEth(
     _hackathonId: PromiseOrValue<BytesLike>,
     _amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)"(
@@ -2206,7 +2206,7 @@ export interface IWorld extends BaseContract {
     depositPrizeEth(
       _hackathonId: PromiseOrValue<BytesLike>,
       _amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)"(
@@ -2602,7 +2602,7 @@ export interface IWorld extends BaseContract {
     depositPrizeEth(
       _hackathonId: PromiseOrValue<BytesLike>,
       _amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)"(

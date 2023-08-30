@@ -480,7 +480,7 @@ const _abi = [
     ],
     name: "depositPrizeEth",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
   {
