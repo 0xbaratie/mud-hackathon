@@ -4,7 +4,7 @@ import { getNetworkConfig } from './getNetworkConfig';
 import { defineContractComponents } from './contractComponents';
 import { world } from './world';
 import { Contract, Signer, utils } from 'ethers';
-import { JsonRpcProvider } from '@ethersproject/providers';
+import { JsonRpcProvider, Web3Provider } from '@ethersproject/providers';
 import { IWorld__factory } from 'contracts/types/ethers-contracts/factories/IWorld__factory';
 import { getTableIds } from '@latticexyz/utils';
 import storeConfig from 'contracts/mud.config';
@@ -49,11 +49,9 @@ export async function setupNetwork() {
   }
 
   const provider = result.network.providers.get().json;
-  // TODO if use wallet connect, use wallet provider
-  // const walletProvider = new Web3Provider((window as any).ethereum);
-  // const walletSigner = walletProvider.getSigner();
-  // const signerOrProvider = walletSigner ?? signer ?? provider;
-  const signerOrProvider = signer ?? provider;
+  const walletProvider = new Web3Provider((window as any).ethereum);
+  const walletSigner = walletProvider.getSigner();
+  const signerOrProvider = walletSigner ?? signer ?? provider;
   // Create a World contract instance
   const worldContract = IWorld__factory.connect(networkConfig.worldAddress, signerOrProvider);
 
@@ -75,7 +73,8 @@ export async function setupNetwork() {
   // Create a fast tx executor
   const fastTxExecutor =
     signer?.provider instanceof JsonRpcProvider
-      ? await createFastTxExecutor(signer as Signer & { provider: JsonRpcProvider })
+      ? // ? await createFastTxExecutor(signer as Signer & { provider: JsonRpcProvider })
+        await createFastTxExecutor(signerOrProvider as Signer & { provider: JsonRpcProvider })
       : null;
 
   // TODO: infer this from fastTxExecute signature?
@@ -102,5 +101,7 @@ export async function setupNetwork() {
     worldContract,
     worldSend: bindFastTxExecute(worldContract),
     fastTxExecutor,
+    signerOrProvider,
+    chainId: networkConfig.chainId,
   };
 }

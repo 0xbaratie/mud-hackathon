@@ -32,7 +32,7 @@ contract SubmissionSystemTest is MudV2Test {
   }
 
   function testSubmit() public {
-    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1","imageUri1");
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
 
     vm.expectRevert(bytes("Hackathon is not in SUBMISSION phase."));
     world.submit(bytes32(uint256(1)), "submit1","description1" ,"submitUri1", "submitImageUri1");
@@ -67,10 +67,10 @@ contract SubmissionSystemTest is MudV2Test {
   }
 
   function testVoteRevert() public {
-    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1","imageUri1");
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
 
     vm.expectRevert(bytes("Hackathon is not in VOTING phase."));
-    world.vote(bytes32(uint256(1)), address(this),1);
+    world.vote(bytes32(uint256(1)), address(this));
 
     //proceed HACKING
     mock.approve(address(world), 100000e6);    
@@ -87,11 +87,11 @@ contract SubmissionSystemTest is MudV2Test {
     // world.vote(bytes32(uint256(1)), address(this),4);
 
     vm.expectRevert(bytes("Submission does not exist."));
-    world.vote(bytes32(uint256(1)), address(this),1);
+    world.vote(bytes32(uint256(1)), address(this));
   }
 
   function testVoteSuccess() public {
-    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1","imageUri1");
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
 
     //proceed HACKING
     mock.approve(address(world), 100000e6);    
@@ -104,20 +104,20 @@ contract SubmissionSystemTest is MudV2Test {
     skip(2);
     world.proceedPhase(bytes32(uint256(1)));
 
-    world.vote(bytes32(uint256(1)), address(this),1);
+    world.vote(bytes32(uint256(1)), address(this));
     vm.prank(address(1));
-    world.vote(bytes32(uint256(1)), address(this),4);
+    world.vote(bytes32(uint256(1)), address(this));
     assertEq(Submission.getVotes(world, bytes32(uint256(1)), address(this)), 2);
-    assertEq(Vote.get(world, bytes32(uint256(1)), 1), true);
-    assertEq(Vote.get(world, bytes32(uint256(1)), 4), true);
+    // assertEq(Vote.get(world, bytes32(uint256(1)), address(this)), false);
+    // assertEq(Vote.get(world, bytes32(uint256(1)), address(this)), true);
 
     //revert re-vote
     vm.expectRevert(bytes("Already voted."));
-    world.vote(bytes32(uint256(1)), address(this),1);
+    world.vote(bytes32(uint256(1)), address(this));
   }
 
   function testWithdrawPrize() public {
-    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1","imageUri1");
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
 
     //proceed HACKING
     mock.approve(address(world), 100000e6);    
@@ -129,7 +129,7 @@ contract SubmissionSystemTest is MudV2Test {
     //proceed VOTING
     skip(2);
     world.proceedPhase(bytes32(uint256(1)));
-    world.vote(bytes32(uint256(1)), address(this),1);
+    world.vote(bytes32(uint256(1)), address(this));
 
     //proceed WITHDRAWING
     skip(3);

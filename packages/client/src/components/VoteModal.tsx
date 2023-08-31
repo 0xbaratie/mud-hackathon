@@ -1,11 +1,31 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import DateTimePicker from './DateTimePicker';
 import { useMUD } from '../MUDContext';
 
-const VoteModal = ({ hackathonId, submitter }) => {
+interface VoteModalProps {
+  onClose: () => void;
+  hackathonId: string;
+  submitter: string;
+  setError: (error: string | null) => void;
+  setSuccess: (success: string | null) => void;
+}
+
+const VoteModal = ({ onClose, hackathonId, submitter, setError, setSuccess}: VoteModalProps) => {
   const {
     systemCalls: { vote },
   } = useMUD();
+  
+  const handleVote = async () => {
+    try {
+      await vote(hackathonId, submitter);
+      setSuccess('Your vote has been cast!.');
+    } catch (error) {
+      setError('An error occurred while voting.');
+    }
+    
+    onClose();
+  };
+
   return (
     <div className="p-6">
       <p className="font-bold text-xl flex justify-center">
@@ -14,10 +34,9 @@ const VoteModal = ({ hackathonId, submitter }) => {
       <div className="mt-6 flex justify-center">
         <button
           className="btn bg-black text-white rounded-lg w-80"
-          onClick={async (event) => {
+          onClick={event => {
             event.preventDefault();
-            //TODO tokenID
-            await vote(hackathonId, submitter, 1);
+            handleVote();
           }}
         >
           Vote

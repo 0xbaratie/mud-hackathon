@@ -9,11 +9,19 @@ import { IHackathonPrizeSystem } from "./IHackathonPrizeSystem.sol";
 import { IHackathonSystem } from "./IHackathonSystem.sol";
 import { IIncrementSystem } from "./IIncrementSystem.sol";
 import { ISubmissionSystem } from "./ISubmissionSystem.sol";
+import { IViewSystem } from "./IViewSystem.sol";
 
 /**
  * The IWorld interface includes all systems dynamically added to the World
  * during the deploy process.
  */
-interface IWorld is IBaseWorld, IHackathonPrizeSystem, IHackathonSystem, IIncrementSystem, ISubmissionSystem {
+interface IWorld is
+  IBaseWorld,
+  IHackathonPrizeSystem,
+  IHackathonSystem,
+  IIncrementSystem,
+  ISubmissionSystem,
+  IViewSystem
+{
 
 }

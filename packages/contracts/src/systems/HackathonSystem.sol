@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Hackathon,Config,HackathonData,HackathonPrize,Submission,SubmissionData } from "../codegen/Tables.sol";
+import { Hackathon,Config,HackathonData,HackathonPrize,HackathonPrizeData,Submission,SubmissionData,HackathonVoteNft,HackathonVoteNftData } from "../codegen/Tables.sol";
 import { Phase } from "../codegen/Types.sol";
 import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
@@ -14,14 +14,6 @@ contract HackathonSystem is System {
   modifier onlyOwner(bytes32 _hackathonId) {
     require(Hackathon.get(_hackathonId).owner == _msgSender(), "Only owner can call this function.");
     _;
-  }
-
-  function getMaxHackathonId() public view returns(bytes32){
-    return Config.get();
-  }
-
-  function getSubmission(bytes32 _hackathonId, address _submitter) public view returns(SubmissionData memory){
-    return Submission.get(_hackathonId, _submitter);
   }
 
   function _incrementHackathonId() internal returns(bytes32 newHackathonId_){
@@ -38,37 +30,11 @@ contract HackathonSystem is System {
     uint8 _winnerCount,
     string memory _name,
     string memory _uri,
-    string memory _imageUri
+    string memory _imageUri,
+    address _voteNft,
+    uint64 _voteNftSnapshot
   ) public {
-    Hackathon.set(_incrementHackathonId(),HackathonData(
-      _msgSender(),
-      _prizeToken,
-      uint8(Phase.PREPARE_PRIZE),
-      _startTimestamp,
-      _submitPeriod,
-      _votingPeriod,
-      _withdrawalPeriod,
-      _winnerCount,
-      _name,
-      _uri,
-      _imageUri
-    ));
-  }
-  
-  function updateHackathon(
-    bytes32 _hackathonId,
-    address _prizeToken,
-    uint256 _startTimestamp,
-    uint256 _submitPeriod,
-    uint256 _votingPeriod,
-    uint256 _withdrawalPeriod,
-    uint8 _winnerCount,
-    string memory _name,
-    string memory _uri,
-    string memory _imageUri
-  ) public onlyOwner(_hackathonId) {
-    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
-    require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
+    bytes32 _hackathonId = _incrementHackathonId();
     Hackathon.set(_hackathonId,HackathonData(
       _msgSender(),
       _prizeToken,
@@ -82,6 +48,59 @@ contract HackathonSystem is System {
       _uri,
       _imageUri
     ));
+    HackathonVoteNft.set(_hackathonId,
+      HackathonVoteNftData(_voteNft,_voteNftSnapshot)
+    );
+    HackathonPrize.set(_hackathonId,
+      HackathonPrizeData( 0, new address[](0))
+    );
+  }
+  
+  function updateHackathon(
+    bytes32 _hackathonId,
+    address _prizeToken,
+    uint256 _startTimestamp,
+    uint256 _submitPeriod,
+    uint256 _votingPeriod,
+    uint256 _withdrawalPeriod,
+    uint8 _winnerCount,
+    string memory _name,
+    string memory _uri,
+    string memory _imageUri,
+    address _voteNft,
+    uint64 _voteNftSnapshot
+  ) public onlyOwner(_hackathonId) {
+    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
+    require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
+
+    HackathonData memory _newHackathonData = HackathonData(
+      _msgSender(),
+      _prizeToken,
+      uint8(Phase.PREPARE_PRIZE),
+      _startTimestamp,
+      _submitPeriod,
+      _votingPeriod,
+      _withdrawalPeriod,
+      _winnerCount,
+      _name,
+      _uri,
+      _imageUri
+    );
+    Hackathon.set(_hackathonId,_newHackathonData);
+
+    HackathonVoteNft.set(_hackathonId,
+      HackathonVoteNftData(_voteNft,_voteNftSnapshot)
+    );
+  }
+
+  function deleteHackathon(bytes32 _hackathonId) public onlyOwner(_hackathonId) {
+    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
+    require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
+
+    Hackathon.deleteRecord(_hackathonId);
+    HackathonVoteNft.deleteRecord(_hackathonId);
+    HackathonPrize.deleteRecord(_hackathonId);
+
   }
 
   function proceedPhase(bytes32 _hackathonId) public {

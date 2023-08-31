@@ -28,6 +28,56 @@ import type {
   PromiseOrValue,
 } from "./common";
 
+export type HackathonDataStruct = {
+  owner: PromiseOrValue<string>;
+  prizeToken: PromiseOrValue<string>;
+  phase: PromiseOrValue<BigNumberish>;
+  startTimestamp: PromiseOrValue<BigNumberish>;
+  submitPeriod: PromiseOrValue<BigNumberish>;
+  votingPeriod: PromiseOrValue<BigNumberish>;
+  withdrawalPeriod: PromiseOrValue<BigNumberish>;
+  winnerCount: PromiseOrValue<BigNumberish>;
+  name: PromiseOrValue<string>;
+  uri: PromiseOrValue<string>;
+  imageUri: PromiseOrValue<string>;
+};
+
+export type HackathonDataStructOutput = [
+  string,
+  string,
+  number,
+  BigNumber,
+  BigNumber,
+  BigNumber,
+  BigNumber,
+  number,
+  string,
+  string,
+  string
+] & {
+  owner: string;
+  prizeToken: string;
+  phase: number;
+  startTimestamp: BigNumber;
+  submitPeriod: BigNumber;
+  votingPeriod: BigNumber;
+  withdrawalPeriod: BigNumber;
+  winnerCount: number;
+  name: string;
+  uri: string;
+  imageUri: string;
+};
+
+export type HackathonPrizeDataStruct = {
+  deposit: PromiseOrValue<BigNumberish>;
+  submitters: PromiseOrValue<string>[];
+};
+
+export type HackathonPrizeDataStructOutput = [BigNumber, string[]] & {
+  deposit: BigNumber;
+  submitters: string[];
+};
+
 export type SubmissionDataStruct = {
   votes: PromiseOrValue<BigNumberish>;
   withdrawalPrize: PromiseOrValue<BigNumberish>;
@@ -53,24 +103,39 @@ export type SubmissionDataStructOutput = [
   imageUri: string;
 };
 
+export type VoteDataStruct = {
+  count: PromiseOrValue<BigNumberish>;
+  aggregated: PromiseOrValue<boolean>;
+};
+
+export type VoteDataStructOutput = [BigNumber, boolean] & {
+  count: BigNumber;
+  aggregated: boolean;
+};
+
 export interface IWorldInterface extends utils.Interface {
   functions: {
     "call(bytes16,bytes16,bytes)": FunctionFragment;
-    "createHackathon(address,uint256,uint256,uint256,uint256,uint8,string,string,string)": FunctionFragment;
+    "createHackathon(address,uint256,uint256,uint256,uint256,uint8,string,string,string,address,uint64)": FunctionFragment;
+    "deleteHackathon(bytes32)": FunctionFragment;
     "deleteRecord(bytes32,bytes32[])": FunctionFragment;
     "deleteRecord(bytes16,bytes16,bytes32[])": FunctionFragment;
     "depositPrize(bytes32,uint256)": FunctionFragment;
+    "depositPrizeEth(bytes32,uint256)": FunctionFragment;
     "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)": FunctionFragment;
     "emitEphemeralRecord(bytes32,bytes32[],bytes)": FunctionFragment;
     "getField(bytes32,bytes32[],uint8)": FunctionFragment;
     "getFieldLength(bytes32,bytes32[],uint8,bytes32)": FunctionFragment;
     "getFieldSlice(bytes32,bytes32[],uint8,bytes32,uint256,uint256)": FunctionFragment;
+    "getHackathon(bytes32)": FunctionFragment;
+    "getHackathonPrize(bytes32)": FunctionFragment;
     "getKeySchema(bytes32)": FunctionFragment;
     "getMaxHackathonId()": FunctionFragment;
     "getRecord(bytes32,bytes32[],bytes32)": FunctionFragment;
     "getRecord(bytes32,bytes32[])": FunctionFragment;
     "getSchema(bytes32)": FunctionFragment;
     "getSubmission(bytes32,address)": FunctionFragment;
+    "getVote(bytes32,address)": FunctionFragment;
     "grantAccess(bytes16,bytes16,address)": FunctionFragment;
     "increment()": FunctionFragment;
     "installModule(address,bytes)": FunctionFragment;
@@ -100,10 +165,10 @@ export interface IWorldInterface extends utils.Interface {
     "setRecord(bytes32,bytes32[],bytes)": FunctionFragment;
     "setVoteToken(address)": FunctionFragment;
     "submit(bytes32,string,string,string,string)": FunctionFragment;
-    "updateHackathon(bytes32,address,uint256,uint256,uint256,uint256,uint8,string,string,string)": FunctionFragment;
+    "updateHackathon(bytes32,address,uint256,uint256,uint256,uint256,uint8,string,string,string,address,uint64)": FunctionFragment;
     "updateInField(bytes32,bytes32[],uint8,uint256,bytes)": FunctionFragment;
     "updateInField(bytes16,bytes16,bytes32[],uint8,uint256,bytes)": FunctionFragment;
-    "vote(bytes32,address,uint256)": FunctionFragment;
+    "vote(bytes32,address)": FunctionFragment;
     "withdrawByOwner(bytes32)": FunctionFragment;
     "withdrawPrize(bytes32)": FunctionFragment;
   };
@@ -112,20 +177,25 @@ export interface IWorldInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "call"
       | "createHackathon"
+      | "deleteHackathon"
       | "deleteRecord(bytes32,bytes32[])"
       | "deleteRecord(bytes16,bytes16,bytes32[])"
       | "depositPrize"
+      | "depositPrizeEth"
       | "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)"
       | "emitEphemeralRecord(bytes32,bytes32[],bytes)"
       | "getField"
       | "getFieldLength"
       | "getFieldSlice"
+      | "getHackathon"
+      | "getHackathonPrize"
       | "getKeySchema"
       | "getMaxHackathonId"
       | "getRecord(bytes32,bytes32[],bytes32)"
       | "getRecord(bytes32,bytes32[])"
       | "getSchema"
       | "getSubmission"
+      | "getVote"
       | "grantAccess"
       | "increment"
       | "installModule"
@@ -182,8 +252,14 @@ export interface IWorldInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
-      PromiseOrValue<string>
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "deleteHackathon",
+    values: [PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
     functionFragment: "deleteRecord(bytes32,bytes32[])",
@@ -199,6 +275,10 @@ export interface IWorldInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "depositPrize",
+    values: [PromiseOrValue<BytesLike>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "depositPrizeEth",
     values: [PromiseOrValue<BytesLike>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -247,6 +327,14 @@ export interface IWorldInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "getHackathon",
+    values: [PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getHackathonPrize",
+    values: [PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getKeySchema",
     values: [PromiseOrValue<BytesLike>]
   ): string;
@@ -272,6 +360,10 @@ export interface IWorldInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getSubmission",
+    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getVote",
     values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
@@ -497,7 +589,9 @@ export interface IWorldInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
-      PromiseOrValue<string>
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
@@ -523,11 +617,7 @@ export interface IWorldInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "vote",
-    values: [
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>
-    ]
+    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "withdrawByOwner",
@@ -544,6 +634,10 @@ export interface IWorldInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "deleteHackathon",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "deleteRecord(bytes32,bytes32[])",
     data: BytesLike
   ): Result;
@@ -553,6 +647,10 @@ export interface IWorldInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "depositPrize",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "depositPrizeEth",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -570,6 +668,14 @@ export interface IWorldInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getFieldSlice",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getHackathon",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getHackathonPrize",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -593,6 +699,7 @@ export interface IWorldInterface extends utils.Interface {
     functionFragment: "getSubmission",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getVote", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "grantAccess",
     data: BytesLike
@@ -836,6 +943,13 @@ export interface IWorld extends BaseContract {
       _name: PromiseOrValue<string>,
       _uri: PromiseOrValue<string>,
       _imageUri: PromiseOrValue<string>,
+      _voteNft: PromiseOrValue<string>,
+      _voteNftSnapshot: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    deleteHackathon(
+      _hackathonId: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -856,6 +970,12 @@ export interface IWorld extends BaseContract {
       _hackathonId: PromiseOrValue<BytesLike>,
       _amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    depositPrizeEth(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      _amount: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)"(
@@ -898,6 +1018,16 @@ export interface IWorld extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string] & { data: string }>;
 
+    getHackathon(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<[HackathonDataStructOutput]>;
+
+    getHackathonPrize(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<[HackathonPrizeDataStructOutput]>;
+
     getKeySchema(
       table: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -928,6 +1058,12 @@ export interface IWorld extends BaseContract {
       _submitter: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[SubmissionDataStructOutput]>;
+
+    getVote(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      _voter: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[VoteDataStructOutput]>;
 
     grantAccess(
       namespace: PromiseOrValue<BytesLike>,
@@ -1143,6 +1279,8 @@ export interface IWorld extends BaseContract {
       _name: PromiseOrValue<string>,
       _uri: PromiseOrValue<string>,
       _imageUri: PromiseOrValue<string>,
+      _voteNft: PromiseOrValue<string>,
+      _voteNftSnapshot: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -1168,7 +1306,6 @@ export interface IWorld extends BaseContract {
     vote(
       _hackathonId: PromiseOrValue<BytesLike>,
       _submitter: PromiseOrValue<string>,
-      _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -1179,7 +1316,7 @@ export interface IWorld extends BaseContract {
 
     withdrawPrize(
       _hackathonId: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
 
@@ -1200,6 +1337,13 @@ export interface IWorld extends BaseContract {
     _name: PromiseOrValue<string>,
     _uri: PromiseOrValue<string>,
     _imageUri: PromiseOrValue<string>,
+    _voteNft: PromiseOrValue<string>,
+    _voteNftSnapshot: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  deleteHackathon(
+    _hackathonId: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -1220,6 +1364,12 @@ export interface IWorld extends BaseContract {
     _hackathonId: PromiseOrValue<BytesLike>,
     _amount: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  depositPrizeEth(
+    _hackathonId: PromiseOrValue<BytesLike>,
+    _amount: PromiseOrValue<BigNumberish>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)"(
@@ -1262,6 +1412,16 @@ export interface IWorld extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  getHackathon(
+    _hackathonId: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides
+  ): Promise<HackathonDataStructOutput>;
+
+  getHackathonPrize(
+    _hackathonId: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides
+  ): Promise<HackathonPrizeDataStructOutput>;
+
   getKeySchema(
     table: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
@@ -1292,6 +1452,12 @@ export interface IWorld extends BaseContract {
     _submitter: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<SubmissionDataStructOutput>;
+
+  getVote(
+    _hackathonId: PromiseOrValue<BytesLike>,
+    _voter: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<VoteDataStructOutput>;
 
   grantAccess(
     namespace: PromiseOrValue<BytesLike>,
@@ -1507,6 +1673,8 @@ export interface IWorld extends BaseContract {
     _name: PromiseOrValue<string>,
     _uri: PromiseOrValue<string>,
     _imageUri: PromiseOrValue<string>,
+    _voteNft: PromiseOrValue<string>,
+    _voteNftSnapshot: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -1532,7 +1700,6 @@ export interface IWorld extends BaseContract {
   vote(
     _hackathonId: PromiseOrValue<BytesLike>,
     _submitter: PromiseOrValue<string>,
-    _tokenId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -1543,7 +1710,7 @@ export interface IWorld extends BaseContract {
 
   withdrawPrize(
     _hackathonId: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
@@ -1564,6 +1731,13 @@ export interface IWorld extends BaseContract {
       _name: PromiseOrValue<string>,
       _uri: PromiseOrValue<string>,
       _imageUri: PromiseOrValue<string>,
+      _voteNft: PromiseOrValue<string>,
+      _voteNftSnapshot: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    deleteHackathon(
+      _hackathonId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1581,6 +1755,12 @@ export interface IWorld extends BaseContract {
     ): Promise<void>;
 
     depositPrize(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      _amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    depositPrizeEth(
       _hackathonId: PromiseOrValue<BytesLike>,
       _amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -1626,6 +1806,16 @@ export interface IWorld extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    getHackathon(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<HackathonDataStructOutput>;
+
+    getHackathonPrize(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<HackathonPrizeDataStructOutput>;
+
     getKeySchema(
       table: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -1656,6 +1846,12 @@ export interface IWorld extends BaseContract {
       _submitter: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<SubmissionDataStructOutput>;
+
+    getVote(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      _voter: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<VoteDataStructOutput>;
 
     grantAccess(
       namespace: PromiseOrValue<BytesLike>,
@@ -1869,6 +2065,8 @@ export interface IWorld extends BaseContract {
       _name: PromiseOrValue<string>,
       _uri: PromiseOrValue<string>,
       _imageUri: PromiseOrValue<string>,
+      _voteNft: PromiseOrValue<string>,
+      _voteNftSnapshot: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1894,7 +2092,6 @@ export interface IWorld extends BaseContract {
     vote(
       _hackathonId: PromiseOrValue<BytesLike>,
       _submitter: PromiseOrValue<string>,
-      _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1973,6 +2170,13 @@ export interface IWorld extends BaseContract {
       _name: PromiseOrValue<string>,
       _uri: PromiseOrValue<string>,
       _imageUri: PromiseOrValue<string>,
+      _voteNft: PromiseOrValue<string>,
+      _voteNftSnapshot: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    deleteHackathon(
+      _hackathonId: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1993,6 +2197,12 @@ export interface IWorld extends BaseContract {
       _hackathonId: PromiseOrValue<BytesLike>,
       _amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    depositPrizeEth(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      _amount: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)"(
@@ -2035,6 +2245,16 @@ export interface IWorld extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getHackathon(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getHackathonPrize(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getKeySchema(
       table: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -2063,6 +2283,12 @@ export interface IWorld extends BaseContract {
     getSubmission(
       _hackathonId: PromiseOrValue<BytesLike>,
       _submitter: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getVote(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      _voter: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -2280,6 +2506,8 @@ export interface IWorld extends BaseContract {
       _name: PromiseOrValue<string>,
       _uri: PromiseOrValue<string>,
       _imageUri: PromiseOrValue<string>,
+      _voteNft: PromiseOrValue<string>,
+      _voteNftSnapshot: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -2305,7 +2533,6 @@ export interface IWorld extends BaseContract {
     vote(
       _hackathonId: PromiseOrValue<BytesLike>,
       _submitter: PromiseOrValue<string>,
-      _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -2316,7 +2543,7 @@ export interface IWorld extends BaseContract {
 
     withdrawPrize(
       _hackathonId: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
 
@@ -2338,6 +2565,13 @@ export interface IWorld extends BaseContract {
       _name: PromiseOrValue<string>,
       _uri: PromiseOrValue<string>,
       _imageUri: PromiseOrValue<string>,
+      _voteNft: PromiseOrValue<string>,
+      _voteNftSnapshot: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    deleteHackathon(
+      _hackathonId: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -2358,6 +2592,12 @@ export interface IWorld extends BaseContract {
       _hackathonId: PromiseOrValue<BytesLike>,
       _amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    depositPrizeEth(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      _amount: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)"(
@@ -2400,6 +2640,16 @@ export interface IWorld extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getHackathon(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getHackathonPrize(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getKeySchema(
       table: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -2428,6 +2678,12 @@ export interface IWorld extends BaseContract {
     getSubmission(
       _hackathonId: PromiseOrValue<BytesLike>,
       _submitter: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getVote(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      _voter: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -2645,6 +2901,8 @@ export interface IWorld extends BaseContract {
       _name: PromiseOrValue<string>,
       _uri: PromiseOrValue<string>,
       _imageUri: PromiseOrValue<string>,
+      _voteNft: PromiseOrValue<string>,
+      _voteNftSnapshot: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -2670,7 +2928,6 @@ export interface IWorld extends BaseContract {
     vote(
       _hackathonId: PromiseOrValue<BytesLike>,
       _submitter: PromiseOrValue<string>,
-      _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -2681,7 +2938,7 @@ export interface IWorld extends BaseContract {
 
     withdrawPrize(
       _hackathonId: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

@@ -1,15 +1,26 @@
-import React, { FC, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import DateTimePicker from './DateTimePicker';
 import { useMUD } from '../MUDContext';
 import { useState } from 'react';
-import { PRIZE_TOKEN } from '../constants/constants';
-import { ToastError } from './ToastError';
+import { PRIZE_TOKEN, PRIZE_TOKEN_TEST } from '../constants/constants';
 
 type HackathonFormProps = {
   onClose: () => void;
+  maxHackathonNum: number;
+  setMaxHackathonNum: (num: number) => void;
+  setError: (error: string | null) => void;
+  setSuccess: (success: string | null) => void;
 };
 
-const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
+const HackathonForm: FC<HackathonFormProps> = ({
+  onClose,
+  maxHackathonNum,
+  setMaxHackathonNum,
+  setError,
+  setSuccess,
+}) => {
+  const prizeTokens = import.meta.env.VITE_CHAIN_ID == 10 ? PRIZE_TOKEN : PRIZE_TOKEN_TEST;
+
   const getWeeksLater = (weeks: number) => {
     const date = new Date();
     date.setDate(date.getDate() + 7 * weeks);
@@ -26,7 +37,7 @@ const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
   const {
     systemCalls: { createHackathon },
   } = useMUD();
-  const [prizeToken, setPrizeToken] = useState(PRIZE_TOKEN.ETH);
+  const [prizeToken, setPrizeToken] = useState(prizeTokens.ETH);
   const [startTimestamp, setStartTimestamp] = useState(getWeeksLater(-1));
   const [submitPeriod, setSubmitPeriod] = useState(getWeeksLater(-1));
   const [votingPeriod, setVotingPeriod] = useState(getWeeksLater(-1));
@@ -37,21 +48,11 @@ const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
   const [imageUri, setImageUri] = useState(
     'https://pbs.twimg.com/profile_images/1642968539719163904/xbrZ4_Om_400x400.jpg',
   );
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setError(null);
-    }, 10000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [error]);
+  const [voteNft, setVoteNft] = useState('0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E');
+  const [voteNftSnapshot, setVoteNftSnapshot] = useState(17928076);
 
   return (
-    <div className="p-4">
-      {error && <ToastError message={error} />}
+    <div className="p-4 overflow-y-auto max-h-[800px]">
       <h1 className="text-sm mb-1">Hackathon title</h1>
       <input
         type="text"
@@ -70,29 +71,28 @@ const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
         onChange={(e) => setUri(e.target.value)}
       />
       <h1 className="text-sm mb-1 mt-3 ">Prize token (Optimism chain)</h1>
-      {/* <select
+      <select
         className="select select-bordered w-full max-w-xs text-gray-900"
         value={prizeToken}
         onChange={(e) => setPrizeToken(e.target.value)}
       >
-        <option value={PRIZE_TOKEN.ETH}>ETH</option>
-        <option value={PRIZE_TOKEN.USDC}>USDC</option>
-        <option value={PRIZE_TOKEN.DAI}>DAI</option>
-      </select> */}
-      <input
+        <option value={prizeTokens.ETH}>ETH</option>
+        <option value={prizeTokens.USDC}>USDC</option>
+        <option value={prizeTokens.DAI}>DAI</option>
+      </select>
+      {/* <input
         type="text"
         placeholder="0x"
         className="input input-bordered w-full max-w-xs text-gray-900"
         value={prizeToken}
         onChange={(e) => setPrizeToken(e.target.value)}
-      />
+      /> */}
       <div className="flex">
         <div className="flex-1">
           <h1 className="text-sm mb-1 mt-3">Hack start datetime</h1>
           <DateTimePicker
             selectedDateTime={startTimestamp}
             setSelectedDateTime={setStartTimestamp}
-            style={{ width: '100%' }}
           />
         </div>
       </div>
@@ -123,7 +123,7 @@ const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
         placeholder="1"
         className="input input-bordered w-full max-w-xs text-gray-900"
         value={winnerCount}
-        onChange={(e) => setWinnerCount(e.target.value)}
+        onChange={(e) => setWinnerCount(parseFloat(e.target.value))}
       />
       <h1 className="text-sm mb-1 mt-3">Cover image</h1>
       <p className="text-sm text-gray-500 mb-1">
@@ -135,6 +135,24 @@ const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
         className="input input-bordered w-full max-w-xs text-gray-900"
         value={imageUri}
         onChange={(e) => setImageUri(e.target.value)}
+      />
+      <h1 className="text-sm mb-1 mt-3">Vote NFT Address</h1>
+      <p className="text-sm text-gray-500 mb-1">This vote contract is only ERC721 on L1 only.</p>
+      <input
+        type="text"
+        className="input input-bordered w-full max-w-xs text-gray-900"
+        value={voteNft}
+        onChange={(e) => setVoteNft(e.target.value)}
+      />
+      <h1 className="text-sm mb-1 mt-3">Vote NFT Snapshot</h1>
+      <p className="text-sm text-gray-500 mb-1">
+        You need to decide which block ID you want to use to implement the timing of your ownership
+      </p>
+      <input
+        type="text"
+        className="input input-bordered w-full max-w-xs text-gray-900"
+        value={voteNftSnapshot}
+        onChange={(e) => setVoteNftSnapshot(parseInt(e.target.value))}
       />
       <div className="mt-3">
         <button
@@ -152,11 +170,17 @@ const HackathonForm: FC<HackathonFormProps> = ({ onClose }) => {
                 name,
                 uri,
                 imageUri,
+                voteNft,
+                voteNftSnapshot,
               );
-              onClose();
+              const newMaxHackathonNum = maxHackathonNum + 1;
+              setMaxHackathonNum(newMaxHackathonNum);
+              setSuccess('Your hackathon has been created!.');
             } catch (error) {
+              console.error(error);
               setError('An error occurred while creating the hackathon.');
             }
+            onClose();
           }}
         >
           Create hackathon

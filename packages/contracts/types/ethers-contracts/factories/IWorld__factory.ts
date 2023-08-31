@@ -372,8 +372,31 @@ const _abi = [
         name: "_imageUri",
         type: "string",
       },
+      {
+        internalType: "address",
+        name: "_voteNft",
+        type: "address",
+      },
+      {
+        internalType: "uint64",
+        name: "_voteNftSnapshot",
+        type: "uint64",
+      },
     ],
     name: "createHackathon",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+    ],
+    name: "deleteHackathon",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -435,6 +458,24 @@ const _abi = [
     name: "depositPrize",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+    ],
+    name: "depositPrizeEth",
+    outputs: [],
+    stateMutability: "payable",
     type: "function",
   },
   {
@@ -599,6 +640,113 @@ const _abi = [
     inputs: [
       {
         internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+    ],
+    name: "getHackathon",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "prizeToken",
+            type: "address",
+          },
+          {
+            internalType: "uint8",
+            name: "phase",
+            type: "uint8",
+          },
+          {
+            internalType: "uint256",
+            name: "startTimestamp",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "submitPeriod",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "votingPeriod",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "withdrawalPeriod",
+            type: "uint256",
+          },
+          {
+            internalType: "uint8",
+            name: "winnerCount",
+            type: "uint8",
+          },
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "uri",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "imageUri",
+            type: "string",
+          },
+        ],
+        internalType: "struct HackathonData",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+    ],
+    name: "getHackathonPrize",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "deposit",
+            type: "uint256",
+          },
+          {
+            internalType: "address[]",
+            name: "submitters",
+            type: "address[]",
+          },
+        ],
+        internalType: "struct HackathonPrizeData",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
         name: "table",
         type: "bytes32",
       },
@@ -748,6 +896,42 @@ const _abi = [
           },
         ],
         internalType: "struct SubmissionData",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "_voter",
+        type: "address",
+      },
+    ],
+    name: "getVote",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "count",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "aggregated",
+            type: "bool",
+          },
+        ],
+        internalType: "struct VoteData",
         name: "",
         type: "tuple",
       },
@@ -1512,6 +1696,16 @@ const _abi = [
         name: "_imageUri",
         type: "string",
       },
+      {
+        internalType: "address",
+        name: "_voteNft",
+        type: "address",
+      },
+      {
+        internalType: "uint64",
+        name: "_voteNftSnapshot",
+        type: "uint64",
+      },
     ],
     name: "updateHackathon",
     outputs: [],
@@ -1601,11 +1795,6 @@ const _abi = [
         name: "_submitter",
         type: "address",
       },
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
     ],
     name: "vote",
     outputs: [],
@@ -1635,7 +1824,7 @@ const _abi = [
     ],
     name: "withdrawPrize",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
 ] as const;

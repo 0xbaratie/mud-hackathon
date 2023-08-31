@@ -76,6 +76,22 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    HackathonVoteNft: (() => {
+      const tableId = new TableId("", "HackathonVoteNft");
+      return defineComponent(
+        world,
+        {
+          voteNft: RecsType.String,
+          voteNftSnapshot: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
     Submission: (() => {
       const tableId = new TableId("", "Submission");
       return defineComponent(
@@ -101,7 +117,8 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
-          voted: RecsType.Boolean,
+          count: RecsType.BigInt,
+          aggregated: RecsType.Boolean,
         },
         {
           metadata: {

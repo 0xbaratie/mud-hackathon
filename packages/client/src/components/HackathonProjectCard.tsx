@@ -1,12 +1,19 @@
-import React, { ReactNode, useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import VotingBox from '../../public/voting_box.svg';
 import FullScreenModal from './FullScreenModal';
 import VoteModal from './VoteModal';
-import { useComponentValue, useEntityQuery } from '@latticexyz/react';
 import { useMUD } from '../MUDContext';
 import { PHASE } from '../constants/constants';
+import { ToastError } from './ToastError';
+import { ToastSuccess } from './ToastSuccess';
 
-const HackathonProjects = ({ hackathonId, submitter, phase }) => {
+interface HackathonPrizesProps {
+  hackathonId: string;
+  submitter: string;
+  phase: number;
+}
+
+const HackathonProjects = ({ hackathonId, submitter, phase }: HackathonPrizesProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => {
     setModalOpen(true);
@@ -15,7 +22,6 @@ const HackathonProjects = ({ hackathonId, submitter, phase }) => {
     setModalOpen(false);
   };
 
-  console.log('submitter', submitter);
   const {
     network: { worldContract },
     systemCalls: { withdrawPrize },
@@ -27,11 +33,10 @@ const HackathonProjects = ({ hackathonId, submitter, phase }) => {
   const [votes, setVotes] = useState(0);
   const [prize, setPrize] = useState(0);
 
-  //TODO
   useEffect(() => {
     (async () => {
       const submittion = await worldContract.getSubmission(hackathonId, submitter);
-      console.log('submittion: ', submittion);
+      // console.log('submittion: ', submittion);
       setName(submittion.name);
       setDescription(submittion.description);
       setURL(submittion.uri);
@@ -41,10 +46,31 @@ const HackathonProjects = ({ hackathonId, submitter, phase }) => {
     })();
   }, []);
 
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setError(null);
+      setSuccess(null);
+    }, 10000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [error, success]);
+
   return (
     <div className="mt-10 w-[390px] mx-auto">
+      {error && <ToastError message={error} />}
+      {success && <ToastSuccess message={success} />}
       <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-        <VoteModal hackathonId={hackathonId} submitter={submitter} />
+        <VoteModal
+          onClose={closeModal}
+          hackathonId={hackathonId}
+          submitter={submitter}
+          setError={setError}
+          setSuccess={setSuccess}
+        />
       </FullScreenModal>
       <a href={url} target="blank">
         <div className="border rounded-md shadow-md h-[438px] relative">
@@ -69,7 +95,10 @@ const HackathonProjects = ({ hackathonId, submitter, phase }) => {
         </div>
       ) : (
         <div className="flex justify-center items-center">
-          <button className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg bg-gray-400" disabled>
+          <button
+            className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg bg-gray-400"
+            disabled
+          >
             Vote (outside the period)
           </button>
         </div>
