@@ -1829,7 +1829,7 @@ const _abi = [
     ],
     name: "withdrawPrize",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
 ] as const;

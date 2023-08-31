@@ -1317,7 +1317,7 @@ export interface IWorld extends BaseContract {
 
     withdrawPrize(
       _hackathonId: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
 
@@ -1712,7 +1712,7 @@ export interface IWorld extends BaseContract {
 
   withdrawPrize(
     _hackathonId: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
@@ -2547,7 +2547,7 @@ export interface IWorld extends BaseContract {
 
     withdrawPrize(
       _hackathonId: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
 
@@ -2943,7 +2943,7 @@ export interface IWorld extends BaseContract {
 
     withdrawPrize(
       _hackathonId: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

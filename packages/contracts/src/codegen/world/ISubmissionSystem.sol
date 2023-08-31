@@ -18,5 +18,5 @@ interface ISubmissionSystem {
 
   function continueVote(bytes memory _requestResult, bytes memory _callbackExtraData) external;
 
-  function withdrawPrize(bytes32 _hackathonId) external;
+  function withdrawPrize(bytes32 _hackathonId) external payable;
 }
