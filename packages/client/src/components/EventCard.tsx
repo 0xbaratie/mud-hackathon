@@ -2,7 +2,7 @@ import { BigNumber, ethers } from 'ethers';
 import { useMUD } from '../MUDContext';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { getPrizeTokenSymbol } from '../utils/common';
+import { getPrizeTokenSymbol, bigNumberToNumber } from '../utils/common';
 
 interface EventcardProps {
   hackathonNum: number;
@@ -56,9 +56,17 @@ export const EventCard = ({ hackathonNum }: EventcardProps) => {
             </button>
           </div>
           <div className="mt-2">
-            <span className="font-bold">
-              {deposit ? Number(deposit) : 0} {getPrizeTokenSymbol(prizeToken, chainId)}
-            </span>
+            {getPrizeTokenSymbol(prizeToken, chainId) === 'ETH' ? (
+              <span className="font-bold">
+                {deposit ? bigNumberToNumber(deposit, 18) : 0}{' '}
+                {getPrizeTokenSymbol(prizeToken, chainId)}
+              </span>
+            ) : (
+              <span className="font-bold">
+                {deposit ? bigNumberToNumber(deposit, 6) : 0}{' '}
+                {getPrizeTokenSymbol(prizeToken, chainId)}
+              </span>
+            )}
             <span className="p-2 text-gray-600">in prizes</span>
             <span className="font-bold">{projectsSum}</span>
             <span className="p-2 text-gray-600">projects</span>

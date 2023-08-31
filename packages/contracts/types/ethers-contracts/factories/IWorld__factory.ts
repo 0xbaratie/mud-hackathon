@@ -493,7 +493,7 @@ const _abi = [
     ],
     name: "depositPrizeEth",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
   {
@@ -1842,7 +1842,7 @@ const _abi = [
     ],
     name: "withdrawPrize",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
 ] as const;

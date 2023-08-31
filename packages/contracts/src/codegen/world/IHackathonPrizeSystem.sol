@@ -6,5 +6,5 @@ pragma solidity >=0.8.0;
 interface IHackathonPrizeSystem {
   function depositPrize(bytes32 _hackathonId, uint256 _amount) external;
 
-  function depositPrizeEth(bytes32 _hackathonId, uint256 _amount) external;
+  function depositPrizeEth(bytes32 _hackathonId, uint256 _amount) external payable;
 }

@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { useMUD } from '../MUDContext';
 import FullScreenModal from './FullScreenModal';
 import DepositModal from './DepositModal';
-import { getPrizeTokenSymbol } from '../utils/common';
+import { PRIZE_TOKEN } from '../constants/constants';
+import { BigNumber, ethers } from 'ethers';
+import { getPrizeTokenSymbol, bigNumberToNumber } from '../utils/common';
 
 interface HackathonPrizesProps {
   hackathonId: string;
@@ -15,11 +17,11 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
     network: { worldContract, chainId },
   } = useMUD();
 
-  const [deposit, setDeposit] = useState(0);
+  const [deposit, setDeposit] = useState(BigNumber.from(0));
   useEffect(() => {
     (async () => {
       const hackathonPrize = await worldContract.getHackathonPrize(hackathonId);
-      setDeposit(hackathonPrize?.deposit ? Number(hackathonPrize.deposit) : 0);
+      setDeposit(hackathonPrize?.deposit ? hackathonPrize.deposit : BigNumber.from(0));
     })();
   }, []);
 
@@ -65,8 +67,13 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
       </div>
 
       <p>
-        {deposit} {getPrizeTokenSymbol(prizeToken, chainId)} will be distributed to the top{' '}
-        {winnerCount} winners.
+        {getPrizeTokenSymbol(prizeToken, chainId) === 'ETH' ? (
+          <span>{deposit ? bigNumberToNumber(deposit, 18) : 0}</span>
+        ) : (
+          <span>{deposit ? bigNumberToNumber(deposit, 6) : 0}</span>
+        )}{' '}
+        {getPrizeTokenSymbol(prizeToken, chainId)} will be distributed to the top {winnerCount}{' '}
+        winners.
       </p>
       {/* <h2 className="text-2xl font-bold mt-4">Transactions</h2>
       <div className="grid grid-cols-4 p-4 rounded-md shadow-md">

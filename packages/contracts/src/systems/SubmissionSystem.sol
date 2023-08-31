@@ -28,10 +28,12 @@ interface IFeeVault {
     // function deposit(address _account, address _token, uint256 _amount) external;
 }
 
+
 contract SubmissionSystem is System {
   using SafeERC20 for IERC20;
   event Voted(address indexed holder);
 
+  address public constant ETH_ADDRESS = 0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000;
   address public voteToken;
   // WARNING: Not compatible with Optimism Mainnet at this time.
   address public STATE_QUERY_GATEWAY = address(0x1b132819aFE2AFD5b76eF6721bCCC6Ede40cd9eC);
@@ -124,7 +126,7 @@ contract SubmissionSystem is System {
       emit Voted(_msgSender);
   }
 
-  function withdrawPrize(bytes32 _hackathonId) public {
+  function withdrawPrize(bytes32 _hackathonId) public payable {
     //validate phase
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
     require(_hackathonData.phase == uint8(Phase.WITHDRAWING), "Hackathon is not in WITHDRAWING phase.");
@@ -135,6 +137,11 @@ contract SubmissionSystem is System {
     uint256 _deposit = HackathonPrize.getDeposit(_hackathonId);
     HackathonPrize.setDeposit(_hackathonId, _deposit - _prize);
 
-    IERC20(_hackathonData.prizeToken).safeTransfer(_msgSender(), _prize);
+    //if prizeToken is ETH
+    if(_hackathonData.prizeToken == ETH_ADDRESS){
+      payable(_msgSender()).transfer(_prize);
+    }else{
+      IERC20(_hackathonData.prizeToken).safeTransfer(_msgSender(), _prize);
+    }
   }
 }
