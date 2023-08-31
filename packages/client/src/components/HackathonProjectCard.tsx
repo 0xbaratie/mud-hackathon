@@ -22,7 +22,6 @@ const HackathonProjects = ({ hackathonId, submitter, phase }: HackathonPrizesPro
     setModalOpen(false);
   };
 
-  console.log('submitter', submitter);
   const {
     network: { worldContract },
     systemCalls: { withdrawPrize },
@@ -37,7 +36,7 @@ const HackathonProjects = ({ hackathonId, submitter, phase }: HackathonPrizesPro
   useEffect(() => {
     (async () => {
       const submittion = await worldContract.getSubmission(hackathonId, submitter);
-      console.log('submittion: ', submittion);
+      // console.log('submittion: ', submittion);
       setName(submittion.name);
       setDescription(submittion.description);
       setURL(submittion.uri);
@@ -67,7 +66,7 @@ const HackathonProjects = ({ hackathonId, submitter, phase }: HackathonPrizesPro
       <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
         <VoteModal
           onClose={closeModal}
-          hackathonId={hackathonId} 
+          hackathonId={hackathonId}
           submitter={submitter}
           setError={setError}
           setSuccess={setSuccess}

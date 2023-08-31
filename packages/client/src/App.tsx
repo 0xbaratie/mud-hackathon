@@ -9,6 +9,7 @@ import { ethers } from 'ethers';
 import { useState, useEffect } from 'react';
 import { ToastError } from './components/ToastError';
 import { ToastSuccess } from './components/ToastSuccess';
+import { useInterval } from './hooks/useInterval';
 
 export const App = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -17,14 +18,17 @@ export const App = () => {
     network: { worldContract },
   } = useMUD();
   const [maxHackathonNum, setMaxHackathonNum] = useState(0);
-  useEffect(() => {
+
+  useInterval(() => {
     (async () => {
       const maxHackathonId = await worldContract.getMaxHackathonId();
       console.log('maxHackathonId: ', maxHackathonId);
-      const bigNum = ethers.BigNumber.from(maxHackathonId);
-      setMaxHackathonNum(bigNum.toNumber());
+      const _maxHackathonNum = ethers.BigNumber.from(maxHackathonId).toNumber();
+      if (_maxHackathonNum !== maxHackathonNum) {
+        setMaxHackathonNum(_maxHackathonNum);
+      }
     })();
-  }, [maxHackathonNum]);
+  }, 5000);
 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);

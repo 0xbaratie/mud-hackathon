@@ -5,10 +5,11 @@ import HackathonProjectCard from './HackathonProjectCard';
 import FullScreenModal from './FullScreenModal';
 import HackathonSubmit from './HackathonSubmit';
 import { PHASE } from '../constants/constants';
+import { useInterval } from '../hooks/useInterval';
 
 const imageURL =
   'https://storage.googleapis.com/ethglobal-api-production/projects%2F0wa8j%2Fimages%2FToronto_in_COVID-19_times_by_tour_boat.png';
-const HackathonProjects = ({ hackathonId, phase, counter, setCounter }: any) => {
+const HackathonProjects = ({ hackathonId, phase }: any) => {
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => {
     setModalOpen(true);
@@ -21,14 +22,13 @@ const HackathonProjects = ({ hackathonId, phase, counter, setCounter }: any) => 
   } = useMUD();
 
   const [hackathonSubmitters, setHackathonSubmitters] = useState([]);
-  useEffect(() => {
+  useInterval(() => {
     (async () => {
       const hackathonPrize = await worldContract.getHackathonPrize(hackathonId);
-      //TODO: To be fixed
       setHackathonSubmitters(hackathonPrize?.submitters);
     })();
-  }, []);
-  console.log(hackathonSubmitters);
+  }, 5000);
+
   return (
     <>
       {phase === PHASE.HACKING ? (
@@ -49,12 +49,7 @@ const HackathonProjects = ({ hackathonId, phase, counter, setCounter }: any) => 
       )}
 
       <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-        <HackathonSubmit
-          onClose={closeModal}
-          hackathonId={hackathonId}
-          counter={counter}
-          setCounter={setCounter}
-        />
+        <HackathonSubmit onClose={closeModal} hackathonId={hackathonId} />
       </FullScreenModal>
 
       <div className="flex flex-wrap justify-center mb-40">

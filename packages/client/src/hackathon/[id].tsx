@@ -17,7 +17,6 @@ export const HackathonPage = () => {
   const bigNum = ethers.BigNumber.from(id);
   const paddedHexStr = '0x' + bigNum.toHexString().slice(2).padStart(64, '0');
 
-  const [counter, setCounter] = useState(0); //only used for re-rendering HackathonSubmit
   const [activeTab, setActiveTab] = useState(1);
   const [name, setName] = useState('');
   const [uri, setUri] = useState('');
@@ -50,7 +49,7 @@ export const HackathonPage = () => {
       setWithdrawalPeriod(hackathon.withdrawalPeriod.toNumber());
       setProductId(paddedHexStr);
     })();
-  }, [counter]);
+  }, []);
 
   const OverviewTabContent: React.FC = () => {
     return <HackathonOverview uri={uri} name={name} owner={owner} hackathonId={productId} />;
@@ -67,14 +66,7 @@ export const HackathonPage = () => {
   };
 
   const ProjectsTabContent: React.FC = () => {
-    return (
-      <HackathonProjects
-        hackathonId={paddedHexStr}
-        phase={phase}
-        counter={counter}
-        setCounter={setCounter}
-      />
-    );
+    return <HackathonProjects hackathonId={paddedHexStr} phase={phase} />;
   };
 
   let activeTabContent;

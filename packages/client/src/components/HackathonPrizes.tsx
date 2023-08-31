@@ -5,6 +5,7 @@ import DepositModal from './DepositModal';
 import { PRIZE_TOKEN } from '../constants/constants';
 import { BigNumber, ethers } from 'ethers';
 import { getPrizeTokenSymbol, bigNumberToNumber } from '../utils/common';
+import { useInterval } from '../hooks/useInterval';
 
 interface HackathonPrizesProps {
   hackathonId: string;
@@ -18,12 +19,13 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
   } = useMUD();
 
   const [deposit, setDeposit] = useState(BigNumber.from(0));
-  useEffect(() => {
+
+  useInterval(() => {
     (async () => {
       const hackathonPrize = await worldContract.getHackathonPrize(hackathonId);
       setDeposit(hackathonPrize?.deposit ? hackathonPrize.deposit : BigNumber.from(0));
     })();
-  }, []);
+  }, 5000);
 
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => {

@@ -5,6 +5,7 @@ import { utils, Contract, BigNumber } from 'ethers';
 import { getPrizeTokenSymbol, numberToBigNumber } from '../utils/common';
 import { erc20abi } from '../constants/erc20abi';
 import { worldAbi } from '../constants/worldAbi';
+import { useInterval } from '../hooks/useInterval';
 
 interface DepositProps {
   hackathonId: string;
@@ -23,24 +24,17 @@ const DepositModal = ({ hackathonId, prizeToken, setError, setSuccess }: Deposit
   const prizeTokenSymbol = getPrizeTokenSymbol(prizeToken, chainId);
 
   //Timer
-  useEffect(() => {
-    if (prizeTokenSymbol === 'ETH') return;
-    const fetchData = async () => {
+  useInterval(() => {
+    (async () => {
+      if (prizeTokenSymbol === 'ETH') return;
       const myAddress = await signerOrProvider.getAddress();
       console.log('myAddress', myAddress);
       const prizeTokenERC20 = new Contract(prizeToken, erc20abi, signerOrProvider);
       const _allowance = await prizeTokenERC20.allowance(myAddress, worldContract.address);
       console.log('allowance', _allowance.toNumber());
       setAllowance(_allowance.toNumber());
-    };
-
-    // Fetch data initially and every 5 seconds
-    fetchData();
-    const interval = setInterval(fetchData, 5000);
-
-    // Clean up the interval to avoid memory leaks
-    return () => clearInterval(interval);
-  }, []);
+    })();
+  }, 5000);
 
   return (
     <div className="p-6">

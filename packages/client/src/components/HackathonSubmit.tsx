@@ -10,16 +10,9 @@ const imageURL =
 type HackathonSubmitProps = {
   onClose: () => void;
   hackathonId: string;
-  counter: number;
-  setCounter: (counter: number) => void;
 };
 
-const HackathonSubmit: FC<HackathonSubmitProps> = ({
-  onClose,
-  hackathonId,
-  counter,
-  setCounter,
-}) => {
+const HackathonSubmit: FC<HackathonSubmitProps> = ({ onClose, hackathonId }) => {
   //TODO 自分のSubmit情報取得
   const [name, setName] = useState('Your Project');
   const [description, setDescription] = useState('Short description');
@@ -186,7 +179,6 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({
             event.preventDefault();
             try {
               await submit(hackathonId, name, description, uri, imageUri);
-              setCounter(counter + 1);
               setShowSuccess(true);
               onClose();
             } catch (error) {
