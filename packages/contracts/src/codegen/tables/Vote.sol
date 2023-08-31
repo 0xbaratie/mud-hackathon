@@ -22,7 +22,7 @@ bytes32 constant VoteTableId = _tableId;
 
 struct VoteData {
   uint256 count;
-  bool voted;
+  bool aggregated;
 }
 
 library Vote {
@@ -47,7 +47,7 @@ library Vote {
   function getMetadata() internal pure returns (string memory, string[] memory) {
     string[] memory _fieldNames = new string[](2);
     _fieldNames[0] = "count";
-    _fieldNames[1] = "voted";
+    _fieldNames[1] = "aggregated";
     return ("Vote", _fieldNames);
   }
 
@@ -111,8 +111,8 @@ library Vote {
     _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((count)));
   }
 
-  /** Get voted */
-  function getVoted(bytes32 hackathonId, address voter) internal view returns (bool voted) {
+  /** Get aggregated */
+  function getAggregated(bytes32 hackathonId, address voter) internal view returns (bool aggregated) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
     _keyTuple[1] = bytes32(uint256(uint160(voter)));
@@ -121,8 +121,8 @@ library Vote {
     return (_toBool(uint8(Bytes.slice1(_blob, 0))));
   }
 
-  /** Get voted (using the specified store) */
-  function getVoted(IStore _store, bytes32 hackathonId, address voter) internal view returns (bool voted) {
+  /** Get aggregated (using the specified store) */
+  function getAggregated(IStore _store, bytes32 hackathonId, address voter) internal view returns (bool aggregated) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
     _keyTuple[1] = bytes32(uint256(uint160(voter)));
@@ -131,22 +131,22 @@ library Vote {
     return (_toBool(uint8(Bytes.slice1(_blob, 0))));
   }
 
-  /** Set voted */
-  function setVoted(bytes32 hackathonId, address voter, bool voted) internal {
+  /** Set aggregated */
+  function setAggregated(bytes32 hackathonId, address voter, bool aggregated) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
     _keyTuple[1] = bytes32(uint256(uint160(voter)));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((voted)));
+    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((aggregated)));
   }
 
-  /** Set voted (using the specified store) */
-  function setVoted(IStore _store, bytes32 hackathonId, address voter, bool voted) internal {
+  /** Set aggregated (using the specified store) */
+  function setAggregated(IStore _store, bytes32 hackathonId, address voter, bool aggregated) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
     _keyTuple[1] = bytes32(uint256(uint160(voter)));
 
-    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((voted)));
+    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((aggregated)));
   }
 
   /** Get the full data */
@@ -170,8 +170,8 @@ library Vote {
   }
 
   /** Set the full data using individual values */
-  function set(bytes32 hackathonId, address voter, uint256 count, bool voted) internal {
-    bytes memory _data = encode(count, voted);
+  function set(bytes32 hackathonId, address voter, uint256 count, bool aggregated) internal {
+    bytes memory _data = encode(count, aggregated);
 
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
@@ -181,8 +181,8 @@ library Vote {
   }
 
   /** Set the full data using individual values (using the specified store) */
-  function set(IStore _store, bytes32 hackathonId, address voter, uint256 count, bool voted) internal {
-    bytes memory _data = encode(count, voted);
+  function set(IStore _store, bytes32 hackathonId, address voter, uint256 count, bool aggregated) internal {
+    bytes memory _data = encode(count, aggregated);
 
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = hackathonId;
@@ -193,24 +193,24 @@ library Vote {
 
   /** Set the full data using the data struct */
   function set(bytes32 hackathonId, address voter, VoteData memory _table) internal {
-    set(hackathonId, voter, _table.count, _table.voted);
+    set(hackathonId, voter, _table.count, _table.aggregated);
   }
 
   /** Set the full data using the data struct (using the specified store) */
   function set(IStore _store, bytes32 hackathonId, address voter, VoteData memory _table) internal {
-    set(_store, hackathonId, voter, _table.count, _table.voted);
+    set(_store, hackathonId, voter, _table.count, _table.aggregated);
   }
 
   /** Decode the tightly packed blob using this table's schema */
   function decode(bytes memory _blob) internal pure returns (VoteData memory _table) {
     _table.count = (uint256(Bytes.slice32(_blob, 0)));
 
-    _table.voted = (_toBool(uint8(Bytes.slice1(_blob, 32))));
+    _table.aggregated = (_toBool(uint8(Bytes.slice1(_blob, 32))));
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(uint256 count, bool voted) internal view returns (bytes memory) {
-    return abi.encodePacked(count, voted);
+  function encode(uint256 count, bool aggregated) internal view returns (bytes memory) {
+    return abi.encodePacked(count, aggregated);
   }
 
   /** Encode keys as a bytes32 array using this table's schema */
