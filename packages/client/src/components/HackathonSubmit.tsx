@@ -1,5 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
-import Upload from '../../public/upload.svg';
+import { FC, useState, useEffect } from 'react';
 import { useMUD } from '../MUDContext';
 import { Transition } from '@headlessui/react';
 import { ToastSuccess } from './ToastSuccess';

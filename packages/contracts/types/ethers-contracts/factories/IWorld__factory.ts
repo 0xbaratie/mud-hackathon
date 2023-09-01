@@ -423,6 +423,19 @@ const _abi = [
     inputs: [
       {
         internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+    ],
+    name: "deleteHackathonByAdmin",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
         name: "table",
         type: "bytes32",
       },

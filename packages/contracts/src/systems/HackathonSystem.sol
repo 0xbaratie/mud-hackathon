@@ -9,8 +9,6 @@ import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/Saf
 contract HackathonSystem is System {
   using SafeERC20 for IERC20;
 
-  address public owner;
-
   modifier onlyOwner(bytes32 _hackathonId) {
     require(Hackathon.get(_hackathonId).owner == _msgSender(), "Only owner can call this function.");
     _;

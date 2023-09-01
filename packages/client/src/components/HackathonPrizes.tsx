@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useMUD } from '../MUDContext';
 import FullScreenModal from './FullScreenModal';
-import DepositModal from './DepositModal';
+import HackathonPrizeModal from './HackathonPrizeModal';
 import { PRIZE_TOKEN } from '../constants/constants';
 import { BigNumber, ethers } from 'ethers';
 import { getPrizeTokenSymbol, bigNumberToNumber } from '../utils/common';
@@ -52,12 +52,7 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
   return (
     <div className="mr-10">
       <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-        <DepositModal
-          hackathonId={hackathonId}
-          prizeToken={prizeToken}
-          setError={setError}
-          setSuccess={setSuccess}
-        />
+        <HackathonPrizeModal hackathonId={hackathonId} prizeToken={prizeToken} />
       </FullScreenModal>
       <div className="flex justify-between items-center ">
         <h2 className="text-2xl font-bold">Prizes</h2>
