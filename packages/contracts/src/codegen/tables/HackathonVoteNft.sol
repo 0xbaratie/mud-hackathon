@@ -23,14 +23,16 @@ bytes32 constant HackathonVoteNftTableId = _tableId;
 struct HackathonVoteNftData {
   address voteNft;
   uint64 voteNftSnapshot;
+  address[] specialVoters;
 }
 
 library HackathonVoteNft {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](2);
+    SchemaType[] memory _schema = new SchemaType[](3);
     _schema[0] = SchemaType.ADDRESS;
     _schema[1] = SchemaType.UINT64;
+    _schema[2] = SchemaType.ADDRESS_ARRAY;
 
     return SchemaLib.encode(_schema);
   }
@@ -44,9 +46,10 @@ library HackathonVoteNft {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](2);
+    string[] memory _fieldNames = new string[](3);
     _fieldNames[0] = "voteNft";
     _fieldNames[1] = "voteNftSnapshot";
+    _fieldNames[2] = "specialVoters";
     return ("HackathonVoteNft", _fieldNames);
   }
 
@@ -140,6 +143,124 @@ library HackathonVoteNft {
     _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((voteNftSnapshot)));
   }
 
+  /** Get specialVoters */
+  function getSpecialVoters(bytes32 key) internal view returns (address[] memory specialVoters) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
+    return (SliceLib.getSubslice(_blob, 0, _blob.length).decodeArray_address());
+  }
+
+  /** Get specialVoters (using the specified store) */
+  function getSpecialVoters(IStore _store, bytes32 key) internal view returns (address[] memory specialVoters) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
+    return (SliceLib.getSubslice(_blob, 0, _blob.length).decodeArray_address());
+  }
+
+  /** Set specialVoters */
+  function setSpecialVoters(bytes32 key, address[] memory specialVoters) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    StoreSwitch.setField(_tableId, _keyTuple, 2, EncodeArray.encode((specialVoters)));
+  }
+
+  /** Set specialVoters (using the specified store) */
+  function setSpecialVoters(IStore _store, bytes32 key, address[] memory specialVoters) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    _store.setField(_tableId, _keyTuple, 2, EncodeArray.encode((specialVoters)));
+  }
+
+  /** Get the length of specialVoters */
+  function lengthSpecialVoters(bytes32 key) internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 2, getSchema());
+    return _byteLength / 20;
+  }
+
+  /** Get the length of specialVoters (using the specified store) */
+  function lengthSpecialVoters(IStore _store, bytes32 key) internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 2, getSchema());
+    return _byteLength / 20;
+  }
+
+  /** Get an item of specialVoters (unchecked, returns invalid data if index overflows) */
+  function getItemSpecialVoters(bytes32 key, uint256 _index) internal view returns (address) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes memory _blob = StoreSwitch.getFieldSlice(_tableId, _keyTuple, 2, getSchema(), _index * 20, (_index + 1) * 20);
+    return (address(Bytes.slice20(_blob, 0)));
+  }
+
+  /** Get an item of specialVoters (using the specified store) (unchecked, returns invalid data if index overflows) */
+  function getItemSpecialVoters(IStore _store, bytes32 key, uint256 _index) internal view returns (address) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 2, getSchema(), _index * 20, (_index + 1) * 20);
+    return (address(Bytes.slice20(_blob, 0)));
+  }
+
+  /** Push an element to specialVoters */
+  function pushSpecialVoters(bytes32 key, address _element) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    StoreSwitch.pushToField(_tableId, _keyTuple, 2, abi.encodePacked((_element)));
+  }
+
+  /** Push an element to specialVoters (using the specified store) */
+  function pushSpecialVoters(IStore _store, bytes32 key, address _element) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    _store.pushToField(_tableId, _keyTuple, 2, abi.encodePacked((_element)));
+  }
+
+  /** Pop an element from specialVoters */
+  function popSpecialVoters(bytes32 key) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    StoreSwitch.popFromField(_tableId, _keyTuple, 2, 20);
+  }
+
+  /** Pop an element from specialVoters (using the specified store) */
+  function popSpecialVoters(IStore _store, bytes32 key) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    _store.popFromField(_tableId, _keyTuple, 2, 20);
+  }
+
+  /** Update an element of specialVoters at `_index` */
+  function updateSpecialVoters(bytes32 key, uint256 _index, address _element) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    StoreSwitch.updateInField(_tableId, _keyTuple, 2, _index * 20, abi.encodePacked((_element)));
+  }
+
+  /** Update an element of specialVoters (using the specified store) at `_index` */
+  function updateSpecialVoters(IStore _store, bytes32 key, uint256 _index, address _element) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    _store.updateInField(_tableId, _keyTuple, 2, _index * 20, abi.encodePacked((_element)));
+  }
+
   /** Get the full data */
   function get(bytes32 key) internal view returns (HackathonVoteNftData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
@@ -159,8 +280,8 @@ library HackathonVoteNft {
   }
 
   /** Set the full data using individual values */
-  function set(bytes32 key, address voteNft, uint64 voteNftSnapshot) internal {
-    bytes memory _data = encode(voteNft, voteNftSnapshot);
+  function set(bytes32 key, address voteNft, uint64 voteNftSnapshot, address[] memory specialVoters) internal {
+    bytes memory _data = encode(voteNft, voteNftSnapshot, specialVoters);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -169,8 +290,14 @@ library HackathonVoteNft {
   }
 
   /** Set the full data using individual values (using the specified store) */
-  function set(IStore _store, bytes32 key, address voteNft, uint64 voteNftSnapshot) internal {
-    bytes memory _data = encode(voteNft, voteNftSnapshot);
+  function set(
+    IStore _store,
+    bytes32 key,
+    address voteNft,
+    uint64 voteNftSnapshot,
+    address[] memory specialVoters
+  ) internal {
+    bytes memory _data = encode(voteNft, voteNftSnapshot, specialVoters);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -180,24 +307,46 @@ library HackathonVoteNft {
 
   /** Set the full data using the data struct */
   function set(bytes32 key, HackathonVoteNftData memory _table) internal {
-    set(key, _table.voteNft, _table.voteNftSnapshot);
+    set(key, _table.voteNft, _table.voteNftSnapshot, _table.specialVoters);
   }
 
   /** Set the full data using the data struct (using the specified store) */
   function set(IStore _store, bytes32 key, HackathonVoteNftData memory _table) internal {
-    set(_store, key, _table.voteNft, _table.voteNftSnapshot);
+    set(_store, key, _table.voteNft, _table.voteNftSnapshot, _table.specialVoters);
   }
 
   /** Decode the tightly packed blob using this table's schema */
-  function decode(bytes memory _blob) internal pure returns (HackathonVoteNftData memory _table) {
+  function decode(bytes memory _blob) internal view returns (HackathonVoteNftData memory _table) {
+    // 28 is the total byte length of static data
+    PackedCounter _encodedLengths = PackedCounter.wrap(Bytes.slice32(_blob, 28));
+
     _table.voteNft = (address(Bytes.slice20(_blob, 0)));
 
     _table.voteNftSnapshot = (uint64(Bytes.slice8(_blob, 20)));
+
+    // Store trims the blob if dynamic fields are all empty
+    if (_blob.length > 28) {
+      uint256 _start;
+      // skip static data length + dynamic lengths word
+      uint256 _end = 60;
+
+      _start = _end;
+      _end += _encodedLengths.atIndex(0);
+      _table.specialVoters = (SliceLib.getSubslice(_blob, _start, _end).decodeArray_address());
+    }
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(address voteNft, uint64 voteNftSnapshot) internal view returns (bytes memory) {
-    return abi.encodePacked(voteNft, voteNftSnapshot);
+  function encode(
+    address voteNft,
+    uint64 voteNftSnapshot,
+    address[] memory specialVoters
+  ) internal view returns (bytes memory) {
+    uint40[] memory _counters = new uint40[](1);
+    _counters[0] = uint40(specialVoters.length * 20);
+    PackedCounter _encodedLengths = PackedCounterLib.pack(_counters);
+
+    return abi.encodePacked(voteNft, voteNftSnapshot, _encodedLengths.unwrap(), EncodeArray.encode((specialVoters)));
   }
 
   /** Encode keys as a bytes32 array using this table's schema */

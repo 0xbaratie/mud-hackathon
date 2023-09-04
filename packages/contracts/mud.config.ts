@@ -42,6 +42,7 @@ export default mudConfig({
       schema: {
         voteNft: "address",
         voteNftSnapshot: "uint64",
+        specialVoters: "address[]",
       },
     },
     Submission: {

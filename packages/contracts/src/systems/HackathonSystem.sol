@@ -9,6 +9,9 @@ import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/Saf
 contract HackathonSystem is System {
   using SafeERC20 for IERC20;
 
+  address public owner;
+  address[] specialVoters;
+
   modifier onlyOwner(bytes32 _hackathonId) {
     require(Hackathon.get(_hackathonId).owner == _msgSender(), "Only owner can call this function.");
     _;
@@ -47,7 +50,7 @@ contract HackathonSystem is System {
       _imageUri
     ));
     HackathonVoteNft.set(_hackathonId,
-      HackathonVoteNftData(_voteNft,_voteNftSnapshot)
+      HackathonVoteNftData(_voteNft,_voteNftSnapshot, specialVoters)
     );
     HackathonPrize.set(_hackathonId,
       HackathonPrizeData( 0, new address[](0))
@@ -89,7 +92,7 @@ contract HackathonSystem is System {
     Hackathon.set(_hackathonId,_newHackathonData);
 
     HackathonVoteNft.set(_hackathonId,
-      HackathonVoteNftData(_voteNft,_voteNftSnapshot)
+      HackathonVoteNftData(_voteNft,_voteNftSnapshot, specialVoters)
     );
   }
 
@@ -103,7 +106,7 @@ contract HackathonSystem is System {
 
   }
 
-  function proceedPhase(bytes32 _hackathonId) public {
+  function proceedPhase(bytes32 _hackathonId) public onlyOwner(_hackathonId) {
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
 
     if(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE)){
