@@ -24,8 +24,7 @@ contract SubmissionSystem is System {
   uint32 public chainId = 1;
   uint64 public snapshotBlock;
   IL2VotingOnChainRequest public l2VotingOnChainRequest;
-  address public owner;
-
+  
   modifier onlyOwner(bytes32 _hackathonId) {
     require(Hackathon.get(_hackathonId).owner == _msgSender(), "Only owner can call this function.");
     _;
