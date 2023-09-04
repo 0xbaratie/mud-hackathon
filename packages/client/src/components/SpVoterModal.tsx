@@ -3,12 +3,13 @@ import { useMUD } from '../MUDContext';
 import { useState } from 'react';
 
 interface SpVoterProps {
+  onClose: () => void;
   hackathonId: string;
   setError: (error: string | null) => void;
   setSuccess: (success: string | null) => void;
 }
 
-const SpVoterModal = ({ hackathonId, setError, setSuccess }: SpVoterProps) => {
+const SpVoterModal = ({ onClose, hackathonId, setError, setSuccess }: SpVoterProps) => {
   const {
     systemCalls: { addSpecialVoter },
   } = useMUD();
@@ -41,14 +42,14 @@ const SpVoterModal = ({ hackathonId, setError, setSuccess }: SpVoterProps) => {
               className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2  bg-[#333333] text-white rounded-lg"
               onClick={async (event) => {
                 event.preventDefault();
-                
                 try {
                   await addSpecialVoter(hackathonId, voteNft, amount);
-                  setSuccess('Your hackathon has been created!.');
+                  setSuccess('The special voter has been added');
                 } catch (error) {
                   console.error(error);
-                  setError('An error occurred while creating the hackathon.');
+                  setError('An error occurred while adding a special voter');
                 }
+                onClose();
               }}
             >
               Add Voter
