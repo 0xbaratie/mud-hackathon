@@ -54,6 +54,8 @@ contract HackathonSystem is System {
     HackathonPrize.set(_hackathonId,
       HackathonPrizeData( 0, new address[](0))
     );
+    // To avoid voting for any project
+    Submission.setName(_hackathonId, address(0x0000000000000000000000000000000000000000), "Vote None");
   }
   
   function updateHackathon(

@@ -18,7 +18,7 @@ contract SubmissionSystem is System {
   event Voted(address indexed holder);
 
   address public constant ETH_ADDRESS = 0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000;
-  address public ERC721_L1_BALANCE_CHECK = 0xEe53229C1Ec56798963B703fD79CF409DF310858;
+  address public constant ERC721_L1_BALANCE_CHECK = 0xEe53229C1Ec56798963B703fD79CF409DF310858;
   address public voteToken;
   address public addressERC721;
   uint32 public chainId = 1;
@@ -74,8 +74,11 @@ contract SubmissionSystem is System {
       // l2VotingOnChainRequest.testPlus();
       Vote.set(_hackathonId, address(_msgSender()), nftBalance, true);
     }
-
+    
+    // TODO: The condition is being changed for debugging purposes. Need to replace with commented out one later. 
+    // require(_voteData.count > voteCount[_hackathonId][address(_msgSender())], "Your voting numbers had already exceed.");
     require(_voteData.count >= voteCount[_hackathonId][address(_msgSender())], "Your voting numbers had already exceed.");
+    
 
     // validate submission
     SubmissionData memory _submissionData = Submission.get(_hackathonId, _submitter);

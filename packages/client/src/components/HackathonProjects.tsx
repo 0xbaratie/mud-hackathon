@@ -6,6 +6,7 @@ import FullScreenModal from './FullScreenModal';
 import HackathonSubmit from './HackathonSubmit';
 import { PHASE } from '../constants/constants';
 import { useInterval } from '../hooks/useInterval';
+import VoteNone from './VoteNone';
 
 const imageURL =
   'https://storage.googleapis.com/ethglobal-api-production/projects%2F0wa8j%2Fimages%2FToronto_in_COVID-19_times_by_tour_boat.png';
@@ -58,7 +59,9 @@ const HackathonProjects = ({ hackathonId, phase }: any) => {
             <div key={submitter} className="w-full sm:w-1/1 md:w-1/2 lg:w-1/3 p-2">
               <HackathonProjectCard hackathonId={hackathonId} submitter={submitter} phase={phase} />
             </div>
-          ))}
+          ))
+        }
+        <VoteNone hackathonId={hackathonId} phase={phase} />
       </div>
     </>
   );
