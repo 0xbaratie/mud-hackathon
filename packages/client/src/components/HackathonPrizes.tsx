@@ -50,16 +50,34 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [specialVoters, setSpecialVoters] = useState<number[]>([]);
+  const [specialVotersAddress, setSpecialVotersAddress] = useState<string[]>([]);
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       setError(null);
       setSuccess(null);
     }, 10000);
-
+    
     return () => {
       clearTimeout(timer);
     };
   }, [error, success]);
+
+  useEffect(() => {
+    (async () => {
+      const fetchedSpecialVoters: number[] = [];
+      const hackathonVoteNft = await worldContract.getHackathonVoteNft(hackathonId);
+      setSpecialVotersAddress(hackathonVoteNft.specialVoters);
+      for (const voteAddress of hackathonVoteNft.specialVoters) {
+        const vote = await worldContract.getVote(hackathonId, voteAddress)
+        fetchedSpecialVoters.push(parseInt(vote.count)); 
+      }
+      setSpecialVoters(fetchedSpecialVoters); 
+    })();
+
+    console.log("@@@specialVoters=", specialVoters);
+  }, []);
 
   return (
     <>
@@ -100,29 +118,6 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
           {getPrizeTokenSymbol(prizeToken, chainId)} will be distributed to the top {winnerCount}{' '}
           winners.
         </p>
-        {/* <h2 className="text-2xl font-bold mt-8">Deposit history</h2>
-        <div className="grid grid-cols-4 p-4 rounded-md shadow-md">
-          <div className="col-span-1 border-b font-bold pb-2">Account</div>
-          <div className="col-span-1 border-b font-bold pb-2">To</div>
-          <div className="col-span-1 border-b font-bold pb-2">Token Amount</div>
-          <div className="col-span-1 border-b font-bold pb-2">Time</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 5</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 6</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 7</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 8</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 9</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 10</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 11</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 12</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 13</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 14</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 15</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 16</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 17</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 18</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 19</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 20</div>
-        </div> */}
 
         <div className="flex justify-between items-center mt-8">
           <h2 className="text-2xl font-bold">Voters</h2>
@@ -136,14 +131,24 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
         <p className={"mt-2"}>
             The hack owner can add people who are not entitled to vote when in Deposit prize status only.
         </p>
-        {/* <div className="grid grid-cols-2 p-4 rounded-md shadow-md mt-4 mb-12">
+        <div className="grid grid-cols-2 p-4 rounded-md shadow-md mt-4 mb-12">
           <div className="col-span-1 border-b font-bold pb-2">Account</div>
           <div className="col-span-1 border-b font-bold pb-2">Sum</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 5</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">1</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 7</div>
-          <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">3</div>
-        </div> */}
+
+          {specialVoters &&
+            specialVoters.map((vote, index) => [
+              <div key={`voter-${index}`} className="col-span-1 border-b pb-2 pt-2 text-gray-500">
+                {`${specialVotersAddress[index].slice(0, 5)}...${specialVotersAddress[index].slice(-5)}`}
+              </div>,
+              <div key={`count-${index}`} className="col-span-1 border-b pb-2 pt-2 text-gray-500">
+                {vote}
+              </div>,
+            ])
+          }
+        
+        </div>
+        
+
       </div>
     </>
     

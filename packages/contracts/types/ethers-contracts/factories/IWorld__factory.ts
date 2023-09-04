@@ -770,6 +770,42 @@ const _abi = [
     inputs: [
       {
         internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+    ],
+    name: "getHackathonVoteNft",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "voteNft",
+            type: "address",
+          },
+          {
+            internalType: "uint64",
+            name: "voteNftSnapshot",
+            type: "uint64",
+          },
+          {
+            internalType: "address[]",
+            name: "specialVoters",
+            type: "address[]",
+          },
+        ],
+        internalType: "struct HackathonVoteNftData",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
         name: "table",
         type: "bytes32",
       },

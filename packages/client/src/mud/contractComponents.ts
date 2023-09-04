@@ -83,6 +83,7 @@ export function defineContractComponents(world: World) {
         {
           voteNft: RecsType.String,
           voteNftSnapshot: RecsType.BigInt,
+          specialVoters: RecsType.StringArray,
         },
         {
           metadata: {

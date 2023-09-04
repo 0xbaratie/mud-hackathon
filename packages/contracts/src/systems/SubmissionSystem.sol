@@ -98,6 +98,8 @@ contract SubmissionSystem is System {
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
     require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
     Vote.set(_hackathonId, _voter, voteSum, true);
+    // Needed to list by hackathon
+    HackathonVoteNft.pushSpecialVoters(_hackathonId, _voter);  
   }
 
 

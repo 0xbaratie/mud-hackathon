@@ -10,6 +10,7 @@ contract HackathonSystem is System {
   using SafeERC20 for IERC20;
 
   address public owner;
+  address[] specialVoters;
 
   modifier onlyOwner(bytes32 _hackathonId) {
     require(Hackathon.get(_hackathonId).owner == _msgSender(), "Only owner can call this function.");
@@ -49,7 +50,7 @@ contract HackathonSystem is System {
       _imageUri
     ));
     HackathonVoteNft.set(_hackathonId,
-      HackathonVoteNftData(_voteNft,_voteNftSnapshot)
+      HackathonVoteNftData(_voteNft,_voteNftSnapshot, specialVoters)
     );
     HackathonPrize.set(_hackathonId,
       HackathonPrizeData( 0, new address[](0))
@@ -91,7 +92,7 @@ contract HackathonSystem is System {
     Hackathon.set(_hackathonId,_newHackathonData);
 
     HackathonVoteNft.set(_hackathonId,
-      HackathonVoteNftData(_voteNft,_voteNftSnapshot)
+      HackathonVoteNftData(_voteNft,_voteNftSnapshot, specialVoters)
     );
   }
 
