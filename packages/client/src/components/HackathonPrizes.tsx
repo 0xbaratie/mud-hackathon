@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useMUD } from '../MUDContext';
 import FullScreenModal from './FullScreenModal';
-import DepositModal from './DepositModal';
 import SpVoterModal from './SpVoterModal';
+import HackathonPrizeModal from './HackathonPrizeModal';
+
 import { PRIZE_TOKEN } from '../constants/constants';
 import { BigNumber, ethers } from 'ethers';
 import { getPrizeTokenSymbol, bigNumberToNumber } from '../utils/common';
@@ -85,21 +86,16 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
       {success && <ToastSuccess message={success} />}
       <div className="mr-10">
         <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-          <DepositModal
-            hackathonId={hackathonId}
-            prizeToken={prizeToken}
-            setError={setError}
-            setSuccess={setSuccess}
-          />
+          <HackathonPrizeModal hackathonId={hackathonId} prizeToken={prizeToken} />
         </FullScreenModal>
         <FullScreenModal isOpen={modalSpVoter} onClose={closeModalSpVoter}>
-          <SpVoterModal
-            onClose={closeModalSpVoter}
-            hackathonId={hackathonId}
-            setError={setError}
-            setSuccess={setSuccess}
-          />
-        </FullScreenModal>
+            <SpVoterModal
+              onClose={closeModalSpVoter}
+              hackathonId={hackathonId}
+              setError={setError}
+              setSuccess={setSuccess}
+            />
+          </FullScreenModal>
         <div className="flex justify-between items-center ">
           <h2 className="text-2xl font-bold">Prizes</h2>
           <a onClick={openModal}>
@@ -108,17 +104,7 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
             </button>
           </a>
         </div>
-
-        <p>
-          {getPrizeTokenSymbol(prizeToken, chainId) === 'ETH' ? (
-            <span>{deposit ? bigNumberToNumber(deposit, 18) : 0}</span>
-          ) : (
-            <span>{deposit ? bigNumberToNumber(deposit, 6) : 0}</span>
-          )}{' '}
-          {getPrizeTokenSymbol(prizeToken, chainId)} will be distributed to the top {winnerCount}{' '}
-          winners.
-        </p>
-
+        
         <div className="flex justify-between items-center mt-8">
           <h2 className="text-2xl font-bold">Voters</h2>
           <a onClick={openModalSpVoter}>

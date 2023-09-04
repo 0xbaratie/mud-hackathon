@@ -6,19 +6,20 @@ import { getPrizeTokenSymbol, numberToBigNumber } from '../utils/common';
 import { erc20abi } from '../constants/erc20abi';
 import { worldAbi } from '../constants/worldAbi';
 import { useInterval } from '../hooks/useInterval';
+import { useToast } from '../hooks/useToast';
+import { Toast } from './Toast';
 
-interface DepositProps {
+interface HackathonPrizeMocalProps {
   hackathonId: string;
   prizeToken: string;
-  setError: (error: string | null) => void;
-  setSuccess: (success: string | null) => void;
 }
 
-const DepositModal = ({ hackathonId, prizeToken, setError, setSuccess }: DepositProps) => {
+const HackathonPrizeModal = ({ hackathonId, prizeToken }: HackathonPrizeMocalProps) => {
   const {
-    systemCalls: { depositPrize, depositPrizeEth },
+    systemCalls: { depositPrize },
     network: { worldContract, signerOrProvider, chainId },
   } = useMUD();
+  const { showToast, toastType } = useToast();
   const [amount, setAmount] = useState(0);
   const [allowance, setAllowance] = useState(BigNumber.from('0'));
   const prizeTokenSymbol = getPrizeTokenSymbol(prizeToken, chainId);
@@ -38,6 +39,7 @@ const DepositModal = ({ hackathonId, prizeToken, setError, setSuccess }: Deposit
 
   return (
     <div className="p-6">
+      <Toast toastType={toastType} />
       <p className="font-bold text-sm">Deposit {prizeTokenSymbol}</p>
       <div className="mt-4 w-full">
         <input
@@ -54,10 +56,16 @@ const DepositModal = ({ hackathonId, prizeToken, setError, setSuccess }: Deposit
               className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2  bg-[#333333] text-white rounded-lg"
               onClick={async (event) => {
                 event.preventDefault();
-                const world = new Contract(worldContract.address, worldAbi, signerOrProvider);
-                await world.depositPrizeEth(hackathonId, numberToBigNumber(amount, 18), {
-                  value: numberToBigNumber(amount, 18),
-                });
+                try {
+                  const world = new Contract(worldContract.address, worldAbi, signerOrProvider);
+                  await world.depositPrizeEth(hackathonId, numberToBigNumber(amount, 18), {
+                    value: numberToBigNumber(amount, 18),
+                  });
+                  showToast('success');
+                } catch (error) {
+                  console.error(error);
+                  showToast('error');
+                }
               }}
             >
               Deposit
@@ -71,11 +79,17 @@ const DepositModal = ({ hackathonId, prizeToken, setError, setSuccess }: Deposit
                   className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2  bg-[#333333] text-white rounded-lg"
                   onClick={async (event) => {
                     event.preventDefault();
-                    const prizeTokenERC20 = new Contract(prizeToken, erc20abi, signerOrProvider);
-                    await prizeTokenERC20.approve(
-                      worldContract.address,
-                      numberToBigNumber(amount, 6),
-                    );
+                    try {
+                      const prizeTokenERC20 = new Contract(prizeToken, erc20abi, signerOrProvider);
+                      await prizeTokenERC20.approve(
+                        worldContract.address,
+                        numberToBigNumber(amount, 6),
+                      );
+                      showToast('success');
+                    } catch (error) {
+                      console.error(error);
+                      showToast('error');
+                    }
                   }}
                 >
                   Approve
@@ -95,8 +109,13 @@ const DepositModal = ({ hackathonId, prizeToken, setError, setSuccess }: Deposit
                   className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2  bg-[#333333] text-white rounded-lg"
                   onClick={async (event) => {
                     event.preventDefault();
-                    //TODO decimal if USDC or DAI
-                    await depositPrize(hackathonId, numberToBigNumber(amount, 6));
+                    try {
+                      await depositPrize(hackathonId, numberToBigNumber(amount, 6));
+                      showToast('success');
+                    } catch (error) {
+                      console.error(error);
+                      showToast('error');
+                    }
                   }}
                 >
                   Deposit
@@ -117,4 +136,4 @@ const DepositModal = ({ hackathonId, prizeToken, setError, setSuccess }: Deposit
   );
 };
 
-export default DepositModal;
+export default HackathonPrizeModal;

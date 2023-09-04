@@ -131,12 +131,14 @@ export interface IWorldInterface extends utils.Interface {
     "call(bytes16,bytes16,bytes)": FunctionFragment;
     "createHackathon(address,uint256,uint256,uint256,uint256,uint8,string,string,string,address,uint64)": FunctionFragment;
     "deleteHackathon(bytes32)": FunctionFragment;
+    "deleteHackathonByAdmin(bytes32)": FunctionFragment;
     "deleteRecord(bytes32,bytes32[])": FunctionFragment;
     "deleteRecord(bytes16,bytes16,bytes32[])": FunctionFragment;
     "depositPrize(bytes32,uint256)": FunctionFragment;
     "depositPrizeEth(bytes32,uint256)": FunctionFragment;
     "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)": FunctionFragment;
     "emitEphemeralRecord(bytes32,bytes32[],bytes)": FunctionFragment;
+    "getAdministrator()": FunctionFragment;
     "getField(bytes32,bytes32[],uint8)": FunctionFragment;
     "getFieldLength(bytes32,bytes32[],uint8,bytes32)": FunctionFragment;
     "getFieldSlice(bytes32,bytes32[],uint8,bytes32,uint256,uint256)": FunctionFragment;
@@ -193,12 +195,14 @@ export interface IWorldInterface extends utils.Interface {
       | "call"
       | "createHackathon"
       | "deleteHackathon"
+      | "deleteHackathonByAdmin"
       | "deleteRecord(bytes32,bytes32[])"
       | "deleteRecord(bytes16,bytes16,bytes32[])"
       | "depositPrize"
       | "depositPrizeEth"
       | "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)"
       | "emitEphemeralRecord(bytes32,bytes32[],bytes)"
+      | "getAdministrator"
       | "getField"
       | "getFieldLength"
       | "getFieldSlice"
@@ -286,6 +290,10 @@ export interface IWorldInterface extends utils.Interface {
     values: [PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
+    functionFragment: "deleteHackathonByAdmin",
+    values: [PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "deleteRecord(bytes32,bytes32[])",
     values: [PromiseOrValue<BytesLike>, PromiseOrValue<BytesLike>[]]
   ): string;
@@ -321,6 +329,10 @@ export interface IWorldInterface extends utils.Interface {
       PromiseOrValue<BytesLike>[],
       PromiseOrValue<BytesLike>
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getAdministrator",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getField",
@@ -670,6 +682,10 @@ export interface IWorldInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "deleteHackathonByAdmin",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "deleteRecord(bytes32,bytes32[])",
     data: BytesLike
   ): Result;
@@ -691,6 +707,10 @@ export interface IWorldInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "emitEphemeralRecord(bytes32,bytes32[],bytes)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getAdministrator",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getField", data: BytesLike): Result;
@@ -996,6 +1016,11 @@ export interface IWorld extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    deleteHackathonByAdmin(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     "deleteRecord(bytes32,bytes32[])"(
       table: PromiseOrValue<BytesLike>,
       key: PromiseOrValue<BytesLike>[],
@@ -1035,6 +1060,8 @@ export interface IWorld extends BaseContract {
       data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    getAdministrator(overrides?: CallOverrides): Promise<[string]>;
 
     getField(
       table: PromiseOrValue<BytesLike>,
@@ -1402,6 +1429,11 @@ export interface IWorld extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  deleteHackathonByAdmin(
+    _hackathonId: PromiseOrValue<BytesLike>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   "deleteRecord(bytes32,bytes32[])"(
     table: PromiseOrValue<BytesLike>,
     key: PromiseOrValue<BytesLike>[],
@@ -1441,6 +1473,8 @@ export interface IWorld extends BaseContract {
     data: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
+
+  getAdministrator(overrides?: CallOverrides): Promise<string>;
 
   getField(
     table: PromiseOrValue<BytesLike>,
@@ -1808,6 +1842,11 @@ export interface IWorld extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    deleteHackathonByAdmin(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     "deleteRecord(bytes32,bytes32[])"(
       table: PromiseOrValue<BytesLike>,
       key: PromiseOrValue<BytesLike>[],
@@ -1847,6 +1886,8 @@ export interface IWorld extends BaseContract {
       data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    getAdministrator(overrides?: CallOverrides): Promise<string>;
 
     getField(
       table: PromiseOrValue<BytesLike>,
@@ -2259,6 +2300,11 @@ export interface IWorld extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    deleteHackathonByAdmin(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     "deleteRecord(bytes32,bytes32[])"(
       table: PromiseOrValue<BytesLike>,
       key: PromiseOrValue<BytesLike>[],
@@ -2298,6 +2344,8 @@ export interface IWorld extends BaseContract {
       data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
+
+    getAdministrator(overrides?: CallOverrides): Promise<BigNumber>;
 
     getField(
       table: PromiseOrValue<BytesLike>,
@@ -2666,6 +2714,11 @@ export interface IWorld extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    deleteHackathonByAdmin(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     "deleteRecord(bytes32,bytes32[])"(
       table: PromiseOrValue<BytesLike>,
       key: PromiseOrValue<BytesLike>[],
@@ -2705,6 +2758,8 @@ export interface IWorld extends BaseContract {
       data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
+
+    getAdministrator(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getField(
       table: PromiseOrValue<BytesLike>,

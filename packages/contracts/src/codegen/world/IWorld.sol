@@ -5,6 +5,7 @@ pragma solidity >=0.8.0;
 
 import { IBaseWorld } from "@latticexyz/world/src/interfaces/IBaseWorld.sol";
 
+import { IAdministratorSystem } from "./IAdministratorSystem.sol";
 import { IHackathonPrizeSystem } from "./IHackathonPrizeSystem.sol";
 import { IHackathonSystem } from "./IHackathonSystem.sol";
 import { IIncrementSystem } from "./IIncrementSystem.sol";
@@ -17,6 +18,7 @@ import { IViewSystem } from "./IViewSystem.sol";
  */
 interface IWorld is
   IBaseWorld,
+  IAdministratorSystem,
   IHackathonPrizeSystem,
   IHackathonSystem,
   IIncrementSystem,

@@ -124,6 +124,7 @@ export const HackathonPage = () => {
             votingPeriod={votingPeriod}
             withdrawalPeriod={withdrawalPeriod}
             setPhase={setPhase}
+            owner={owner}
           />
         )}
       </div>

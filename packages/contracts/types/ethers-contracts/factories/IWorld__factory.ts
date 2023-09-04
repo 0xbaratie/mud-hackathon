@@ -428,6 +428,19 @@ const _abi = [
     inputs: [
       {
         internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+    ],
+    name: "deleteHackathonByAdmin",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
         name: "table",
         type: "bytes32",
       },
@@ -550,6 +563,19 @@ const _abi = [
     name: "emitEphemeralRecord",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getAdministrator",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {

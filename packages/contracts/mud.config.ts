@@ -7,6 +7,10 @@ export default mudConfig({
       keySchema: {},
       schema: "uint32",
     },
+    Administrator: {
+      keySchema: {},
+      schema: "address",
+    },
     Config: {
       keySchema: {},
       schema: {

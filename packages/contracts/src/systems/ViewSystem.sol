@@ -13,7 +13,8 @@ import {
   Submission,
   SubmissionData,
   Vote,
-  VoteData
+  VoteData,
+  Administrator
 } from "../codegen/Tables.sol";
 import { Phase } from "../codegen/Types.sol";
 
@@ -40,6 +41,10 @@ contract ViewSystem is System {
 
   function getVote(bytes32 _hackathonId, address _voter)  public view returns(VoteData memory){
     return Vote.get(_hackathonId, _voter);
+  }
+
+  function getAdministrator() public view returns(address) {
+    return Administrator.get();
   }
 
 }
