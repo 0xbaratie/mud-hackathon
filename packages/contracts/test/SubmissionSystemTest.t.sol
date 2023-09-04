@@ -116,6 +116,15 @@ contract SubmissionSystemTest is MudV2Test {
     world.vote(bytes32(uint256(1)), address(this));
   }
 
+  function testAddSpecialVoter() public {
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
+    //proceed HACKING
+    mock.approve(address(world), 100000e6);    
+    world.depositPrize(bytes32(uint256(1)), 100);
+    skip(2);
+    world.addSpecialVoter(bytes32(uint256(1)), address(this), 1);
+  }
+
   function testWithdrawPrize() public {
     world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
 

@@ -115,6 +115,7 @@ export type VoteDataStructOutput = [BigNumber, boolean] & {
 
 export interface IWorldInterface extends utils.Interface {
   functions: {
+    "addSpecialVoter(bytes32,address,uint32)": FunctionFragment;
     "call(bytes16,bytes16,bytes)": FunctionFragment;
     "createHackathon(address,uint256,uint256,uint256,uint256,uint8,string,string,string,address,uint64)": FunctionFragment;
     "deleteHackathon(bytes32)": FunctionFragment;
@@ -175,6 +176,7 @@ export interface IWorldInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "addSpecialVoter"
       | "call"
       | "createHackathon"
       | "deleteHackathon"
@@ -233,6 +235,14 @@ export interface IWorldInterface extends utils.Interface {
       | "withdrawPrize"
   ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "addSpecialVoter",
+    values: [
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
   encodeFunctionData(
     functionFragment: "call",
     values: [
@@ -628,6 +638,10 @@ export interface IWorldInterface extends utils.Interface {
     values: [PromiseOrValue<BytesLike>]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "addSpecialVoter",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "call", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "createHackathon",
@@ -926,6 +940,13 @@ export interface IWorld extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    addSpecialVoter(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      _voter: PromiseOrValue<string>,
+      voteSum: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     call(
       namespace: PromiseOrValue<BytesLike>,
       name: PromiseOrValue<BytesLike>,
@@ -1319,6 +1340,13 @@ export interface IWorld extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
+
+  addSpecialVoter(
+    _hackathonId: PromiseOrValue<BytesLike>,
+    _voter: PromiseOrValue<string>,
+    voteSum: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   call(
     namespace: PromiseOrValue<BytesLike>,
@@ -1714,6 +1742,13 @@ export interface IWorld extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    addSpecialVoter(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      _voter: PromiseOrValue<string>,
+      voteSum: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     call(
       namespace: PromiseOrValue<BytesLike>,
       name: PromiseOrValue<BytesLike>,
@@ -2153,6 +2188,13 @@ export interface IWorld extends BaseContract {
   };
 
   estimateGas: {
+    addSpecialVoter(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      _voter: PromiseOrValue<string>,
+      voteSum: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     call(
       namespace: PromiseOrValue<BytesLike>,
       name: PromiseOrValue<BytesLike>,
@@ -2548,6 +2590,13 @@ export interface IWorld extends BaseContract {
   };
 
   populateTransaction: {
+    addSpecialVoter(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      _voter: PromiseOrValue<string>,
+      voteSum: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     call(
       namespace: PromiseOrValue<BytesLike>,
       name: PromiseOrValue<BytesLike>,

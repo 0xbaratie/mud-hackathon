@@ -299,6 +299,29 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "_voter",
+        type: "address",
+      },
+      {
+        internalType: "uint32",
+        name: "voteSum",
+        type: "uint32",
+      },
+    ],
+    name: "addSpecialVoter",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "bytes16",
         name: "namespace",
         type: "bytes16",
