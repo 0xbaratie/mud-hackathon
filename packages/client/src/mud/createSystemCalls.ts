@@ -97,6 +97,11 @@ export function createSystemCalls(
     // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
+  const addSpecialVoter = async (_hackathonId: string, _voterAddress: string, _amount: number) => {
+    const tx = await worldSend('addSpecialVoter', [_hackathonId, _voterAddress, _amount]);
+    // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+  };
+
   const setVoteToken = async (_voteToken: string) => {
     const tx = await worldSend('setVoteToken', [_voteToken]);
     // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
@@ -131,6 +136,7 @@ export function createSystemCalls(
     proceedPhase,
     depositPrize,
     depositPrizeEth,
+    addSpecialVoter,
     setVoteToken,
     submit,
     vote,

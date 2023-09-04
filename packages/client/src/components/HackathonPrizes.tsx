@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useMUD } from '../MUDContext';
 import FullScreenModal from './FullScreenModal';
 import DepositModal from './DepositModal';
+import SpVoterModal from './SpVoterModal';
 import { PRIZE_TOKEN } from '../constants/constants';
 import { BigNumber, ethers } from 'ethers';
 import { getPrizeTokenSymbol, bigNumberToNumber } from '../utils/common';
@@ -36,6 +37,15 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
     setModalOpen(false);
   };
 
+  const [modalSpVoter, setModalSpVoter] = useState(false);
+  const openModalSpVoter = () => {
+    setModalSpVoter(true);
+  };
+
+  const closeModalSpVoter = () => {
+    setModalSpVoter(false);
+  };
+
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   useEffect(() => {
@@ -59,6 +69,13 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
           setSuccess={setSuccess}
         />
       </FullScreenModal>
+      <FullScreenModal isOpen={modalSpVoter} onClose={closeModalSpVoter}>
+        <SpVoterModal
+          hackathonId={hackathonId}
+          setError={setError}
+          setSuccess={setSuccess}
+        />
+      </FullScreenModal>
       <div className="flex justify-between items-center ">
         <h2 className="text-2xl font-bold">Prizes</h2>
         <a onClick={openModal}>
@@ -77,7 +94,7 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
         {getPrizeTokenSymbol(prizeToken, chainId)} will be distributed to the top {winnerCount}{' '}
         winners.
       </p>
-      {/* <h2 className="text-2xl font-bold mt-4">Transactions</h2>
+      {/* <h2 className="text-2xl font-bold mt-8">Deposit history</h2>
       <div className="grid grid-cols-4 p-4 rounded-md shadow-md">
         <div className="col-span-1 border-b font-bold pb-2">Account</div>
         <div className="col-span-1 border-b font-bold pb-2">To</div>
@@ -100,7 +117,29 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
         <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 19</div>
         <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 20</div>
       </div> */}
+
+      <div className="flex justify-between items-center mt-8">
+        <h2 className="text-2xl font-bold">Voters</h2>
+        <a onClick={openModalSpVoter}>
+          <button className="bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl">
+            Add special voters
+          </button>
+        </a>
+      </div>
+
+      <p className={"mt-2"}>
+          The hack owner can add people who are not entitled to vote when in Deposit prize status only.
+      </p>
+      {/* <div className="grid grid-cols-2 p-4 rounded-md shadow-md mt-4 mb-12">
+        <div className="col-span-1 border-b font-bold pb-2">Account</div>
+        <div className="col-span-1 border-b font-bold pb-2">Sum</div>
+        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 5</div>
+        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">1</div>
+        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 7</div>
+        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">3</div>
+      </div> */}
     </div>
+    
   );
 };
 
