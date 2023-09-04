@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import DateTimePicker from './DateTimePicker';
 import { useMUD } from '../MUDContext';
 
@@ -6,7 +6,7 @@ interface VoteModalProps {
   onClose: () => void;
   hackathonId: string;
   submitter: string;
-  setError: (error: string | null) => void; 
+  setError: (error: string | null) => void;
   setSuccess: (success: string | null) => void;
 }
 
@@ -14,6 +14,18 @@ const VoteModal = ({ onClose, hackathonId, submitter, setError, setSuccess}: Vot
   const {
     systemCalls: { vote },
   } = useMUD();
+  
+  const handleVote = async () => {
+    try {
+      await vote(hackathonId, submitter);
+      setSuccess('Your vote has been cast!.');
+    } catch (error) {
+      setError('An error occurred while voting.');
+    }
+    
+    onClose();
+  };
+
   return (
     <div className="p-6">
       <p className="font-bold text-xl flex justify-center">
@@ -22,15 +34,9 @@ const VoteModal = ({ onClose, hackathonId, submitter, setError, setSuccess}: Vot
       <div className="mt-6 flex justify-center">
         <button
           className="btn bg-black text-white rounded-lg w-80"
-          onClick={async (event) => {  
-            event.preventDefault();        
-            try {
-              await vote(hackathonId, submitter);
-              setSuccess('Your vote has been cast!.');
-            } catch (error) {
-              setError('An error occurred while voting.');
-            }
-            onClose();
+          onClick={event => {
+            event.preventDefault();
+            handleVote();
           }}
         >
           Vote

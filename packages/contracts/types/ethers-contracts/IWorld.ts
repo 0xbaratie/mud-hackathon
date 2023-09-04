@@ -105,18 +105,17 @@ export type SubmissionDataStructOutput = [
 
 export type VoteDataStruct = {
   count: PromiseOrValue<BigNumberish>;
-  voted: PromiseOrValue<boolean>;
+  aggregated: PromiseOrValue<boolean>;
 };
 
 export type VoteDataStructOutput = [BigNumber, boolean] & {
   count: BigNumber;
-  voted: boolean;
+  aggregated: boolean;
 };
 
 export interface IWorldInterface extends utils.Interface {
   functions: {
     "call(bytes16,bytes16,bytes)": FunctionFragment;
-    "continueVote(bytes,bytes)": FunctionFragment;
     "createHackathon(address,uint256,uint256,uint256,uint256,uint8,string,string,string,address,uint64)": FunctionFragment;
     "deleteHackathon(bytes32)": FunctionFragment;
     "deleteHackathonByAdmin(bytes32)": FunctionFragment;
@@ -178,7 +177,6 @@ export interface IWorldInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "call"
-      | "continueVote"
       | "createHackathon"
       | "deleteHackathon"
       | "deleteHackathonByAdmin"
@@ -244,10 +242,6 @@ export interface IWorldInterface extends utils.Interface {
       PromiseOrValue<BytesLike>,
       PromiseOrValue<BytesLike>
     ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "continueVote",
-    values: [PromiseOrValue<BytesLike>, PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
     functionFragment: "createHackathon",
@@ -642,10 +636,6 @@ export interface IWorldInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: "call", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "continueVote",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "createHackathon",
     data: BytesLike
   ): Result;
@@ -951,12 +941,6 @@ export interface IWorld extends BaseContract {
       name: PromiseOrValue<BytesLike>,
       funcSelectorAndArgs: PromiseOrValue<BytesLike>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    continueVote(
-      _requestResult: PromiseOrValue<BytesLike>,
-      _callbackExtraData: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     createHackathon(
@@ -1358,12 +1342,6 @@ export interface IWorld extends BaseContract {
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  continueVote(
-    _requestResult: PromiseOrValue<BytesLike>,
-    _callbackExtraData: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   createHackathon(
     _prizeToken: PromiseOrValue<string>,
     _startTimestamp: PromiseOrValue<BigNumberish>,
@@ -1762,12 +1740,6 @@ export interface IWorld extends BaseContract {
       funcSelectorAndArgs: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<string>;
-
-    continueVote(
-      _requestResult: PromiseOrValue<BytesLike>,
-      _callbackExtraData: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     createHackathon(
       _prizeToken: PromiseOrValue<string>,
@@ -2213,12 +2185,6 @@ export interface IWorld extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    continueVote(
-      _requestResult: PromiseOrValue<BytesLike>,
-      _callbackExtraData: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     createHackathon(
       _prizeToken: PromiseOrValue<string>,
       _startTimestamp: PromiseOrValue<BigNumberish>,
@@ -2617,12 +2583,6 @@ export interface IWorld extends BaseContract {
       name: PromiseOrValue<BytesLike>,
       funcSelectorAndArgs: PromiseOrValue<BytesLike>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    continueVote(
-      _requestResult: PromiseOrValue<BytesLike>,
-      _callbackExtraData: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     createHackathon(

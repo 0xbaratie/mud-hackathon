@@ -61,7 +61,7 @@ export default mudConfig({
     Vote: {
       schema: {
         count: "uint256",
-        voted: "bool",
+        aggregated: "bool",
       },
       keySchema: {
         hackathonId: "bytes32",

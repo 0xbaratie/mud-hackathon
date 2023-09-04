@@ -328,24 +328,6 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "bytes",
-        name: "_requestResult",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "_callbackExtraData",
-        type: "bytes",
-      },
-    ],
-    name: "continueVote",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "address",
         name: "_prizeToken",
         type: "address",
@@ -958,7 +940,7 @@ const _abi = [
           },
           {
             internalType: "bool",
-            name: "voted",
+            name: "aggregated",
             type: "bool",
           },
         ],
