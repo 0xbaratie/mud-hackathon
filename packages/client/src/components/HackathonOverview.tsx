@@ -1,6 +1,9 @@
 import { useMUD } from '../MUDContext';
 import { useState, useEffect } from 'react';
-import { Navigate } from "react-router-dom";
+import { Navigate } from 'react-router-dom';
+import { useInterval } from '../hooks/useInterval';
+import { useToast } from '../hooks/useToast';
+import { Toast } from './Toast';
 
 interface HackathonOverviewProps {
   uri: string;
@@ -10,14 +13,29 @@ interface HackathonOverviewProps {
 }
 
 const HackathonOverview = ({ uri, name, owner, hackathonId }: HackathonOverviewProps) => {
-  
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const { showToast, toastType } = useToast();
   const [shouldRedirect, setShouldRedirect] = useState(false);
-  
+  const [myAddress, setMyAddress] = useState('');
+  const [administrator, setAdministrator] = useState('');
+
   const {
     systemCalls: { deleteHackathon },
+    network: { signerOrProvider, worldContract },
   } = useMUD();
+
+  useEffect(() => {
+    (async () => {
+      const _administrator = await worldContract.getAdministrator();
+      setAdministrator(_administrator);
+    })();
+  });
+
+  useInterval(() => {
+    (async () => {
+      const _myAddress = await signerOrProvider.getAddress();
+      setMyAddress(_myAddress);
+    })();
+  }, 5000);
 
   if (shouldRedirect) {
     return <Navigate to="/" replace={true} />;
@@ -25,7 +43,10 @@ const HackathonOverview = ({ uri, name, owner, hackathonId }: HackathonOverviewP
 
   return (
     <div className="">
-      <div className="ml-2 font-bold"><p className="text-2xl">{name}</p></div>
+      <Toast toastType={toastType} />
+      <div className="ml-2 font-bold">
+        <p className="text-2xl">{name}</p>
+      </div>
       <div className="flex">
         {/* <img
           src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
@@ -54,24 +75,24 @@ const HackathonOverview = ({ uri, name, owner, hackathonId }: HackathonOverviewP
           Detail
         </a>
       </button>
-      <button 
-        className="mt-6 bg-white text-[#333333] border border-[#333333] pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl"
-        onClick={async (event) => {
-          event.preventDefault();
-          try {
-            await deleteHackathon(hackathonId);
-            setSuccess('Your hackathon successfully deleted!.');
-            setShouldRedirect(true);
-          } catch (error) {
-            console.error(error);
-            setError('An error occurred while delete.');
-          }
-        }}
-      >
-          
+      {(myAddress === owner || myAddress === administrator) && (
+        <button
+          className="mt-6 bg-white text-[#333333] border border-[#333333] pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl"
+          onClick={async (event) => {
+            event.preventDefault();
+            try {
+              await deleteHackathon(hackathonId);
+              showToast('success');
+              setShouldRedirect(true);
+            } catch (error) {
+              console.error(error);
+              showToast('error');
+            }
+          }}
+        >
           Delete hackathon
-          
-      </button>
+        </button>
+      )}
     </div>
   );
 };

@@ -125,6 +125,7 @@ export interface IWorldInterface extends utils.Interface {
     "depositPrizeEth(bytes32,uint256)": FunctionFragment;
     "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)": FunctionFragment;
     "emitEphemeralRecord(bytes32,bytes32[],bytes)": FunctionFragment;
+    "getAdministrator()": FunctionFragment;
     "getField(bytes32,bytes32[],uint8)": FunctionFragment;
     "getFieldLength(bytes32,bytes32[],uint8,bytes32)": FunctionFragment;
     "getFieldSlice(bytes32,bytes32[],uint8,bytes32,uint256,uint256)": FunctionFragment;
@@ -186,6 +187,7 @@ export interface IWorldInterface extends utils.Interface {
       | "depositPrizeEth"
       | "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)"
       | "emitEphemeralRecord(bytes32,bytes32[],bytes)"
+      | "getAdministrator"
       | "getField"
       | "getFieldLength"
       | "getFieldSlice"
@@ -303,6 +305,10 @@ export interface IWorldInterface extends utils.Interface {
       PromiseOrValue<BytesLike>[],
       PromiseOrValue<BytesLike>
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getAdministrator",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getField",
@@ -671,6 +677,10 @@ export interface IWorldInterface extends utils.Interface {
     functionFragment: "emitEphemeralRecord(bytes32,bytes32[],bytes)",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "getAdministrator",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "getField", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getFieldLength",
@@ -1007,6 +1017,8 @@ export interface IWorld extends BaseContract {
       data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    getAdministrator(overrides?: CallOverrides): Promise<[string]>;
 
     getField(
       table: PromiseOrValue<BytesLike>,
@@ -1407,6 +1419,8 @@ export interface IWorld extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  getAdministrator(overrides?: CallOverrides): Promise<string>;
+
   getField(
     table: PromiseOrValue<BytesLike>,
     key: PromiseOrValue<BytesLike>[],
@@ -1805,6 +1819,8 @@ export interface IWorld extends BaseContract {
       data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    getAdministrator(overrides?: CallOverrides): Promise<string>;
 
     getField(
       table: PromiseOrValue<BytesLike>,
@@ -2250,6 +2266,8 @@ export interface IWorld extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    getAdministrator(overrides?: CallOverrides): Promise<BigNumber>;
+
     getField(
       table: PromiseOrValue<BytesLike>,
       key: PromiseOrValue<BytesLike>[],
@@ -2649,6 +2667,8 @@ export interface IWorld extends BaseContract {
       data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
+
+    getAdministrator(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getField(
       table: PromiseOrValue<BytesLike>,
