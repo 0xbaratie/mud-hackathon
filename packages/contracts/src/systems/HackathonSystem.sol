@@ -105,7 +105,7 @@ contract HackathonSystem is System {
 
   }
 
-  function proceedPhase(bytes32 _hackathonId) public {
+  function proceedPhase(bytes32 _hackathonId) public onlyOwner(_hackathonId) {
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
 
     if(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE)){
