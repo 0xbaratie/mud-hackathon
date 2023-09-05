@@ -95,9 +95,9 @@ const Timeline = ({
       </div>
 
       {owner === myAddress && (
-        <div className="mt-10">
+        <div className="mt-12">
           <button
-            className="btn bg-[#333333] text-white rounded-lg"
+            className="btn bg-[#333333] text-white rounded-xl"
             onClick={async (event) => {
               event.preventDefault();
               try {

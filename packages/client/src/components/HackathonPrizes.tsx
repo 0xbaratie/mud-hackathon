@@ -104,8 +104,11 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
             </button>
           </a>
         </div>
+        <p className={"mt-2"}>
+          Those who wish to award prizes for the hackathon may donate.
+        </p>
         
-        <div className="flex justify-between items-center mt-8">
+        <div className="flex justify-between items-center mt-16">
           <h2 className="text-2xl font-bold">Voters</h2>
           <a onClick={openModalSpVoter}>
             <button className="bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl">
@@ -115,7 +118,7 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
         </div>
 
         <p className={"mt-2"}>
-            The hack owner can add people who are not entitled to vote when in Deposit prize status only.
+          The hack owner can add people who are not entitled to vote when in Deposit prize status only.(Optional to do) 
         </p>
         <div className="grid grid-cols-2 p-4 rounded-md shadow-md mt-4 mb-12">
           <div className="col-span-1 border-b font-bold pb-2">Account</div>
@@ -124,7 +127,14 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
           {specialVoters &&
             specialVoters.map((vote, index) => [
               <div key={`voter-${index}`} className="col-span-1 border-b pb-2 pt-2 text-gray-500">
-                {`${specialVotersAddress[index].slice(0, 5)}...${specialVotersAddress[index].slice(-5)}`}
+                <a
+                  href={`https://optimistic.etherscan.io/address/${specialVotersAddress[index]}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500"
+                >
+                  {`${specialVotersAddress[index].slice(0, 5)}...${specialVotersAddress[index].slice(-5)}`}
+                </a>
               </div>,
               <div key={`count-${index}`} className="col-span-1 border-b pb-2 pt-2 text-gray-500">
                 {vote}

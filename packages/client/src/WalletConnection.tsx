@@ -91,12 +91,12 @@ const WalletConnection = ({ children }: Props) => {
   return (
     <>
       <div className="navbar bg-primary-content border border-b-gray-300">
-        <div className="flex-1 ml-32">
+        <div className="flex-1 ml-2">
           <a href="/" className="ml-4 normal-case">
             <img src={TitleLogo} className="" alt="AW Hackathon logo" />
           </a>
         </div>
-        <div className="flex-none mr-36">
+        <div className="flex-none mr-4">
           {wallet.accounts.length > 0 && network === NETWORK_ID ? (
             <>
               <Button
@@ -137,7 +137,7 @@ const WalletConnection = ({ children }: Props) => {
           )}
         </div>
       </div>
-      <Container>
+    
         {isMetaMask ? (
           wallet.accounts.length > 0 && network === NETWORK_ID ? (
             <>
@@ -149,7 +149,6 @@ const WalletConnection = ({ children }: Props) => {
         ) : (
           <div className="mt-8">Please Install Metamask</div>
         )}
-      </Container>
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
