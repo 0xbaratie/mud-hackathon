@@ -39,6 +39,27 @@ export const EventCard = ({ hackathonNum }: EventcardProps) => {
     })();
   }, []);
 
+  const calculateTimeRemaining = () => {
+    const timeInSeconds = Number(submitPeriod) - Date.now() / 1000;
+    const hoursRemaining = Math.floor(Math.abs(timeInSeconds) / 3600);
+  
+    let timeRemaining;
+    if (hoursRemaining >= 24) {
+      const daysRemaining = Math.floor(Math.abs(timeInSeconds) / 86400);
+      timeRemaining = `${daysRemaining} days`;
+    } else {
+      timeRemaining = `${hoursRemaining} hours`;
+    }
+    return timeInSeconds >= 0 ? `about ${timeRemaining}` : `${timeRemaining} ago`;
+  };
+  
+
+  const depositAmount = deposit ? bigNumberToNumber(deposit, getDecimalPlaces(prizeToken, chainId)) : 0;
+  
+  function getDecimalPlaces(prizeToken: string, chainId: number): number {
+    return getPrizeTokenSymbol(prizeToken, chainId) === 'ETH' ? 18 : 6;
+  }
+  
   return (
     name ? (
     <Link to={`/hackathon/${hackathonNum}`}>
@@ -52,21 +73,13 @@ export const EventCard = ({ hackathonNum }: EventcardProps) => {
           <h2 className="card-title text-md">{name}</h2>
           <div className="card-actions mt-2">
             <button className="bg-[#333333] text-white pl-4 pr-4 pt-1 pb-1 text-sm rounded-3xl">
-              about {Math.floor((Number(submitPeriod) - Date.now() / 1000) / 3600)} hours
+              {calculateTimeRemaining()}
             </button>
           </div>
           <div className="mt-2">
-            {getPrizeTokenSymbol(prizeToken, chainId) === 'ETH' ? (
-              <span className="font-bold">
-                {deposit ? bigNumberToNumber(deposit, 18) : 0}{' '}
-                {getPrizeTokenSymbol(prizeToken, chainId)}
-              </span>
-            ) : (
-              <span className="font-bold">
-                {deposit ? bigNumberToNumber(deposit, 6) : 0}{' '}
-                {getPrizeTokenSymbol(prizeToken, chainId)}
-              </span>
-            )}
+            <span className="font-bold">
+              {depositAmount} {getPrizeTokenSymbol(prizeToken, chainId)}
+            </span>
             <span className="p-2 text-gray-600">in prizes</span>
             <span className="font-bold">{projectsSum}</span>
             <span className="p-2 text-gray-600">projects</span>
