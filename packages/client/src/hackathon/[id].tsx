@@ -24,6 +24,8 @@ export const HackathonPage = () => {
   const [prizeToken, setPrizeToken] = useState('');
   const [phase, setPhase] = useState(0);
   const [winnerCount, setWinnerCount] = useState(0);
+  const [voteNft, setVoteNft] = useState('');
+  const [voteNftSnapshot, setVoteNftSnapshot] = useState(0);
   const [startTimestamp, setStartTimestamp] = useState(0);
   const [submitPeriod, setSubmitPeriod] = useState(0);
   const [votingPeriod, setVotingPeriod] = useState(0);
@@ -37,12 +39,15 @@ export const HackathonPage = () => {
   useEffect(() => {
     (async () => {
       const hackathon = await worldContract.getHackathon(paddedHexStr);
+      const hackathonVoteNft = await worldContract.getHackathonVoteNft(paddedHexStr);
       setName(hackathon.name);
       setUri(hackathon.uri);
       setOwner(hackathon.owner);
       setPrizeToken(hackathon.prizeToken);
       setPhase(hackathon.phase);
       setWinnerCount(hackathon.winnerCount);
+      setVoteNft(hackathonVoteNft.voteNft);
+      setVoteNftSnapshot(parseInt('0x' + hackathonVoteNft.voteNftSnapshot.toHexString().slice(2).padStart(64, '0')));
       setStartTimestamp(hackathon.startTimestamp.toNumber());
       setSubmitPeriod(hackathon.submitPeriod.toNumber());
       setVotingPeriod(hackathon.votingPeriod.toNumber());
@@ -52,7 +57,18 @@ export const HackathonPage = () => {
   }, []);
 
   const OverviewTabContent: React.FC = () => {
-    return <HackathonOverview uri={uri} name={name} owner={owner} hackathonId={productId} />;
+    return( 
+      <HackathonOverview 
+        uri={uri} 
+        name={name} 
+        owner={owner} 
+        hackathonId={productId} 
+        winnerCount={winnerCount} 
+        voteNft={voteNft} 
+        voteNftSnapshot={voteNftSnapshot}
+        phase={phase}
+      />
+    );
   };
 
   const PrizesTabContent: React.FC = () => {
@@ -61,12 +77,18 @@ export const HackathonPage = () => {
         hackathonId={paddedHexStr}
         prizeToken={prizeToken}
         winnerCount={winnerCount}
+        phase={phase}
       />
     );
   };
 
   const ProjectsTabContent: React.FC = () => {
-    return <HackathonProjects hackathonId={paddedHexStr} phase={phase} />;
+    return (
+      <HackathonProjects 
+        hackathonId={paddedHexStr} 
+        phase={phase} 
+      />
+    );
   };
 
   let activeTabContent;
@@ -82,36 +104,44 @@ export const HackathonPage = () => {
 
   return (
     <>
-      <div>
+      <div className="bg-black bg-opacity-70">
         <div>
           <img src={bgImage} className="w-full" />
         </div>
-        <div className="ml-4 tabs bg-black bg-opacity-70">
-          <a
-            className={`tab tab-lifted font-bold ${
-              activeTab === 1 ? 'tab-active bg-white text-black' : 'text-white '
-            }`}
-            onClick={() => handleTabClick(1)}
-          >
-            Overview
-          </a>
-          <a
-            className={`tab tab-lifted font-bold ${
-              activeTab === 2 ? 'tab-active bg-white text-black' : 'text-white '
-            }`}
-            onClick={() => handleTabClick(2)}
-          >
-            Prizes
-          </a>
-          <a
-            className={`tab tab-lifted font-bold ${
-              activeTab === 3 ? 'tab-active bg-white text-black' : 'text-white '
-            }`}
-            onClick={() => handleTabClick(3)}
-          >
-            Projects
-          </a>
+        <div className="ml-4 relative ">
+          <div
+            className=""
+            style={{ zIndex: -1 }}
+          ></div>
+          <div className="tabs">
+            <a
+              className={`tab tab-lifted font-bold ${
+                activeTab === 1 ? 'tab-active bg-white text-black' : 'text-white '
+              }`}
+              onClick={() => handleTabClick(1)}
+            >
+              Overview
+            </a>
+            <a
+              className={`tab tab-lifted font-bold ${
+                activeTab === 2 ? 'tab-active bg-white text-black' : 'text-white '
+              }`}
+              onClick={() => handleTabClick(2)}
+            >
+              Setup
+            </a>
+            <a
+              className={`tab tab-lifted font-bold ${
+                activeTab === 3 ? 'tab-active bg-white text-black' : 'text-white '
+              }`}
+              onClick={() => handleTabClick(3)}
+            >
+              Projects
+            </a>
+          </div>
+
         </div>
+        
       </div>
       <div className="flex mt-6 p-6">
         <div className={containerClassName}>{activeTabContent}</div>
@@ -124,6 +154,7 @@ export const HackathonPage = () => {
             votingPeriod={votingPeriod}
             withdrawalPeriod={withdrawalPeriod}
             setPhase={setPhase}
+            owner={owner}
           />
         )}
       </div>

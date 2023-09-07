@@ -1,10 +1,11 @@
 import CheckCircleIcon from '../../public/icon_check_circle.svg';
 import NotFinishedIcon from '../../public/icon_not_finished.svg';
 import { useMUD } from '../MUDContext';
+import { useState } from 'react';
 import { PHASE } from '../constants/constants';
-import { ToastError } from './ToastError';
-import { ToastSuccess } from './ToastSuccess';
-import { useState, useEffect } from 'react';
+import { useInterval } from '../hooks/useInterval';
+import { useToast } from '../hooks/useToast';
+import { Toast } from './Toast';
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const timestampToDateString = (timestamp: any) => {
@@ -16,38 +17,34 @@ const timestampToDateString = (timestamp: any) => {
   )}`;
   return formattedDate;
 };
+
 const Timeline = ({
-    hackathonId,
-    phase,
-    startTimestamp,
-    submitPeriod,
-    votingPeriod,
-    withdrawalPeriod,
-    setPhase,
-  }: any) => {
-  console.log('phase', phase);
+  hackathonId,
+  phase,
+  startTimestamp,
+  submitPeriod,
+  votingPeriod,
+  withdrawalPeriod,
+  setPhase,
+  owner,
+}: any) => {
+  const { showToast, toastType } = useToast();
+  const [myAddress, setMyAddress] = useState('');
   const {
     systemCalls: { proceedPhase },
+    network: { signerOrProvider },
   } = useMUD();
 
-
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setError(null);
-      setSuccess(null);
-    }, 10000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [error, success]);
+  useInterval(() => {
+    (async () => {
+      const _myAddress = await signerOrProvider.getAddress();
+      setMyAddress(_myAddress);
+    })();
+  }, 5000);
 
   return (
     <div className="w-1/4 relative h-100">
-      {error && <ToastError message={error} />}
-      {success && <ToastSuccess message={success} />}
+      <Toast toastType={toastType} />
       <div className="mt-8">
         <div className="absolute">
           <img src={CheckCircleIcon} className=" -ml-2" alt="Check circle icon" />
@@ -97,24 +94,26 @@ const Timeline = ({
         </div>
       </div>
 
-      <div className="mt-10">
-        <button
-          className="btn bg-[#333333] text-white rounded-lg"
-          onClick={async (event) => {
-            event.preventDefault();
-            try {
-              await proceedPhase(hackathonId);
-              setPhase(phase + 1);
-              setSuccess('Your proceed phase has been cast!.');
-            } catch (error) {
-              console.error(error);
-              setError('An error occurred while voting.');
-            }
-          }}
-        >
-          Proceed Phase
-        </button>
-      </div>
+      {owner === myAddress && (
+        <div className="mt-12">
+          <button
+            className="btn bg-[#333333] text-white rounded-xl"
+            onClick={async (event) => {
+              event.preventDefault();
+              try {
+                await proceedPhase(hackathonId);
+                setPhase(phase + 1);
+                showToast('success');
+              } catch (error) {
+                console.error(error);
+                showToast('error');
+              }
+            }}
+          >
+            Proceed Phase
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -67,10 +67,18 @@ const WalletConnection = ({ children }: Props) => {
   };
 
   const handleConnect = async () => {
-    const accounts = await window.ethereum.request({
-      method: 'eth_requestAccounts',
-    });
-    updateWallet(accounts);
+    if (isMetaMask) {
+      try {
+        const accounts = await window.ethereum.request({
+          method: 'eth_requestAccounts',
+        });
+        updateWallet(accounts);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      console.warn('WalletConnect is not available.');
+    }
   };
   const handleDisconnect = async () => {
     await window.ethereum.request({
@@ -91,44 +99,38 @@ const WalletConnection = ({ children }: Props) => {
   return (
     <>
       <div className="navbar bg-primary-content border border-b-gray-300">
-        <div className="flex-1 ml-32">
+        <div className="flex-1 ml-2">
           <a href="/" className="ml-4 normal-case">
             <img src={TitleLogo} className="" alt="AW Hackathon logo" />
           </a>
         </div>
-        <div className="flex-none mr-36">
+        <div className="flex-none mr-4">
           {wallet.accounts.length > 0 && network === NETWORK_ID ? (
             <>
-              <Button
-                variant="outlined"
-                id="basic-button"
-                aria-controls={open ? 'basic-menu' : undefined}
-                aria-haspopup="true"
+              <button
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
-                startIcon={<SvgIcon component={MetaMaskIcon} viewBox="0 0 300 300" />}
+                className="btn bg-[#333333] text-white rounded-lg"
               >
                 {(wallet.accounts[0] as string)?.slice(0, 5)}...
                 {(wallet.accounts[0] as string)?.slice(-5)}
-              </Button>
+              </button>
             </>
           ) : network === NETWORK_ID ? (
             <>
-              <Button
-                variant="outlined"
+              <button
                 onClick={handleConnect}
-                startIcon={<SvgIcon component={MetaMaskIcon} viewBox="0 0 300 300" />}
                 disabled={!isMetaMask}
+                className="btn bg-[#333333] text-white rounded-lg"
               >
                 connect
-              </Button>
+              </button>
             </>
           ) : (
             <>
               <Button
                 variant="outlined"
                 onClick={switchToNetwork}
-                startIcon={<SvgIcon component={MetaMaskIcon} viewBox="0 0 300 300" />}
                 sx={{ color: 'red', borderColor: 'red' }} // Change text and border color to red
               >
                 Wrong Network
@@ -137,19 +139,23 @@ const WalletConnection = ({ children }: Props) => {
           )}
         </div>
       </div>
-      <Container>
-        {isMetaMask ? (
-          wallet.accounts.length > 0 && network === NETWORK_ID ? (
-            <>
-              <walletContext.Provider value={{ wallet }}>{children}</walletContext.Provider>
-            </>
-          ) : (
-            <></>
-          )
+    
+      {isMetaMask ? (
+        wallet.accounts.length > 0 && network === NETWORK_ID ? (
+          <>
+            <walletContext.Provider value={{ wallet }}>{children}</walletContext.Provider>
+          </>
         ) : (
-          <div className="mt-8">Please Install Metamask</div>
-        )}
-      </Container>
+          <>{children}</>
+        )
+      ) : (
+        <>
+          <div className="mt-8 flex justify-center items-center ">
+            <a href="https://metamask.io/download/" target="_blank" rel="noreferrer" className="border-b-2 font-bold">Please Install Metamask first</a>
+          </div>
+          {/* {children} */}
+        </>
+      )}
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}

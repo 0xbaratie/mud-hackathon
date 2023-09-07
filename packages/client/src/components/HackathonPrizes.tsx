@@ -1,19 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useMUD } from '../MUDContext';
 import FullScreenModal from './FullScreenModal';
-import DepositModal from './DepositModal';
+import SpVoterModal from './SpVoterModal';
+import HackathonPrizeModal from './HackathonPrizeModal';
+
 import { PRIZE_TOKEN } from '../constants/constants';
 import { BigNumber, ethers } from 'ethers';
 import { getPrizeTokenSymbol, bigNumberToNumber } from '../utils/common';
+import { ToastError } from '../components/ToastError';
+import { ToastSuccess } from '../components/ToastSuccess';
 import { useInterval } from '../hooks/useInterval';
+import { PHASE } from '../constants/constants';
 
 interface HackathonPrizesProps {
   hackathonId: string;
   prizeToken: string;
   winnerCount: number;
+  phase: number;
 }
 
-const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPrizesProps) => {
+const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: HackathonPrizesProps) => {
   const {
     network: { worldContract, chainId },
   } = useMUD();
@@ -36,71 +42,133 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
     setModalOpen(false);
   };
 
+  const [modalSpVoter, setModalSpVoter] = useState(false);
+  const openModalSpVoter = () => {
+    setModalSpVoter(true);
+  };
+
+  const closeModalSpVoter = () => {
+    setModalSpVoter(false);
+  };
+
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [specialVoters, setSpecialVoters] = useState<number[]>([]);
+  const [specialVotersAddress, setSpecialVotersAddress] = useState<string[]>([]);
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       setError(null);
       setSuccess(null);
     }, 10000);
-
+    
     return () => {
       clearTimeout(timer);
     };
   }, [error, success]);
 
-  return (
-    <div className="mr-10">
-      <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-        <DepositModal
-          hackathonId={hackathonId}
-          prizeToken={prizeToken}
-          setError={setError}
-          setSuccess={setSuccess}
-        />
-      </FullScreenModal>
-      <div className="flex justify-between items-center ">
-        <h2 className="text-2xl font-bold">Prizes</h2>
-        <a onClick={openModal}>
-          <button className="bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl">
-            Donate {getPrizeTokenSymbol(prizeToken, chainId)}
-          </button>
-        </a>
-      </div>
+  useEffect(() => {
+    (async () => {
+      const fetchedSpecialVoters: number[] = [];
+      const hackathonVoteNft = await worldContract.getHackathonVoteNft(hackathonId);
+      setSpecialVotersAddress(hackathonVoteNft.specialVoters);
+      for (const voteAddress of hackathonVoteNft.specialVoters) {
+        const vote = await worldContract.getVote(hackathonId, voteAddress)
+        fetchedSpecialVoters.push(vote.count.toNumber()); 
+      }
+      setSpecialVoters(fetchedSpecialVoters); 
+    })();
 
-      <p>
-        {getPrizeTokenSymbol(prizeToken, chainId) === 'ETH' ? (
-          <span>{deposit ? bigNumberToNumber(deposit, 18) : 0}</span>
+    console.log("@@@specialVoters=", specialVoters);
+  }, []);
+
+  return (
+    <>
+      {error && <ToastError message={error} />}
+      {success && <ToastSuccess message={success} />}
+      <div className="mr-10">
+        <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
+          <HackathonPrizeModal hackathonId={hackathonId} prizeToken={prizeToken} />
+        </FullScreenModal>
+        <FullScreenModal isOpen={modalSpVoter} onClose={closeModalSpVoter}>
+            <SpVoterModal
+              onClose={closeModalSpVoter}
+              hackathonId={hackathonId}
+              setError={setError}
+              setSuccess={setSuccess}
+            />
+          </FullScreenModal>
+        
+        
+        <div className="flex justify-between items-center ">
+          <h2 className="text-2xl font-bold">Prizes</h2>
+          {phase === PHASE.PREPARE_PRIZE ? (
+            <a onClick={openModal}>
+              <button className="bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl">
+                Donate {getPrizeTokenSymbol(prizeToken, chainId)}
+              </button>
+            </a>
+          ) : (
+            <a onClick={openModal}>
+              <button className="bg-gray-400 text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl" disabled>
+                Donate {getPrizeTokenSymbol(prizeToken, chainId)}
+              </button>
+            </a>
+          )}
+        </div>
+        
+        <p className={"mt-2"}>
+          Those who wish to award prizes for the hackathon may donate.
+        </p>
+        
+        <div className="flex justify-between items-center mt-16">
+          <h2 className="text-2xl font-bold">Voters</h2>
+          {phase === PHASE.PREPARE_PRIZE ? (
+            <a onClick={openModalSpVoter}>
+              <button className="bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl">
+                Add special voters
+              </button>
+            </a>
+          ) : (
+            <a onClick={openModalSpVoter}>
+              <button className="bg-gray-400 text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl" disabled>
+                Add special voters
+              </button>
+            </a>
+          )}
+        </div>
+
+        <p className={"mt-2"}>
+          The hack owner can add people who are not entitled to vote when in Deposit prize status only.(Optional to do) 
+        </p>
+        {specialVoters.length > 0 ? ( 
+          <div className="grid grid-cols-2 p-4 rounded-md shadow-md mt-4 mb-12">
+            <div className="col-span-1 border-b font-bold pb-2">Account</div>
+            <div className="col-span-1 border-b font-bold pb-2">Sum</div>
+
+            {specialVoters.map((vote, index) => (
+              <>
+                <div key={`voter-${index}`} className="col-span-1 border-b pb-2 pt-2 text-gray-500">
+                  <a
+                    href={`https://optimistic.etherscan.io/address/${specialVotersAddress[index]}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500"
+                  >
+                    {`${specialVotersAddress[index].slice(0, 5)}...${specialVotersAddress[index].slice(-5)}`}
+                  </a>
+                </div>
+                <div key={`count-${index}`} className="col-span-1 border-b pb-2 pt-2 text-gray-500">
+                  {vote}
+                </div>
+              </>
+            ))}
+          </div>
         ) : (
-          <span>{deposit ? bigNumberToNumber(deposit, 6) : 0}</span>
-        )}{' '}
-        {getPrizeTokenSymbol(prizeToken, chainId)} will be distributed to the top {winnerCount}{' '}
-        winners.
-      </p>
-      {/* <h2 className="text-2xl font-bold mt-4">Transactions</h2>
-      <div className="grid grid-cols-4 p-4 rounded-md shadow-md">
-        <div className="col-span-1 border-b font-bold pb-2">Account</div>
-        <div className="col-span-1 border-b font-bold pb-2">To</div>
-        <div className="col-span-1 border-b font-bold pb-2">Token Amount</div>
-        <div className="col-span-1 border-b font-bold pb-2">Time</div>
-        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 5</div>
-        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 6</div>
-        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 7</div>
-        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 8</div>
-        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 9</div>
-        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 10</div>
-        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 11</div>
-        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 12</div>
-        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 13</div>
-        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 14</div>
-        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 15</div>
-        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 16</div>
-        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 17</div>
-        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 18</div>
-        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 19</div>
-        <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">Cell 20</div>
-      </div> */}
-    </div>
+          null
+        )}
+      </div>
+    </>
   );
 };
 

@@ -6,12 +6,15 @@ import {
   Config,
   Hackathon,
   HackathonData,
+  HackathonVoteNft,
+  HackathonVoteNftData,
   HackathonPrize,
   HackathonPrizeData,
   Submission,
   SubmissionData,
   Vote,
-  VoteData
+  VoteData,
+  Administrator
 } from "../codegen/Tables.sol";
 import { Phase } from "../codegen/Types.sol";
 
@@ -24,6 +27,10 @@ contract ViewSystem is System {
     return Hackathon.get(_hackathonId);
   }
 
+  function getHackathonVoteNft(bytes32 _hackathonId) public view returns(HackathonVoteNftData memory){
+    return HackathonVoteNft.get(_hackathonId);
+  }
+
   function getHackathonPrize(bytes32 _hackathonId) public view returns(HackathonPrizeData memory){
     return HackathonPrize.get(_hackathonId);
   }
@@ -34,6 +41,10 @@ contract ViewSystem is System {
 
   function getVote(bytes32 _hackathonId, address _voter)  public view returns(VoteData memory){
     return Vote.get(_hackathonId, _voter);
+  }
+
+  function getAdministrator() public view returns(address) {
+    return Administrator.get();
   }
 
 }

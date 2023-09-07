@@ -7,6 +7,10 @@ export default mudConfig({
       keySchema: {},
       schema: "uint32",
     },
+    Administrator: {
+      keySchema: {},
+      schema: "address",
+    },
     Config: {
       keySchema: {},
       schema: {
@@ -38,6 +42,7 @@ export default mudConfig({
       schema: {
         voteNft: "address",
         voteNftSnapshot: "uint64",
+        specialVoters: "address[]",
       },
     },
     Submission: {

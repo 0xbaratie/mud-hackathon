@@ -299,6 +299,29 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "_voter",
+        type: "address",
+      },
+      {
+        internalType: "uint32",
+        name: "voteSum",
+        type: "uint32",
+      },
+    ],
+    name: "addSpecialVoter",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "bytes16",
         name: "namespace",
         type: "bytes16",
@@ -397,6 +420,19 @@ const _abi = [
       },
     ],
     name: "deleteHackathon",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+    ],
+    name: "deleteHackathonByAdmin",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -527,6 +563,19 @@ const _abi = [
     name: "emitEphemeralRecord",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getAdministrator",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -736,6 +785,42 @@ const _abi = [
           },
         ],
         internalType: "struct HackathonPrizeData",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+    ],
+    name: "getHackathonVoteNft",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "voteNft",
+            type: "address",
+          },
+          {
+            internalType: "uint64",
+            name: "voteNftSnapshot",
+            type: "uint64",
+          },
+          {
+            internalType: "address[]",
+            name: "specialVoters",
+            type: "address[]",
+          },
+        ],
+        internalType: "struct HackathonVoteNftData",
         name: "",
         type: "tuple",
       },

@@ -18,12 +18,17 @@ contract SubmissionSystem is System {
   event Voted(address indexed holder);
 
   address public constant ETH_ADDRESS = 0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000;
-  address public ERC721_L1_BALANCE_CHECK = 0xEe53229C1Ec56798963B703fD79CF409DF310858;
+  address public constant ERC721_L1_BALANCE_CHECK = 0xEe53229C1Ec56798963B703fD79CF409DF310858;
   address public voteToken;
   address public addressERC721;
   uint32 public chainId = 1;
   uint64 public snapshotBlock;
   IL2VotingOnChainRequest public l2VotingOnChainRequest;
+  
+  modifier onlyOwner(bytes32 _hackathonId) {
+    require(Hackathon.get(_hackathonId).owner == _msgSender(), "Only owner can call this function.");
+    _;
+  }
 
   mapping(bytes32 => mapping(address => uint256)) public voteCount;
 
@@ -74,8 +79,11 @@ contract SubmissionSystem is System {
       // l2VotingOnChainRequest.testPlus();
       Vote.set(_hackathonId, address(_msgSender()), nftBalance, true);
     }
-
+    
+    // TODO: The condition is being changed for debugging purposes. Need to replace with commented out one later. 
+    // require(_voteData.count > voteCount[_hackathonId][address(_msgSender())], "Your voting numbers had already exceed.");
     require(_voteData.count >= voteCount[_hackathonId][address(_msgSender())], "Your voting numbers had already exceed.");
+    
 
     // validate submission
     SubmissionData memory _submissionData = Submission.get(_hackathonId, _submitter);
@@ -84,6 +92,14 @@ contract SubmissionSystem is System {
     //increment votes
     voteCount[_hackathonId][address(_msgSender())] += 1;
     Submission.setVotes(_hackathonId, _submitter, _submissionData.votes + 1);
+  }
+
+  function addSpecialVoter(bytes32 _hackathonId, address _voter, uint32 voteSum) public onlyOwner(_hackathonId) {
+    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
+    require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
+    Vote.set(_hackathonId, _voter, voteSum, true);
+    // Needed to list by hackathon
+    HackathonVoteNft.pushSpecialVoters(_hackathonId, _voter);  
   }
 
 
