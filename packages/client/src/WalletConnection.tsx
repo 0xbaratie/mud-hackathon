@@ -123,7 +123,7 @@ const WalletConnection = ({ children }: Props) => {
                 disabled={!isMetaMask}
                 className="btn bg-[#333333] text-white rounded-lg"
               >
-                connect(Metamask)
+                connect
               </button>
             </>
           ) : (
