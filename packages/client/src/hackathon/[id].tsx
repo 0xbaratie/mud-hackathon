@@ -57,7 +57,18 @@ export const HackathonPage = () => {
   }, []);
 
   const OverviewTabContent: React.FC = () => {
-    return <HackathonOverview uri={uri} name={name} owner={owner} hackathonId={productId} winnerCount={winnerCount} voteNft={voteNft} voteNftSnapshot={voteNftSnapshot} />;
+    return( 
+      <HackathonOverview 
+        uri={uri} 
+        name={name} 
+        owner={owner} 
+        hackathonId={productId} 
+        winnerCount={winnerCount} 
+        voteNft={voteNft} 
+        voteNftSnapshot={voteNftSnapshot}
+        phase={phase}
+      />
+    );
   };
 
   const PrizesTabContent: React.FC = () => {
@@ -66,12 +77,18 @@ export const HackathonPage = () => {
         hackathonId={paddedHexStr}
         prizeToken={prizeToken}
         winnerCount={winnerCount}
+        phase={phase}
       />
     );
   };
 
   const ProjectsTabContent: React.FC = () => {
-    return <HackathonProjects hackathonId={paddedHexStr} phase={phase} />;
+    return (
+      <HackathonProjects 
+        hackathonId={paddedHexStr} 
+        phase={phase} 
+      />
+    );
   };
 
   let activeTabContent;

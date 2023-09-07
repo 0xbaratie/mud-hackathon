@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom';
 import { useInterval } from '../hooks/useInterval';
 import { useToast } from '../hooks/useToast';
 import { Toast } from './Toast';
+import { PHASE } from '../constants/constants';
 
 interface HackathonOverviewProps {
   uri: string;
@@ -13,9 +14,10 @@ interface HackathonOverviewProps {
   winnerCount: number;
   voteNft: string;
   voteNftSnapshot: number;
+  phase: number;
 }
 
-const HackathonOverview = ({ uri, name, owner, hackathonId, winnerCount, voteNft, voteNftSnapshot}: HackathonOverviewProps) => {
+const HackathonOverview = ({ uri, name, owner, hackathonId, winnerCount, voteNft, voteNftSnapshot, phase}: HackathonOverviewProps) => {
   const { showToast, toastType } = useToast();
   const [shouldRedirect, setShouldRedirect] = useState(false);
   const [myAddress, setMyAddress] = useState('');
@@ -78,7 +80,7 @@ const HackathonOverview = ({ uri, name, owner, hackathonId, winnerCount, voteNft
           Detail
         </a>
       </button>
-      {(myAddress === owner || myAddress === administrator) && (
+      {(myAddress === owner || myAddress === administrator) && phase === PHASE.PREPARE_PRIZE && (
         <button
           className="mt-6 bg-white text-[#333333] border border-[#333333] pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl"
           onClick={async (event) => {
@@ -93,7 +95,7 @@ const HackathonOverview = ({ uri, name, owner, hackathonId, winnerCount, voteNft
             }
           }}
         >
-          Delete hackathon (Owner only)
+          Delete hackathon
         </button>
       )}
     </div>

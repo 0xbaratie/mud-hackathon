@@ -10,14 +10,16 @@ import { getPrizeTokenSymbol, bigNumberToNumber } from '../utils/common';
 import { ToastError } from '../components/ToastError';
 import { ToastSuccess } from '../components/ToastSuccess';
 import { useInterval } from '../hooks/useInterval';
+import { PHASE } from '../constants/constants';
 
 interface HackathonPrizesProps {
   hackathonId: string;
   prizeToken: string;
   winnerCount: number;
+  phase: number;
 }
 
-const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPrizesProps) => {
+const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: HackathonPrizesProps) => {
   const {
     network: { worldContract, chainId },
   } = useMUD();
@@ -72,7 +74,7 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
       setSpecialVotersAddress(hackathonVoteNft.specialVoters);
       for (const voteAddress of hackathonVoteNft.specialVoters) {
         const vote = await worldContract.getVote(hackathonId, voteAddress)
-        fetchedSpecialVoters.push(parseInt(vote.count)); 
+        fetchedSpecialVoters.push(vote.count.toNumber()); 
       }
       setSpecialVoters(fetchedSpecialVoters); 
     })();
@@ -96,58 +98,77 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount }: HackathonPriz
               setSuccess={setSuccess}
             />
           </FullScreenModal>
+        
+        
         <div className="flex justify-between items-center ">
           <h2 className="text-2xl font-bold">Prizes</h2>
-          <a onClick={openModal}>
-            <button className="bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl">
-              Donate {getPrizeTokenSymbol(prizeToken, chainId)}
-            </button>
-          </a>
+          {phase === PHASE.PREPARE_PRIZE ? (
+            <a onClick={openModal}>
+              <button className="bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl">
+                Donate {getPrizeTokenSymbol(prizeToken, chainId)}
+              </button>
+            </a>
+          ) : (
+            <a onClick={openModal}>
+              <button className="bg-gray-400 text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl" disabled>
+                Donate {getPrizeTokenSymbol(prizeToken, chainId)}
+              </button>
+            </a>
+          )}
         </div>
+        
         <p className={"mt-2"}>
           Those who wish to award prizes for the hackathon may donate.
         </p>
         
         <div className="flex justify-between items-center mt-16">
           <h2 className="text-2xl font-bold">Voters</h2>
-          <a onClick={openModalSpVoter}>
-            <button className="bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl">
-              Add special voters
-            </button>
-          </a>
+          {phase === PHASE.PREPARE_PRIZE ? (
+            <a onClick={openModalSpVoter}>
+              <button className="bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl">
+                Add special voters
+              </button>
+            </a>
+          ) : (
+            <a onClick={openModalSpVoter}>
+              <button className="bg-gray-400 text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl" disabled>
+                Add special voters
+              </button>
+            </a>
+          )}
         </div>
 
         <p className={"mt-2"}>
           The hack owner can add people who are not entitled to vote when in Deposit prize status only.(Optional to do) 
         </p>
-        <div className="grid grid-cols-2 p-4 rounded-md shadow-md mt-4 mb-12">
-          <div className="col-span-1 border-b font-bold pb-2">Account</div>
-          <div className="col-span-1 border-b font-bold pb-2">Sum</div>
+        {specialVoters.length > 0 ? ( 
+          <div className="grid grid-cols-2 p-4 rounded-md shadow-md mt-4 mb-12">
+            <div className="col-span-1 border-b font-bold pb-2">Account</div>
+            <div className="col-span-1 border-b font-bold pb-2">Sum</div>
 
-          {specialVoters &&
-            specialVoters.map((vote, index) => [
-              <div key={`voter-${index}`} className="col-span-1 border-b pb-2 pt-2 text-gray-500">
-                <a
-                  href={`https://optimistic.etherscan.io/address/${specialVotersAddress[index]}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500"
-                >
-                  {`${specialVotersAddress[index].slice(0, 5)}...${specialVotersAddress[index].slice(-5)}`}
-                </a>
-              </div>,
-              <div key={`count-${index}`} className="col-span-1 border-b pb-2 pt-2 text-gray-500">
-                {vote}
-              </div>,
-            ])
-          }
-        
-        </div>
-        
-
+            {specialVoters.map((vote, index) => (
+              <>
+                <div key={`voter-${index}`} className="col-span-1 border-b pb-2 pt-2 text-gray-500">
+                  <a
+                    href={`https://optimistic.etherscan.io/address/${specialVotersAddress[index]}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500"
+                  >
+                    {`${specialVotersAddress[index].slice(0, 5)}...${specialVotersAddress[index].slice(-5)}`}
+                  </a>
+                </div>
+                <div key={`count-${index}`} className="col-span-1 border-b pb-2 pt-2 text-gray-500">
+                  {vote}
+                </div>
+              </>
+            ))}
+          </div>
+        ) : (
+          null
+        )}
       </div>
     </>
-    
   );
 };
 
