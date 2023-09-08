@@ -80,8 +80,8 @@ const HackathonProjects = ({ hackathonId, submitter, phase }: HackathonPrizesPro
             <p className="text-sm">{description}</p>
           </div>
           <div className="flex absolute bottom-4 right-0 pr-4">
-            <img src={VotingBox} className="" alt="Voting box icon" />
-            <span className="ml-1 text-md font-bold">{votes}</span>
+            <img src={VotingBox} className="w-6" alt="Voting box icon" />
+            <span className="ml-1 text-xl font-bold">{votes}</span>
           </div>
         </div>
       </a>
