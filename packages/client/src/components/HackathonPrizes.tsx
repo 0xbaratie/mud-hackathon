@@ -88,7 +88,13 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: Hackat
       {success && <ToastSuccess message={success} />}
       <div className="mr-10">
         <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-          <HackathonPrizeModal hackathonId={hackathonId} prizeToken={prizeToken} />
+          <HackathonPrizeModal 
+            onClose={closeModal} 
+            hackathonId={hackathonId} 
+            prizeToken={prizeToken}
+            setError={setError}
+            setSuccess={setSuccess} 
+          />
         </FullScreenModal>
         <FullScreenModal isOpen={modalSpVoter} onClose={closeModalSpVoter}>
             <SpVoterModal
@@ -100,22 +106,20 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: Hackat
           </FullScreenModal>
         
         
-        <div className="flex justify-between items-center ">
-          <h2 className="text-2xl font-bold">Prizes</h2>
-          {phase === PHASE.PREPARE_PRIZE ? (
+          <div className="flex justify-between items-center ">
+            <h2 className="text-2xl font-bold">Prizes</h2>
             <a onClick={openModal}>
-              <button className="bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl">
+              <button
+                className={`pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl text-white ${
+                  phase === PHASE.PREPARE_PRIZE ? 'bg-[#333333]' : 'bg-gray-400'
+                }`}
+                disabled={phase !== PHASE.PREPARE_PRIZE}
+              >
                 Donate {getPrizeTokenSymbol(prizeToken, chainId)}
               </button>
             </a>
-          ) : (
-            <a onClick={openModal}>
-              <button className="bg-gray-400 text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl" disabled>
-                Donate {getPrizeTokenSymbol(prizeToken, chainId)}
-              </button>
-            </a>
-          )}
-        </div>
+          </div>
+
         
         <p className={"mt-2"}>
           Those who wish to award prizes for the hackathon may donate.
@@ -123,19 +127,16 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: Hackat
         
         <div className="flex justify-between items-center mt-16">
           <h2 className="text-2xl font-bold">Voters</h2>
-          {phase === PHASE.PREPARE_PRIZE ? (
-            <a onClick={openModalSpVoter}>
-              <button className="bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl">
-                Add special voters
-              </button>
-            </a>
-          ) : (
-            <a onClick={openModalSpVoter}>
-              <button className="bg-gray-400 text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl" disabled>
-                Add special voters
-              </button>
-            </a>
-          )}
+          <a onClick={openModalSpVoter}>
+            <button
+              className={`pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl text-white ${
+                phase === PHASE.PREPARE_PRIZE ? 'bg-[#333333]' : 'bg-gray-400'
+              }`}
+              disabled={phase !== PHASE.PREPARE_PRIZE}
+            >
+              Add special voters
+            </button>
+          </a>
         </div>
 
         <p className={"mt-2"}>

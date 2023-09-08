@@ -55,10 +55,10 @@ export const App = () => {
       {error && <ToastError message={error} />}
       {success && <ToastSuccess message={success} />}
       <div className="text-center mt-12 mb-6">
-        <h1 className="font-bold text-3xl">
+        <h1 className="font-bold text-4xl font-arcade">
           Autonomous World <br /> hackathons for future
         </h1>
-        <p className="text-[#9D9D9D] text-xl mt-4 mb-8">
+        <p className="text-[#9D9D9D] text-xl mt-4 mb-8 font-arcade">
           Build products, practice skills, learn technologies, win prizes, and grow your network
         </p>
       </div>

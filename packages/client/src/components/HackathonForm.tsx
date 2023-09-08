@@ -72,7 +72,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
       />
       <h1 className="text-sm mb-1 mt-4">Cover image</h1>
       <p className="text-sm text-gray-500 mb-1">
-        The ideal aspect ratio is 9 : 2 - for example 1440 x 320 px.
+        The ideal aspect ratio is 1 : 1 - for example 512 x 512 px.
       </p>
       <input
         type="text"

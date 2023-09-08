@@ -7,3 +7,10 @@
   border-left-width: 4px;
   border-left-color: #000000;
 }
+
+@font-face {
+  font-family: 'ArcadeClassic';
+  src: url('/fonts/MobileFont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
