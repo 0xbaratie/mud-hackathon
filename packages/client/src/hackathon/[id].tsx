@@ -7,7 +7,7 @@ import HackathonProjects from '../components/HackathonProjects';
 import Timeline from '../components/Timeline';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-const bgImage = '../../../public/cover.png';
+const bgImage = '/cover.png';
 
 export const HackathonPage = () => {
   const { id } = useParams();
