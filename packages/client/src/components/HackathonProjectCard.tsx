@@ -107,17 +107,16 @@ const HackathonProjects = ({ hackathonId, submitter, phase }: HackathonPrizesPro
         //TODO if address == owner
         prize > 0 && (
           <div className="flex justify-center items-center">
-            <a onClick={openModal}>
-              <button
-                className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg"
-                onClick={async (event) => {
-                  event.preventDefault();
-                  await withdrawPrize(hackathonId);
-                }}
-              >
-                WithdrawPrize
-              </button>
-            </a>
+            <button
+              className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg"
+              onClick={async (event) => {
+                event.preventDefault();
+                await withdrawPrize(hackathonId);
+              }}
+            >
+              WithdrawPrize
+            </button>
+            
           </div>
         )
       }
