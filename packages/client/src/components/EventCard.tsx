@@ -80,7 +80,7 @@ export const EventCard = ({ hackathonNum }: EventcardProps) => {
             <span className="font-bold">
               {depositAmount} {getPrizeTokenSymbol(prizeToken, chainId)}
             </span>
-            <span className="p-2 text-gray-600">in prizes</span>
+            <span className="p-2 text-gray-600">deposited</span>
             <span className="font-bold">{projectsSum}</span>
             <span className="p-2 text-gray-600">projects</span>
           </div>
