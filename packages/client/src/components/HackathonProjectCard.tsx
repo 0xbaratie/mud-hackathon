@@ -96,7 +96,7 @@ const HackathonProjects = ({ hackathonId, submitter, phase }: HackathonPrizesPro
       ) : (
         <div className="flex justify-center items-center">
           <button
-            className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg bg-gray-400 text-white"
+            className="mt-4 pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg bg-gray-400 text-white"
             disabled
           >
             Vote

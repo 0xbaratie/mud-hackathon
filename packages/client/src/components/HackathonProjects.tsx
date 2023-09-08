@@ -60,7 +60,7 @@ const HackathonProjects = ({ hackathonId, phase }: HackathonProjectsProps) => {
       ) : (
         <div className="text-center mb-10">
           <button
-            className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg bg-gray-400"
+            className="mt-4 text-white pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg bg-gray-400"
             disabled
           >
             Submit project
