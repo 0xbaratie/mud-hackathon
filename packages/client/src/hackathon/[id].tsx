@@ -7,7 +7,6 @@ import HackathonProjects from '../components/HackathonProjects';
 import Timeline from '../components/Timeline';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-const bgImage = '/cover.png';
 
 export const HackathonPage = () => {
   const { id } = useParams();
@@ -35,6 +34,7 @@ export const HackathonPage = () => {
   const handleTabClick = (tabIndex: number) => {
     setActiveTab(tabIndex);
   };
+  
 
   useEffect(() => {
     (async () => {
@@ -54,7 +54,7 @@ export const HackathonPage = () => {
       setWithdrawalPeriod(hackathon.withdrawalPeriod.toNumber());
       setProductId(paddedHexStr);
     })();
-  }, []);
+  }, [paddedHexStr, worldContract]);
 
   const OverviewTabContent: React.FC = () => {
     return( 
@@ -104,9 +104,11 @@ export const HackathonPage = () => {
 
   return (
     <>
-      <div className="bg-black bg-opacity-70">
-        <div>
-          <img src={bgImage} className="w-full" />
+      <div className="bg-black text-center">
+        <div className="w-full h-[128px] flex items-center justify-center">
+          <h1 className="font-arcade font-bold text-4xl text-white">
+            {name}
+          </h1>
         </div>
         <div className="ml-4 relative ">
           <div
