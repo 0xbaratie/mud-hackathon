@@ -104,9 +104,11 @@ export const HackathonPage = () => {
 
   return (
     <>
-      <div className="bg-black bg-opacity-70">
-        <div>
-          <img src={bgImage} className="w-full" />
+      <div className="bg-black text-center">
+        <div className="w-full h-[128px] flex items-center justify-center">
+          <h1 className="font-arcade font-bold text-4xl text-white">
+            {name}
+          </h1>
         </div>
         <div className="ml-4 relative ">
           <div
