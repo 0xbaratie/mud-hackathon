@@ -38,6 +38,12 @@ export default mudConfig({
         submitters: "address[]",
       },
     },
+    HackathonPrizeSponsor: {
+      schema: {
+        amounts: "uint256[]",
+        sponsors: "address[]",
+      },
+    },
     HackathonVoteNft: {
       schema: {
         voteNft: "address",
@@ -72,5 +78,8 @@ export default mudConfig({
   },
   enums: {
     Phase: ["NONE", "PREPARE_PRIZE", "HACKING", "VOTING", "WITHDRAWING", "END"],
+  },
+  costants: {
+    ETH_ADDRESS: "0x00",
   },
 });

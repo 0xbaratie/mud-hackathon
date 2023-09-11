@@ -32,6 +32,7 @@ contract HackathonSystemTest is MudV2Test {
   IWorld public world;
   MockERC20 mock;
   MockERC721 nft;
+  address private constant ETH_ADDRESS = 0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000;
 
   function setUp() public override {
     super.setUp();
@@ -136,6 +137,37 @@ contract HackathonSystemTest is MudV2Test {
     assertEq(_hackathon.name, "test2");
     assertEq(_hackathon.uri, "uri2");
     assertEq(Config.get(world), bytes32(uint256(1)));
+  }
+
+  function testDeleteHackathon() public {
+    world.createHackathon(
+      address(mock),
+      1,
+      2,
+      3,
+      4,
+      1,
+      "test1",
+      "uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076
+    );
+
+    deal(address(mock), address(1), 100000e6);
+    vm.startPrank(address(1));
+    mock.approve(address(world), 100000e6);    
+    world.depositPrize(bytes32(uint256(1)), 100);
+    vm.stopPrank();
+    deal(address(mock), address(2), 100000e6);
+    vm.startPrank(address(2));
+    mock.approve(address(world), 100000e6);    
+    world.depositPrize(bytes32(uint256(1)), 200);
+    vm.stopPrank();
+
+    uint _bal1 = mock.balanceOf(address(1));
+    uint _bal2 = mock.balanceOf(address(2));
+
+    world.deleteHackathon(bytes32(uint256(1)));
+    assertEq(mock.balanceOf(address(1)), _bal1 + 100);
+    assertEq(mock.balanceOf(address(2)), _bal2 + 200);    
   }
 
   function testProceedPhase0() public {

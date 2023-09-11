@@ -91,6 +91,22 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    HackathonPrizeSponsor: (() => {
+      const tableId = new TableId("", "HackathonPrizeSp");
+      return defineComponent(
+        world,
+        {
+          amounts: RecsType.BigIntArray,
+          sponsors: RecsType.StringArray,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
     HackathonVoteNft: (() => {
       const tableId = new TableId("", "HackathonVoteNft");
       return defineComponent(

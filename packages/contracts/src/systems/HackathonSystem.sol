@@ -2,18 +2,24 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Hackathon,Config,HackathonData,HackathonPrize,HackathonPrizeData,Submission,SubmissionData,HackathonVoteNft,HackathonVoteNftData } from "../codegen/Tables.sol";
+import { Hackathon,Config,HackathonData,HackathonPrize,HackathonPrizeData,Submission,SubmissionData,HackathonVoteNft,HackathonVoteNftData,Administrator,HackathonPrizeSponsor } from "../codegen/Tables.sol";
 import { Phase } from "../codegen/Types.sol";
 import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 contract HackathonSystem is System {
   using SafeERC20 for IERC20;
 
+  address private constant ETH_ADDRESS = 0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000;
   address public owner;
   address[] specialVoters;
 
   modifier onlyOwner(bytes32 _hackathonId) {
     require(Hackathon.get(_hackathonId).owner == _msgSender(), "Only owner can call this function.");
+    _;
+  }
+
+  modifier onlyAdmin() {
+    require(Administrator.get() == _msgSender(), "Only administrator can call this function.");
     _;
   }
 
@@ -97,6 +103,14 @@ contract HackathonSystem is System {
   }
 
   function deleteHackathon(bytes32 _hackathonId) public onlyOwner(_hackathonId) {
+    _deleteHackathon(_hackathonId);
+  }
+
+  function deleteHackathonByAdmin(bytes32 _hackathonId) public onlyAdmin() {
+    _deleteHackathon(_hackathonId);
+  }
+
+  function _deleteHackathon(bytes32 _hackathonId) internal {
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
     require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
 
@@ -104,6 +118,20 @@ contract HackathonSystem is System {
     HackathonVoteNft.deleteRecord(_hackathonId);
     HackathonPrize.deleteRecord(_hackathonId);
 
+    // return prize to sponsor and delete record
+    uint[] memory _amounts = HackathonPrizeSponsor.getAmounts(_hackathonId);
+    address[] memory _sponsors = HackathonPrizeSponsor.getSponsors(_hackathonId);
+    uint _len = _amounts.length;
+    if(_hackathonData.prizeToken == ETH_ADDRESS){
+      for(uint i = 0; i < _len; i++){
+        payable(_sponsors[i]).transfer(_amounts[i]);
+      }
+    }else{
+      for(uint i = 0; i < _len; i++){
+        IERC20(_hackathonData.prizeToken).safeTransfer(_sponsors[i], _amounts[i]);
+      }
+    }
+    HackathonPrizeSponsor.deleteRecord(_hackathonId);
   }
 
   function proceedPhase(bytes32 _hackathonId) public onlyOwner(_hackathonId) {
