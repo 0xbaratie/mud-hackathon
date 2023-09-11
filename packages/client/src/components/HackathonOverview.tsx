@@ -19,7 +19,7 @@ const HackathonOverview = ({ uri, name, owner, hackathonId }: HackathonOverviewP
   const [administrator, setAdministrator] = useState('');
 
   const {
-    systemCalls: { deleteHackathon },
+    systemCalls: { deleteHackathon, deleteHackathonByAdmin },
     network: { signerOrProvider, worldContract },
   } = useMUD();
 
@@ -75,13 +75,31 @@ const HackathonOverview = ({ uri, name, owner, hackathonId }: HackathonOverviewP
           Detail
         </a>
       </button>
-      {(myAddress === owner || myAddress === administrator) && (
+      {myAddress === owner && (
         <button
           className="mt-6 bg-white text-[#333333] border border-[#333333] pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl"
           onClick={async (event) => {
             event.preventDefault();
             try {
               await deleteHackathon(hackathonId);
+              showToast('success');
+              setShouldRedirect(true);
+            } catch (error) {
+              console.error(error);
+              showToast('error');
+            }
+          }}
+        >
+          Delete hackathon
+        </button>
+      )}
+      {myAddress === administrator && (
+        <button
+          className="mt-6 bg-white text-[#333333] border border-[#333333] pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl"
+          onClick={async (event) => {
+            event.preventDefault();
+            try {
+              await deleteHackathonByAdmin(hackathonId);
               showToast('success');
               setShouldRedirect(true);
             } catch (error) {
