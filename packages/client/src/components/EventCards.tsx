@@ -7,7 +7,7 @@ interface EventCardsProps {
 export const EventCards = ({ maxHackathonNum }: EventCardsProps) => {
   return (
     <div
-      className="bg-white mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-8"
+      className="bg-white mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-8 mb-20"
       style={{ minHeight: '500px' }}
     >
       {Array.from({ length: maxHackathonNum }, (_, i) => i + 1).map((hackathonNum) => (

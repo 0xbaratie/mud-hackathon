@@ -10,16 +10,18 @@ import { useToast } from '../hooks/useToast';
 import { Toast } from './Toast';
 
 interface HackathonPrizeMocalProps {
+  onClose: () => void;
   hackathonId: string;
   prizeToken: string;
+  setError: (error: string | null) => void;
+  setSuccess: (success: string | null) => void;
 }
 
-const HackathonPrizeModal = ({ hackathonId, prizeToken }: HackathonPrizeMocalProps) => {
+const HackathonPrizeModal = ({ onClose, hackathonId, prizeToken, setError, setSuccess }: HackathonPrizeMocalProps) => {
   const {
     systemCalls: { depositPrize },
     network: { worldContract, signerOrProvider, chainId },
   } = useMUD();
-  const { showToast, toastType } = useToast();
   const [amount, setAmount] = useState(0);
   const [allowance, setAllowance] = useState(BigNumber.from('0'));
   const prizeTokenSymbol = getPrizeTokenSymbol(prizeToken, chainId);
@@ -39,7 +41,6 @@ const HackathonPrizeModal = ({ hackathonId, prizeToken }: HackathonPrizeMocalPro
 
   return (
     <div className="p-6">
-      <Toast toastType={toastType} />
       <p className="font-bold text-sm">Deposit {prizeTokenSymbol}</p>
       <div className="mt-4 w-full">
         <input
@@ -61,11 +62,12 @@ const HackathonPrizeModal = ({ hackathonId, prizeToken }: HackathonPrizeMocalPro
                   await world.depositPrizeEth(hackathonId, numberToBigNumber(amount, 18), {
                     value: numberToBigNumber(amount, 18),
                   });
-                  showToast('success');
+                  setSuccess('Deposit success');
                 } catch (error) {
                   console.error(error);
-                  showToast('error');
+                  setError('Deposit error');
                 }
+                onClose();
               }}
             >
               Deposit
@@ -85,10 +87,10 @@ const HackathonPrizeModal = ({ hackathonId, prizeToken }: HackathonPrizeMocalPro
                         worldContract.address,
                         numberToBigNumber(amount, 6),
                       );
-                      showToast('success');
+                      setSuccess('Approve success, please deposit the token next');
                     } catch (error) {
                       console.error(error);
-                      showToast('error');
+                      setError('Approve error');
                     }
                   }}
                 >
@@ -111,11 +113,12 @@ const HackathonPrizeModal = ({ hackathonId, prizeToken }: HackathonPrizeMocalPro
                     event.preventDefault();
                     try {
                       await depositPrize(hackathonId, numberToBigNumber(amount, 6));
-                      showToast('success');
+                      setSuccess('Deposit success');
                     } catch (error) {
                       console.error(error);
-                      showToast('error');
+                      setError('Deposit error');
                     }
+                    onClose();
                   }}
                 >
                   Deposit

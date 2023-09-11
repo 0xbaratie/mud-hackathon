@@ -16,5 +16,7 @@ interface ISubmissionSystem {
 
   function vote(bytes32 _hackathonId, address _submitter) external;
 
+  function addSpecialVoter(bytes32 _hackathonId, address _voter, uint32 voteSum) external;
+
   function withdrawPrize(bytes32 _hackathonId) external payable;
 }

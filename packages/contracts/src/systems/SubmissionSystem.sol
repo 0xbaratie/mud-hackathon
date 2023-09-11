@@ -24,6 +24,11 @@ contract SubmissionSystem is System {
   uint32 public chainId = 1;
   uint64 public snapshotBlock;
   IL2VotingOnChainRequest public l2VotingOnChainRequest;
+  
+  modifier onlyOwner(bytes32 _hackathonId) {
+    require(Hackathon.get(_hackathonId).owner == _msgSender(), "Only owner can call this function.");
+    _;
+  }
 
   mapping(bytes32 => mapping(address => uint256)) public voteCount;
 
@@ -87,6 +92,14 @@ contract SubmissionSystem is System {
     //increment votes
     voteCount[_hackathonId][address(_msgSender())] += 1;
     Submission.setVotes(_hackathonId, _submitter, _submissionData.votes + 1);
+  }
+
+  function addSpecialVoter(bytes32 _hackathonId, address _voter, uint32 voteSum) public onlyOwner(_hackathonId) {
+    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
+    require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
+    Vote.set(_hackathonId, _voter, voteSum, true);
+    // Needed to list by hackathon
+    HackathonVoteNft.pushSpecialVoters(_hackathonId, _voter);  
   }
 
 

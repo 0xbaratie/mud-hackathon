@@ -6,6 +6,8 @@ import {
   Config,
   Hackathon,
   HackathonData,
+  HackathonVoteNft,
+  HackathonVoteNftData,
   HackathonPrize,
   HackathonPrizeData,
   Submission,
@@ -23,6 +25,10 @@ contract ViewSystem is System {
 
   function getHackathon(bytes32 _hackathonId) public view returns(HackathonData memory){
     return Hackathon.get(_hackathonId);
+  }
+
+  function getHackathonVoteNft(bytes32 _hackathonId) public view returns(HackathonVoteNftData memory){
+    return HackathonVoteNft.get(_hackathonId);
   }
 
   function getHackathonPrize(bytes32 _hackathonId) public view returns(HackathonPrizeData memory){

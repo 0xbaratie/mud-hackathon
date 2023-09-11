@@ -80,8 +80,8 @@ const HackathonProjects = ({ hackathonId, submitter, phase }: HackathonPrizesPro
             <p className="text-sm">{description}</p>
           </div>
           <div className="flex absolute bottom-4 right-0 pr-4">
-            <img src={VotingBox} className="" alt="Voting box icon" />
-            <span className="ml-1 text-md font-bold">{votes}</span>
+            <img src={VotingBox} className="w-6" alt="Voting box icon" />
+            <span className="ml-1 text-xl font-bold">{votes}</span>
           </div>
         </div>
       </a>
@@ -96,10 +96,10 @@ const HackathonProjects = ({ hackathonId, submitter, phase }: HackathonPrizesPro
       ) : (
         <div className="flex justify-center items-center">
           <button
-            className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg bg-gray-400"
+            className="mt-4 pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg bg-gray-400 text-white"
             disabled
           >
-            Vote (outside the period)
+            Vote
           </button>
         </div>
       )}
@@ -107,17 +107,16 @@ const HackathonProjects = ({ hackathonId, submitter, phase }: HackathonPrizesPro
         //TODO if address == owner
         prize > 0 && (
           <div className="flex justify-center items-center">
-            <a onClick={openModal}>
-              <button
-                className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg"
-                onClick={async (event) => {
-                  event.preventDefault();
-                  await withdrawPrize(hackathonId);
-                }}
-              >
-                WithdrawPrize
-              </button>
-            </a>
+            <button
+              className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg"
+              onClick={async (event) => {
+                event.preventDefault();
+                await withdrawPrize(hackathonId);
+              }}
+            >
+              WithdrawPrize
+            </button>
+            
           </div>
         )
       }

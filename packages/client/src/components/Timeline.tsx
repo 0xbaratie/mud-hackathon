@@ -51,7 +51,7 @@ const Timeline = ({
         </div>
         <div className="pl-4 z-0 relative">
           <h2 className="font-bold">Deposit prize</h2>
-          <p className="text-gray-500">{timestampToDateString(startTimestamp)}</p>
+          <p className="text-gray-500">{timestampToDateString(startTimestamp)} GMT</p>
         </div>
       </div>
       <div className="mt-8">
@@ -64,7 +64,7 @@ const Timeline = ({
         </div>
         <div className="pl-4 z-0 relative">
           <h2 className="font-bold text-[#4D4D4D]">Hacking</h2>
-          <p className="text-gray-500">{timestampToDateString(submitPeriod)}</p>
+          <p className="text-gray-500">{timestampToDateString(submitPeriod)} GMT</p>
         </div>
       </div>
       <div className="mt-8">
@@ -77,7 +77,7 @@ const Timeline = ({
         </div>
         <div className="pl-4 z-0 relative">
           <h2 className="font-bold text-[#4D4D4D]">Voting</h2>
-          <p className="text-gray-500">{timestampToDateString(votingPeriod)}</p>
+          <p className="text-gray-500">{timestampToDateString(votingPeriod)} GMT</p>
         </div>
       </div>
       <div className="mt-8">
@@ -90,14 +90,14 @@ const Timeline = ({
         </div>
         <div className="pl-4 z-0 relative">
           <h2 className="font-bold text-[#4D4D4D]">Withdrawing prize</h2>
-          <p className="text-gray-500">{timestampToDateString(withdrawalPeriod)}</p>
+          <p className="text-gray-500">{timestampToDateString(withdrawalPeriod)} GMT</p>
         </div>
       </div>
 
       {owner === myAddress && (
-        <div className="mt-10">
+        <div className="mt-12">
           <button
-            className="btn bg-[#333333] text-white rounded-lg"
+            className="btn bg-[#333333] text-white rounded-xl"
             onClick={async (event) => {
               event.preventDefault();
               try {
