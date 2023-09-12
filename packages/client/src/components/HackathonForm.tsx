@@ -45,10 +45,8 @@ const HackathonForm: FC<HackathonFormProps> = ({
   const [winnerCount, setWinnerCount] = useState(1);
   const [name, setName] = useState('');
   const [uri, setUri] = useState('');
-  const [imageUri, setImageUri] = useState(
-    '',
-  );
-  const [voteNft, setVoteNft] = useState('');
+  const [imageUri, setImageUri] = useState('');
+  const [voteNft, setVoteNft] = useState('0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E');
   const [voteNftSnapshot, setVoteNftSnapshot] = useState(17928076);
 
   return (
@@ -93,19 +91,13 @@ const HackathonForm: FC<HackathonFormProps> = ({
       <div className="flex">
         <div className="flex-1">
           <h1 className="text-sm mb-1 mt-4 font-bold">Project submit due(GMT)</h1>
-          <DateTimePicker 
-            selectedDateTime={submitPeriod} 
-            setSelectedDateTime={setSubmitPeriod} 
-          />
+          <DateTimePicker selectedDateTime={submitPeriod} setSelectedDateTime={setSubmitPeriod} />
         </div>
       </div>
       <div className="flex">
         <div className="flex-1">
           <h1 className="text-sm mb-1 mt-4 font-bold">Voting due(GMT)</h1>
-          <DateTimePicker 
-            selectedDateTime={votingPeriod} 
-            setSelectedDateTime={setVotingPeriod} 
-          />
+          <DateTimePicker selectedDateTime={votingPeriod} setSelectedDateTime={setVotingPeriod} />
         </div>
       </div>
       <div className="flex">
@@ -146,7 +138,17 @@ const HackathonForm: FC<HackathonFormProps> = ({
       />
       <h1 className="text-sm mb-1 mt-4 font-bold">Vote NFT Snapshot</h1>
       <p className="text-sm text-gray-500 mb-1">
-        You need to decide which block ID you want to use to implement the timing of your ownership. Please check the block numbers on <a href="https://etherscan.io/" target="_blank" rel="noopener noreferrer" className="underline">Etherscan</a>.
+        You need to decide which block ID you want to use to implement the timing of your ownership.
+        Please check the block numbers on{' '}
+        <a
+          href="https://etherscan.io/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline"
+        >
+          Etherscan
+        </a>
+        .
       </p>
 
       <input

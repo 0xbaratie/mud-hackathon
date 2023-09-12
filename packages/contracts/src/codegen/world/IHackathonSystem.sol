@@ -35,6 +35,8 @@ interface IHackathonSystem {
 
   function deleteHackathon(bytes32 _hackathonId) external;
 
+  function deleteHackathonByAdmin(bytes32 _hackathonId) external;
+
   function proceedPhase(bytes32 _hackathonId) external;
 
   function withdrawByOwner(bytes32 _hackathonId) external;
