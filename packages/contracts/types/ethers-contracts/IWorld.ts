@@ -144,6 +144,7 @@ export interface IWorldInterface extends utils.Interface {
     "getFieldSlice(bytes32,bytes32[],uint8,bytes32,uint256,uint256)": FunctionFragment;
     "getHackathon(bytes32)": FunctionFragment;
     "getHackathonPrize(bytes32)": FunctionFragment;
+    "getHackathonSponsor(bytes32)": FunctionFragment;
     "getHackathonVoteNft(bytes32)": FunctionFragment;
     "getKeySchema(bytes32)": FunctionFragment;
     "getMaxHackathonId()": FunctionFragment;
@@ -208,6 +209,7 @@ export interface IWorldInterface extends utils.Interface {
       | "getFieldSlice"
       | "getHackathon"
       | "getHackathonPrize"
+      | "getHackathonSponsor"
       | "getHackathonVoteNft"
       | "getKeySchema"
       | "getMaxHackathonId"
@@ -368,6 +370,10 @@ export interface IWorldInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getHackathonPrize",
+    values: [PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getHackathonSponsor",
     values: [PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
@@ -728,6 +734,10 @@ export interface IWorldInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getHackathonPrize",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getHackathonSponsor",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -1097,6 +1107,11 @@ export interface IWorld extends BaseContract {
       _hackathonId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[HackathonPrizeDataStructOutput]>;
+
+    getHackathonSponsor(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber[], string[]]>;
 
     getHackathonVoteNft(
       _hackathonId: PromiseOrValue<BytesLike>,
@@ -1511,6 +1526,11 @@ export interface IWorld extends BaseContract {
     overrides?: CallOverrides
   ): Promise<HackathonPrizeDataStructOutput>;
 
+  getHackathonSponsor(
+    _hackathonId: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides
+  ): Promise<[BigNumber[], string[]]>;
+
   getHackathonVoteNft(
     _hackathonId: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
@@ -1923,6 +1943,11 @@ export interface IWorld extends BaseContract {
       _hackathonId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<HackathonPrizeDataStructOutput>;
+
+    getHackathonSponsor(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber[], string[]]>;
 
     getHackathonVoteNft(
       _hackathonId: PromiseOrValue<BytesLike>,
@@ -2382,6 +2407,11 @@ export interface IWorld extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getHackathonSponsor(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getHackathonVoteNft(
       _hackathonId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -2792,6 +2822,11 @@ export interface IWorld extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getHackathonPrize(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getHackathonSponsor(
       _hackathonId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

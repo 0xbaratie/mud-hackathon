@@ -800,6 +800,30 @@ const _abi = [
         type: "bytes32",
       },
     ],
+    name: "getHackathonSponsor",
+    outputs: [
+      {
+        internalType: "uint256[]",
+        name: "",
+        type: "uint256[]",
+      },
+      {
+        internalType: "address[]",
+        name: "",
+        type: "address[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+    ],
     name: "getHackathonVoteNft",
     outputs: [
       {
