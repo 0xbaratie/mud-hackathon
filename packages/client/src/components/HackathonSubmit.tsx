@@ -58,7 +58,7 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ onClose, hackathonId }) => 
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        {showSuccess && <ToastSuccess />}
+        {showSuccess && <ToastSuccess message={"The hackathon successfully created"}/>}
       </Transition>
 
       <Transition
