@@ -64,22 +64,24 @@ const HackathonForm: FC<HackathonFormProps> = ({
       <h1 className="text-sm mb-1 mt-4 font-bold">Detail URL</h1>
       <p className="text-sm text-gray-500 mb-1">Please provide details of your hackathon.</p>
       <input
-        type="text"
+        type="url"
         placeholder="https://xxxxxxx.framer.website/"
         className="input input-bordered w-full max-w-xs text-gray-900"
         value={uri}
         onChange={(e) => setUri(e.target.value)}
+        required
       />
       <h1 className="text-sm mb-1 mt-4 font-bold">Title image</h1>
       <p className="text-sm text-gray-500 mb-1">
         The ideal aspect ratio is 1 : 1 - for example 512 x 512 px.
       </p>
       <input
-        type="text"
+        type="url"
         placeholder="http://arweave.net/xxxxxxxxxxxxxx"
         className="input input-bordered w-full max-w-ms text-gray-900"
         value={imageUri}
         onChange={(e) => setImageUri(e.target.value)}
+        required
       />
       <div className="flex">
         <div className="flex-1">
@@ -124,6 +126,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
         className="input input-bordered w-full max-w-xs text-gray-900"
         value={winnerCount}
         onChange={(e) => setWinnerCount(parseFloat(e.target.value))}
+        required
       />
       <h1 className="text-sm mb-1 mt-4 font-bold">Prize token (Optimism chain)</h1>
       <select
@@ -143,6 +146,8 @@ const HackathonForm: FC<HackathonFormProps> = ({
         className="input input-bordered w-full max-w-s text-gray-900"
         value={voteNft}
         onChange={(e) => setVoteNft(e.target.value)}
+        pattern="^0x[a-fA-F0-9]{40}$"
+        required
       />
       <h1 className="text-sm mb-1 mt-4 font-bold">Vote NFT Snapshot</h1>
       <p className="text-sm text-gray-500 mb-1">
@@ -155,12 +160,21 @@ const HackathonForm: FC<HackathonFormProps> = ({
         className="input input-bordered w-full max-w-xs text-gray-900"
         value={voteNftSnapshot}
         onChange={(e) => setVoteNftSnapshot(parseInt(e.target.value))}
+        min={0}
+        required
       />
       <div className="mt-4">
         <button
           className="btn bg-[#333333] text-white rounded-lg"
           onClick={async (event) => {
             event.preventDefault();
+
+            if (!name || !uri || !imageUri || !voteNft || voteNftSnapshot === null || winnerCount === null) {
+              setError('All fields must be filled try again');
+              onClose();
+              return;
+            }
+
             try {
               await createHackathon(
                 prizeToken,
@@ -187,6 +201,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
         >
           Create hackathon
         </button>
+
       </div>
     </div>
   );
