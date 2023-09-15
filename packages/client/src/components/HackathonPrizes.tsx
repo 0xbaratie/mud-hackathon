@@ -82,7 +82,16 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: Hackat
 
       const hackathonSponsors = await worldContract.getHackathonSponsor(hackathonId);
       if (hackathonSponsors && hackathonSponsors.length > 0 && hackathonSponsors[0].length > 0 && hackathonSponsors[1].length > 0) {
-        setHackathonSponsors(hackathonSponsors);
+        // Sorted in order of the amount deposited.
+        const sortedSponsors = hackathonSponsors[0].map((value, index) => ({
+          depositSum: value,
+          address: hackathonSponsors[1][index],
+        })).sort((a, b) => b.depositSum.sub(a.depositSum).toNumber());
+  
+        setHackathonSponsors([
+          sortedSponsors.map(item => item.depositSum),
+          sortedSponsors.map(item => item.address)
+        ]);
       }
 
     })();
