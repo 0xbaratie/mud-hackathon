@@ -55,6 +55,8 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: Hackat
   const [success, setSuccess] = useState<string | null>(null);
   const [specialVoters, setSpecialVoters] = useState<number[]>([]);
   const [specialVotersAddress, setSpecialVotersAddress] = useState<string[]>([]);
+  const initialSponsors: [BigNumber[], string[]] = [[], []];
+  const [hackathonSponsors, setHackathonSponsors] = useState(initialSponsors);
   
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -77,9 +79,20 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: Hackat
         fetchedSpecialVoters.push(vote.count.toNumber()); 
       }
       setSpecialVoters(fetchedSpecialVoters); 
-    })();
 
-    console.log("@@@specialVoters=", specialVoters);
+      const hackathonSponsors = await worldContract.getHackathonSponsor(hackathonId);
+      if (hackathonSponsors && hackathonSponsors.length > 0 && hackathonSponsors[0].length > 0 && hackathonSponsors[1].length > 0) {
+        setHackathonSponsors(hackathonSponsors);
+      }
+
+    })();
+    if (hackathonSponsors.length > 0 && hackathonSponsors[0].length > 0 && hackathonSponsors[1].length > 0) {
+      console.log("@@@@hackathonSponsors.length=", hackathonSponsors.length);
+      console.log("@@@@hackathonSponsors[0]=", hackathonSponsors[0]);
+      console.log("@@@@hackathonSponsors[1]", hackathonSponsors[1]);
+    }
+
+    
   }, []);
 
   return (
@@ -124,6 +137,37 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: Hackat
         <p className={"mt-2"}>
           Those who wish to award prizes for the hackathon may donate.
         </p>
+        {hackathonSponsors.length > 0 && hackathonSponsors[0].length > 0 ? ( 
+          <div className="grid grid-cols-2 p-4 rounded-md shadow-md mt-4 mb-12">
+            <div className="col-span-1 border-b font-bold pb-2">Account</div>
+            <div className="col-span-1 border-b font-bold pb-2">Sum</div>
+
+            {hackathonSponsors[0].map((depositSum, index) => (
+              <>
+                <div key={`sum-${index}`}>
+                  <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">
+                    <a
+                        href={`https://optimistic.etherscan.io/address/${hackathonSponsors[1][index]}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500"
+                      >
+                        {`${hackathonSponsors[1][index].slice(0, 5)}...${hackathonSponsors[1][index].slice(-5)}`}
+                      </a>
+                  </div>
+                </div>
+                <div key={`sponsor-${index}`}>
+                  <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">
+                    {ethers.utils.formatEther(depositSum)}
+                  </div>
+                </div>
+              </>
+            ))}
+          </div>
+        ) : (
+          null
+        )}
+
         
         <div className="flex justify-between items-center mt-16">
           <h2 className="text-2xl font-bold">Voters</h2>
