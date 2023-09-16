@@ -95,13 +95,6 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: Hackat
       }
 
     })();
-    if (hackathonSponsors.length > 0 && hackathonSponsors[0].length > 0 && hackathonSponsors[1].length > 0) {
-      console.log("@@@@hackathonSponsors.length=", hackathonSponsors.length);
-      console.log("@@@@hackathonSponsors[0]=", hackathonSponsors[0]);
-      console.log("@@@@hackathonSponsors[1]", hackathonSponsors[1]);
-    }
-
-    
   }, []);
 
   return (
