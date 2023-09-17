@@ -129,6 +129,7 @@ export interface IWorldInterface extends utils.Interface {
   functions: {
     "addSpecialVoter(bytes32,address,uint32)": FunctionFragment;
     "call(bytes16,bytes16,bytes)": FunctionFragment;
+    "changeAdmin(address)": FunctionFragment;
     "createHackathon(address,uint256,uint256,uint256,uint256,uint8,string,string,string,address,uint64)": FunctionFragment;
     "deleteHackathon(bytes32)": FunctionFragment;
     "deleteHackathonByAdmin(bytes32)": FunctionFragment;
@@ -174,6 +175,7 @@ export interface IWorldInterface extends utils.Interface {
     "registerTable(bytes16,bytes16,bytes32,bytes32)": FunctionFragment;
     "registerTableHook(bytes16,bytes16,address)": FunctionFragment;
     "revokeAccess(bytes16,bytes16,address)": FunctionFragment;
+    "setAdmin(address)": FunctionFragment;
     "setField(bytes32,bytes32[],uint8,bytes)": FunctionFragment;
     "setField(bytes16,bytes16,bytes32[],uint8,bytes)": FunctionFragment;
     "setMetadata(bytes16,bytes16,string,string[])": FunctionFragment;
@@ -194,6 +196,7 @@ export interface IWorldInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "addSpecialVoter"
       | "call"
+      | "changeAdmin"
       | "createHackathon"
       | "deleteHackathon"
       | "deleteHackathonByAdmin"
@@ -239,6 +242,7 @@ export interface IWorldInterface extends utils.Interface {
       | "registerTable"
       | "registerTableHook"
       | "revokeAccess"
+      | "setAdmin"
       | "setField(bytes32,bytes32[],uint8,bytes)"
       | "setField(bytes16,bytes16,bytes32[],uint8,bytes)"
       | "setMetadata(bytes16,bytes16,string,string[])"
@@ -270,6 +274,10 @@ export interface IWorldInterface extends utils.Interface {
       PromiseOrValue<BytesLike>,
       PromiseOrValue<BytesLike>
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "changeAdmin",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "createHackathon",
@@ -557,6 +565,10 @@ export interface IWorldInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "setAdmin",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setField(bytes32,bytes32[],uint8,bytes)",
     values: [
       PromiseOrValue<BytesLike>,
@@ -679,6 +691,10 @@ export interface IWorldInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "call", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "changeAdmin",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "createHackathon",
     data: BytesLike
@@ -844,6 +860,7 @@ export interface IWorldInterface extends utils.Interface {
     functionFragment: "revokeAccess",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setAdmin", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setField(bytes32,bytes32[],uint8,bytes)",
     data: BytesLike
@@ -1004,6 +1021,11 @@ export interface IWorld extends BaseContract {
       name: PromiseOrValue<BytesLike>,
       funcSelectorAndArgs: PromiseOrValue<BytesLike>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    changeAdmin(
+      _newAdmin: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     createHackathon(
@@ -1297,6 +1319,11 @@ export interface IWorld extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    setAdmin(
+      _newAdmin: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     "setField(bytes32,bytes32[],uint8,bytes)"(
       table: PromiseOrValue<BytesLike>,
       key: PromiseOrValue<BytesLike>[],
@@ -1422,6 +1449,11 @@ export interface IWorld extends BaseContract {
     name: PromiseOrValue<BytesLike>,
     funcSelectorAndArgs: PromiseOrValue<BytesLike>,
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  changeAdmin(
+    _newAdmin: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   createHackathon(
@@ -1715,6 +1747,11 @@ export interface IWorld extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  setAdmin(
+    _newAdmin: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   "setField(bytes32,bytes32[],uint8,bytes)"(
     table: PromiseOrValue<BytesLike>,
     key: PromiseOrValue<BytesLike>[],
@@ -1841,6 +1878,11 @@ export interface IWorld extends BaseContract {
       funcSelectorAndArgs: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    changeAdmin(
+      _newAdmin: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     createHackathon(
       _prizeToken: PromiseOrValue<string>,
@@ -2131,6 +2173,11 @@ export interface IWorld extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setAdmin(
+      _newAdmin: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     "setField(bytes32,bytes32[],uint8,bytes)"(
       table: PromiseOrValue<BytesLike>,
       key: PromiseOrValue<BytesLike>[],
@@ -2303,6 +2350,11 @@ export interface IWorld extends BaseContract {
       name: PromiseOrValue<BytesLike>,
       funcSelectorAndArgs: PromiseOrValue<BytesLike>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    changeAdmin(
+      _newAdmin: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     createHackathon(
@@ -2596,6 +2648,11 @@ export interface IWorld extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    setAdmin(
+      _newAdmin: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     "setField(bytes32,bytes32[],uint8,bytes)"(
       table: PromiseOrValue<BytesLike>,
       key: PromiseOrValue<BytesLike>[],
@@ -2722,6 +2779,11 @@ export interface IWorld extends BaseContract {
       name: PromiseOrValue<BytesLike>,
       funcSelectorAndArgs: PromiseOrValue<BytesLike>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    changeAdmin(
+      _newAdmin: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     createHackathon(
@@ -3012,6 +3074,11 @@ export interface IWorld extends BaseContract {
       namespace: PromiseOrValue<BytesLike>,
       name: PromiseOrValue<BytesLike>,
       grantee: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setAdmin(
+      _newAdmin: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

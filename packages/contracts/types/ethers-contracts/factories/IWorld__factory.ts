@@ -352,6 +352,19 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
+        name: "_newAdmin",
+        type: "address",
+      },
+    ],
+    name: "changeAdmin",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "_prizeToken",
         type: "address",
       },
@@ -1540,6 +1553,19 @@ const _abi = [
       },
     ],
     name: "revokeAccess",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_newAdmin",
+        type: "address",
+      },
+    ],
+    name: "setAdmin",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
