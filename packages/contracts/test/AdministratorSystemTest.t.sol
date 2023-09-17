@@ -24,7 +24,7 @@ contract AdministratorSystemTest is MudV2Test {
     assertEq(Administrator.get(world), address(2));
   }
 
-  function testFailChangeAdmin() public {
+  function testChangeAdmin2() public {
     world.setAdmin(address(1));
     vm.expectRevert(bytes("Only administrator can call this function."));
     world.changeAdmin(address(1));

@@ -40,7 +40,8 @@ contract HackathonSystem is System {
     string memory _imageUri,
     address _voteNft,
     uint64 _voteNftSnapshot
-  ) public {
+  ) public  {
+    require(_startTimestamp >= block.timestamp, "StartTimestamp is not future.");
     bytes32 _hackathonId = _incrementHackathonId();
     Hackathon.set(_hackathonId,HackathonData(
       _msgSender(),
