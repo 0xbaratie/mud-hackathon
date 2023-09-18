@@ -10,12 +10,20 @@ const MUDSetup = ({ children }: Props) => {
   const [setupValue, setSetupValue] = useState<any | null>(null);
 
   useEffect(() => {
-    setup().then((result) => {
-      setSetupValue(result);
-    });
+    setup()
+      .then((result) => {
+        if (result) {
+          setSetupValue(result);
+        } else {
+          console.error("Setup function returned null or undefined");
+        }
+      })
+      .catch((error) => {
+        console.error("Setup function error:", error);
+      });
     mountDevTools();
   }, []);
-
+  
   return <>{setupValue && <MUDProvider value={setupValue}>{children}</MUDProvider>}</>;
 };
 

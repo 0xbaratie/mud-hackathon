@@ -18,6 +18,7 @@ if (typeof window.ethereum !== 'undefined') {
 const isMetaMask = injectedProvider ? window.ethereum.isMetaMask : false;
 console.log(isMetaMask);
 
+
 export const walletContext = createContext<any | null>(null);
 
 type Props = {
@@ -42,7 +43,10 @@ const WalletConnection = ({ children }: Props) => {
       window.ethereum.on('chainChanged', (chainId: string) => {
         setNetwork(chainId);
       });
+    } else {
+      setNetwork(`0x${chainIdNumber.toString(16)}`);
     }
+  
     return () => {
       // Clean up the event listener when the component is unmounted
       if (window.ethereum && window.ethereum.removeListener) {
@@ -146,14 +150,13 @@ const WalletConnection = ({ children }: Props) => {
             <walletContext.Provider value={{ wallet }}>{children}</walletContext.Provider>
           </>
         ) : (
-          <>{children}</>
+          <>
+            <walletContext.Provider value={{ wallet }}>{children}</walletContext.Provider>
+          </>
         )
       ) : (
         <>
-          <div className="mt-8 flex justify-center items-center ">
-            <a href="https://metamask.io/download/" target="_blank" rel="noreferrer" className="border-b-2 font-bold">Please Install Metamask first</a>
-          </div>
-          {/* {children} */}
+          <walletContext.Provider value={{ wallet }}>{children}</walletContext.Provider>
         </>
       )}
       <Menu
