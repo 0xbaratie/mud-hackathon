@@ -50,7 +50,7 @@ export async function setupNetwork() {
 
   const provider = result.network.providers.get().json;
   const backupProvider = new ethers.providers.JsonRpcProvider(import.meta.env.VITE_RPC_PROVIDER || '');
-  const backupSigner = new ethers.Wallet(import.meta.env.VITE_PRIVATE_LEY || '', backupProvider);
+  const backupSigner = new ethers.Wallet(import.meta.env.VITE_PRIVATE_KEY || '', backupProvider);
   const walletProvider = (window as any).ethereum ? new Web3Provider((window as any).ethereum) : backupProvider;
   const walletSigner = walletProvider.getSigner();
   const signerOrProvider = (window as any).ethereum ? walletSigner : backupSigner;
