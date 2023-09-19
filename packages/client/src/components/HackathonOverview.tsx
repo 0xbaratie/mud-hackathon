@@ -9,6 +9,7 @@ import { PHASE } from '../constants/constants';
 interface HackathonOverviewProps {
   uri: string;
   name: string;
+  description: string;
   owner: string;
   hackathonId: string;
   winnerCount: number;
@@ -20,6 +21,7 @@ interface HackathonOverviewProps {
 const HackathonOverview = ({
   uri,
   name,
+  description,
   owner,
   hackathonId,
   winnerCount,
@@ -60,6 +62,9 @@ const HackathonOverview = ({
       <Toast toastType={toastType} />
       <div className="font-bold">
         <p className="text-2xl">{name}</p>
+      </div>
+      <div className="mt-1">
+        <p className="">{description}</p>
       </div>
       <div className="mt-4 flex items-center">
         <p className="text-xl mr-2">Number of winners</p>

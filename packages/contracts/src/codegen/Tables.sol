@@ -7,6 +7,7 @@ import { Counter, CounterTableId } from "./tables/Counter.sol";
 import { Administrator, AdministratorTableId } from "./tables/Administrator.sol";
 import { Config, ConfigTableId } from "./tables/Config.sol";
 import { Hackathon, HackathonData, HackathonTableId } from "./tables/Hackathon.sol";
+import { HackathonInfo, HackathonInfoData, HackathonInfoTableId } from "./tables/HackathonInfo.sol";
 import { HackathonPrize, HackathonPrizeData, HackathonPrizeTableId } from "./tables/HackathonPrize.sol";
 import { HackathonPrizeSponsor, HackathonPrizeSponsorData, HackathonPrizeSponsorTableId } from "./tables/HackathonPrizeSponsor.sol";
 import { HackathonVoteNft, HackathonVoteNftData, HackathonVoteNftTableId } from "./tables/HackathonVoteNft.sol";

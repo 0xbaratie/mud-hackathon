@@ -28,6 +28,20 @@ import type {
   PromiseOrValue,
 } from "./common";
 
+export type HackathonInfoDataStruct = {
+  name: PromiseOrValue<string>;
+  uri: PromiseOrValue<string>;
+  imageUri: PromiseOrValue<string>;
+  description: PromiseOrValue<string>;
+};
+
+export type HackathonInfoDataStructOutput = [string, string, string, string] & {
+  name: string;
+  uri: string;
+  imageUri: string;
+  description: string;
+};
+
 export type HackathonDataStruct = {
   owner: PromiseOrValue<string>;
   prizeToken: PromiseOrValue<string>;
@@ -37,9 +51,6 @@ export type HackathonDataStruct = {
   votingPeriod: PromiseOrValue<BigNumberish>;
   withdrawalPeriod: PromiseOrValue<BigNumberish>;
   winnerCount: PromiseOrValue<BigNumberish>;
-  name: PromiseOrValue<string>;
-  uri: PromiseOrValue<string>;
-  imageUri: PromiseOrValue<string>;
 };
 
 export type HackathonDataStructOutput = [
@@ -50,10 +61,7 @@ export type HackathonDataStructOutput = [
   BigNumber,
   BigNumber,
   BigNumber,
-  number,
-  string,
-  string,
-  string
+  number
 ] & {
   owner: string;
   prizeToken: string;
@@ -63,9 +71,6 @@ export type HackathonDataStructOutput = [
   votingPeriod: BigNumber;
   withdrawalPeriod: BigNumber;
   winnerCount: number;
-  name: string;
-  uri: string;
-  imageUri: string;
 };
 
 export type HackathonPrizeDataStruct = {
@@ -130,7 +135,7 @@ export interface IWorldInterface extends utils.Interface {
     "addSpecialVoter(bytes32,address,uint32)": FunctionFragment;
     "call(bytes16,bytes16,bytes)": FunctionFragment;
     "changeAdmin(address)": FunctionFragment;
-    "createHackathon(address,uint256,uint256,uint256,uint256,uint8,string,string,string,address,uint64)": FunctionFragment;
+    "createHackathon(address,uint256,uint256,uint256,uint256,uint8,(string,string,string,string),address,uint64)": FunctionFragment;
     "deleteHackathon(bytes32)": FunctionFragment;
     "deleteHackathonByAdmin(bytes32)": FunctionFragment;
     "deleteRecord(bytes32,bytes32[])": FunctionFragment;
@@ -144,6 +149,7 @@ export interface IWorldInterface extends utils.Interface {
     "getFieldLength(bytes32,bytes32[],uint8,bytes32)": FunctionFragment;
     "getFieldSlice(bytes32,bytes32[],uint8,bytes32,uint256,uint256)": FunctionFragment;
     "getHackathon(bytes32)": FunctionFragment;
+    "getHackathonInfo(bytes32)": FunctionFragment;
     "getHackathonPrize(bytes32)": FunctionFragment;
     "getHackathonSponsor(bytes32)": FunctionFragment;
     "getHackathonVoteNft(bytes32)": FunctionFragment;
@@ -184,7 +190,7 @@ export interface IWorldInterface extends utils.Interface {
     "setRecord(bytes32,bytes32[],bytes)": FunctionFragment;
     "setVoteToken(address)": FunctionFragment;
     "submit(bytes32,string,string,string,string)": FunctionFragment;
-    "updateHackathon(bytes32,address,uint256,uint256,uint256,uint256,uint8,string,string,string,address,uint64)": FunctionFragment;
+    "updateHackathon(bytes32,address,uint256,uint256,uint256,uint256,uint8,(string,string,string,string),address,uint64)": FunctionFragment;
     "updateInField(bytes32,bytes32[],uint8,uint256,bytes)": FunctionFragment;
     "updateInField(bytes16,bytes16,bytes32[],uint8,uint256,bytes)": FunctionFragment;
     "vote(bytes32,address)": FunctionFragment;
@@ -211,6 +217,7 @@ export interface IWorldInterface extends utils.Interface {
       | "getFieldLength"
       | "getFieldSlice"
       | "getHackathon"
+      | "getHackathonInfo"
       | "getHackathonPrize"
       | "getHackathonSponsor"
       | "getHackathonVoteNft"
@@ -288,9 +295,7 @@ export interface IWorldInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
+      HackathonInfoDataStruct,
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>
     ]
@@ -374,6 +379,10 @@ export interface IWorldInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getHackathon",
+    values: [PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getHackathonInfo",
     values: [PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
@@ -645,9 +654,7 @@ export interface IWorldInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
+      HackathonInfoDataStruct,
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>
     ]
@@ -746,6 +753,10 @@ export interface IWorldInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getHackathon",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getHackathonInfo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -1035,9 +1046,7 @@ export interface IWorld extends BaseContract {
       _votingPeriod: PromiseOrValue<BigNumberish>,
       _withdrawalPeriod: PromiseOrValue<BigNumberish>,
       _winnerCount: PromiseOrValue<BigNumberish>,
-      _name: PromiseOrValue<string>,
-      _uri: PromiseOrValue<string>,
-      _imageUri: PromiseOrValue<string>,
+      _hackathonInfo: HackathonInfoDataStruct,
       _voteNft: PromiseOrValue<string>,
       _voteNftSnapshot: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1124,6 +1133,11 @@ export interface IWorld extends BaseContract {
       _hackathonId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[HackathonDataStructOutput]>;
+
+    getHackathonInfo(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<[HackathonInfoDataStructOutput]>;
 
     getHackathonPrize(
       _hackathonId: PromiseOrValue<BytesLike>,
@@ -1393,9 +1407,7 @@ export interface IWorld extends BaseContract {
       _votingPeriod: PromiseOrValue<BigNumberish>,
       _withdrawalPeriod: PromiseOrValue<BigNumberish>,
       _winnerCount: PromiseOrValue<BigNumberish>,
-      _name: PromiseOrValue<string>,
-      _uri: PromiseOrValue<string>,
-      _imageUri: PromiseOrValue<string>,
+      _hackathonInfo: HackathonInfoDataStruct,
       _voteNft: PromiseOrValue<string>,
       _voteNftSnapshot: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1463,9 +1475,7 @@ export interface IWorld extends BaseContract {
     _votingPeriod: PromiseOrValue<BigNumberish>,
     _withdrawalPeriod: PromiseOrValue<BigNumberish>,
     _winnerCount: PromiseOrValue<BigNumberish>,
-    _name: PromiseOrValue<string>,
-    _uri: PromiseOrValue<string>,
-    _imageUri: PromiseOrValue<string>,
+    _hackathonInfo: HackathonInfoDataStruct,
     _voteNft: PromiseOrValue<string>,
     _voteNftSnapshot: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1552,6 +1562,11 @@ export interface IWorld extends BaseContract {
     _hackathonId: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<HackathonDataStructOutput>;
+
+  getHackathonInfo(
+    _hackathonId: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides
+  ): Promise<HackathonInfoDataStructOutput>;
 
   getHackathonPrize(
     _hackathonId: PromiseOrValue<BytesLike>,
@@ -1821,9 +1836,7 @@ export interface IWorld extends BaseContract {
     _votingPeriod: PromiseOrValue<BigNumberish>,
     _withdrawalPeriod: PromiseOrValue<BigNumberish>,
     _winnerCount: PromiseOrValue<BigNumberish>,
-    _name: PromiseOrValue<string>,
-    _uri: PromiseOrValue<string>,
-    _imageUri: PromiseOrValue<string>,
+    _hackathonInfo: HackathonInfoDataStruct,
     _voteNft: PromiseOrValue<string>,
     _voteNftSnapshot: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1891,9 +1904,7 @@ export interface IWorld extends BaseContract {
       _votingPeriod: PromiseOrValue<BigNumberish>,
       _withdrawalPeriod: PromiseOrValue<BigNumberish>,
       _winnerCount: PromiseOrValue<BigNumberish>,
-      _name: PromiseOrValue<string>,
-      _uri: PromiseOrValue<string>,
-      _imageUri: PromiseOrValue<string>,
+      _hackathonInfo: HackathonInfoDataStruct,
       _voteNft: PromiseOrValue<string>,
       _voteNftSnapshot: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -1980,6 +1991,11 @@ export interface IWorld extends BaseContract {
       _hackathonId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<HackathonDataStructOutput>;
+
+    getHackathonInfo(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<HackathonInfoDataStructOutput>;
 
     getHackathonPrize(
       _hackathonId: PromiseOrValue<BytesLike>,
@@ -2247,9 +2263,7 @@ export interface IWorld extends BaseContract {
       _votingPeriod: PromiseOrValue<BigNumberish>,
       _withdrawalPeriod: PromiseOrValue<BigNumberish>,
       _winnerCount: PromiseOrValue<BigNumberish>,
-      _name: PromiseOrValue<string>,
-      _uri: PromiseOrValue<string>,
-      _imageUri: PromiseOrValue<string>,
+      _hackathonInfo: HackathonInfoDataStruct,
       _voteNft: PromiseOrValue<string>,
       _voteNftSnapshot: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -2364,9 +2378,7 @@ export interface IWorld extends BaseContract {
       _votingPeriod: PromiseOrValue<BigNumberish>,
       _withdrawalPeriod: PromiseOrValue<BigNumberish>,
       _winnerCount: PromiseOrValue<BigNumberish>,
-      _name: PromiseOrValue<string>,
-      _uri: PromiseOrValue<string>,
-      _imageUri: PromiseOrValue<string>,
+      _hackathonInfo: HackathonInfoDataStruct,
       _voteNft: PromiseOrValue<string>,
       _voteNftSnapshot: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2450,6 +2462,11 @@ export interface IWorld extends BaseContract {
     ): Promise<BigNumber>;
 
     getHackathon(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getHackathonInfo(
       _hackathonId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -2722,9 +2739,7 @@ export interface IWorld extends BaseContract {
       _votingPeriod: PromiseOrValue<BigNumberish>,
       _withdrawalPeriod: PromiseOrValue<BigNumberish>,
       _winnerCount: PromiseOrValue<BigNumberish>,
-      _name: PromiseOrValue<string>,
-      _uri: PromiseOrValue<string>,
-      _imageUri: PromiseOrValue<string>,
+      _hackathonInfo: HackathonInfoDataStruct,
       _voteNft: PromiseOrValue<string>,
       _voteNftSnapshot: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2793,9 +2808,7 @@ export interface IWorld extends BaseContract {
       _votingPeriod: PromiseOrValue<BigNumberish>,
       _withdrawalPeriod: PromiseOrValue<BigNumberish>,
       _winnerCount: PromiseOrValue<BigNumberish>,
-      _name: PromiseOrValue<string>,
-      _uri: PromiseOrValue<string>,
-      _imageUri: PromiseOrValue<string>,
+      _hackathonInfo: HackathonInfoDataStruct,
       _voteNft: PromiseOrValue<string>,
       _voteNftSnapshot: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2879,6 +2892,11 @@ export interface IWorld extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getHackathon(
+      _hackathonId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getHackathonInfo(
       _hackathonId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -3151,9 +3169,7 @@ export interface IWorld extends BaseContract {
       _votingPeriod: PromiseOrValue<BigNumberish>,
       _withdrawalPeriod: PromiseOrValue<BigNumberish>,
       _winnerCount: PromiseOrValue<BigNumberish>,
-      _name: PromiseOrValue<string>,
-      _uri: PromiseOrValue<string>,
-      _imageUri: PromiseOrValue<string>,
+      _hackathonInfo: HackathonInfoDataStruct,
       _voteNft: PromiseOrValue<string>,
       _voteNftSnapshot: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }

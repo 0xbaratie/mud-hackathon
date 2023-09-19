@@ -16,7 +16,9 @@ import {
   VoteData,
   Administrator,
   HackathonPrizeSponsor,
-  HackathonPrizeSponsorData
+  HackathonPrizeSponsorData,
+  HackathonInfo,
+  HackathonInfoData
 } from "../codegen/Tables.sol";
 import { Phase } from "../codegen/Types.sol";
 
@@ -52,6 +54,10 @@ contract ViewSystem is System {
   function getHackathonSponsor(bytes32 _hackathonId) public view returns(uint256[] memory, address[] memory){
     HackathonPrizeSponsorData memory _data =  HackathonPrizeSponsor.get(_hackathonId);
     return (_data.amounts, _data.sponsors);
+  }
+
+  function getHackathonInfo(bytes32 _hackathonId) public view returns(HackathonInfoData memory){
+    return HackathonInfo.get(_hackathonId);
   }
 
 }

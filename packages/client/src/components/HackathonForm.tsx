@@ -46,6 +46,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
   const [name, setName] = useState('');
   const [uri, setUri] = useState('');
   const [imageUri, setImageUri] = useState('');
+  const [description, setDescription] = useState('');
   const [voteNft, setVoteNft] = useState('0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E');
   const [voteNftSnapshot, setVoteNftSnapshot] = useState(17928076);
 
@@ -79,6 +80,14 @@ const HackathonForm: FC<HackathonFormProps> = ({
         value={imageUri}
         onChange={(e) => setImageUri(e.target.value)}
       />
+      <h1 className="text-sm mb-1 font-bold">Description</h1>
+      <textarea
+        placeholder="Enter your project overview"
+        className="input input-bordered w-full max-w-ms text-gray-900 pt-2"
+        value={description}
+        maxLength={200}
+        onChange={(e) => setDescription(e.target.value)}
+      ></textarea>
       <div className="flex">
         <div className="flex-1">
           <h1 className="text-sm mb-1 mt-4 font-bold">Hack start(GMT)</h1>
@@ -174,6 +183,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
                 name,
                 uri,
                 imageUri,
+                description,
                 voteNft,
                 voteNftSnapshot,
               );
