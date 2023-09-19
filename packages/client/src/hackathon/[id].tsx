@@ -19,6 +19,7 @@ export const HackathonPage = () => {
   const [activeTab, setActiveTab] = useState(1);
   const [name, setName] = useState('');
   const [uri, setUri] = useState('');
+  const [description, setDescription] = useState('');
   const [owner, setOwner] = useState('');
   const [prizeToken, setPrizeToken] = useState('');
   const [phase, setPhase] = useState(0);
@@ -34,20 +35,23 @@ export const HackathonPage = () => {
   const handleTabClick = (tabIndex: number) => {
     setActiveTab(tabIndex);
   };
-  
 
   useEffect(() => {
     (async () => {
       const hackathon = await worldContract.getHackathon(paddedHexStr);
+      const hackathonInfo = await worldContract.getHackathonInfo(paddedHexStr);
       const hackathonVoteNft = await worldContract.getHackathonVoteNft(paddedHexStr);
-      setName(hackathon.name);
-      setUri(hackathon.uri);
+      setName(hackathonInfo.name);
+      setUri(hackathonInfo.uri);
+      setDescription(hackathonInfo.description);
       setOwner(hackathon.owner);
       setPrizeToken(hackathon.prizeToken);
       setPhase(hackathon.phase);
       setWinnerCount(hackathon.winnerCount);
       setVoteNft(hackathonVoteNft.voteNft);
-      setVoteNftSnapshot(parseInt('0x' + hackathonVoteNft.voteNftSnapshot.toHexString().slice(2).padStart(64, '0')));
+      setVoteNftSnapshot(
+        parseInt('0x' + hackathonVoteNft.voteNftSnapshot.toHexString().slice(2).padStart(64, '0')),
+      );
       setStartTimestamp(hackathon.startTimestamp.toNumber());
       setSubmitPeriod(hackathon.submitPeriod.toNumber());
       setVotingPeriod(hackathon.votingPeriod.toNumber());
@@ -57,14 +61,15 @@ export const HackathonPage = () => {
   }, [paddedHexStr, worldContract]);
 
   const OverviewTabContent: React.FC = () => {
-    return( 
-      <HackathonOverview 
-        uri={uri} 
-        name={name} 
-        owner={owner} 
-        hackathonId={productId} 
-        winnerCount={winnerCount} 
-        voteNft={voteNft} 
+    return (
+      <HackathonOverview
+        uri={uri}
+        name={name}
+        description={description}
+        owner={owner}
+        hackathonId={productId}
+        winnerCount={winnerCount}
+        voteNft={voteNft}
         voteNftSnapshot={voteNftSnapshot}
         phase={phase}
       />
@@ -83,12 +88,7 @@ export const HackathonPage = () => {
   };
 
   const ProjectsTabContent: React.FC = () => {
-    return (
-      <HackathonProjects 
-        hackathonId={paddedHexStr} 
-        phase={phase} 
-      />
-    );
+    return <HackathonProjects hackathonId={paddedHexStr} phase={phase} />;
   };
 
   let activeTabContent;
@@ -106,15 +106,10 @@ export const HackathonPage = () => {
     <>
       <div className="bg-black text-center">
         <div className="w-full h-[128px] flex items-center justify-center">
-          <h1 className="font-arcade font-bold text-4xl text-white">
-            {name}
-          </h1>
+          <h1 className="font-arcade font-bold text-4xl text-white">{name}</h1>
         </div>
         <div className="ml-4 relative ">
-          <div
-            className=""
-            style={{ zIndex: -1 }}
-          ></div>
+          <div className="" style={{ zIndex: -1 }}></div>
           <div className="tabs">
             <a
               className={`tab tab-lifted font-bold ${
@@ -141,9 +136,7 @@ export const HackathonPage = () => {
               Projects
             </a>
           </div>
-
         </div>
-        
       </div>
       <div className="flex mt-6 p-6">
         <div className={containerClassName}>{activeTabContent}</div>

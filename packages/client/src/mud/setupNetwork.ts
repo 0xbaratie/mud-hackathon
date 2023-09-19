@@ -8,7 +8,7 @@ import { JsonRpcProvider, Web3Provider } from '@ethersproject/providers';
 import { IWorld__factory } from 'contracts/types/ethers-contracts/factories/IWorld__factory';
 import { getTableIds } from '@latticexyz/utils';
 import storeConfig from 'contracts/mud.config';
-
+import { ethers } from 'ethers';
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
 
 export async function setupNetwork() {
@@ -49,9 +49,11 @@ export async function setupNetwork() {
   }
 
   const provider = result.network.providers.get().json;
-  const walletProvider = new Web3Provider((window as any).ethereum);
+  const backupProvider = new ethers.providers.JsonRpcProvider(import.meta.env.VITE_RPC_PROVIDER || '');
+  const backupSigner = new ethers.Wallet(import.meta.env.VITE_PRIVATE_KEY || '', backupProvider);
+  const walletProvider = (window as any).ethereum ? new Web3Provider((window as any).ethereum) : backupProvider;
   const walletSigner = walletProvider.getSigner();
-  const signerOrProvider = walletSigner ?? signer ?? provider;
+  const signerOrProvider = (window as any).ethereum ? walletSigner : backupSigner;
   // Create a World contract instance
   const worldContract = IWorld__factory.connect(networkConfig.worldAddress, signerOrProvider);
 

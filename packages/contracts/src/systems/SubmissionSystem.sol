@@ -17,7 +17,7 @@ contract SubmissionSystem is System {
   using SafeERC20 for IERC20;
   event Voted(address indexed holder);
 
-  address public constant ETH_ADDRESS = 0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000;
+  address private constant ETH_ADDRESS = 0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000;
   address public constant ERC721_L1_BALANCE_CHECK = 0xEe53229C1Ec56798963B703fD79CF409DF310858;
   address public voteToken;
   address public addressERC721;

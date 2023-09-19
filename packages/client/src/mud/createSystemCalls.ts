@@ -25,6 +25,7 @@ export function createSystemCalls(
     _name: string,
     _uri: string,
     _imageUri: string,
+    _description: string,
     _voteNft: string,
     _voteNftSnapshot: number,
   ) => {
@@ -35,9 +36,7 @@ export function createSystemCalls(
       _votingPeriod,
       _withdrawalPeriod,
       _winnerCount,
-      _name,
-      _uri,
-      _imageUri,
+      { name: _name, uri: _uri, imageUri: _imageUri, description: _description },
       _voteNft,
       _voteNftSnapshot,
     ]);
@@ -66,9 +65,7 @@ export function createSystemCalls(
       _votingPeriod,
       _withdrawalPeriod,
       _winnerCount,
-      _name,
-      _uri,
-      _imageUri,
+      { name: _name, uri: _uri, imageUri: _imageUri, description: _description },
       _voteNft,
       _voteNftSnapshot,
     ]);
@@ -76,6 +73,11 @@ export function createSystemCalls(
   };
 
   const deleteHackathon = async (_hackathonId: string) => {
+    const tx = await worldSend('deleteHackathon', [_hackathonId]);
+    // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+  };
+
+  const deleteHackathonByAdmin = async (_hackathonId: string) => {
     const tx = await worldSend('deleteHackathon', [_hackathonId]);
     // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
@@ -133,6 +135,7 @@ export function createSystemCalls(
     createHackathon,
     updateHackathon,
     deleteHackathon,
+    deleteHackathonByAdmin,
     proceedPhase,
     depositPrize,
     depositPrizeEth,

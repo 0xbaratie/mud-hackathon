@@ -9,6 +9,7 @@ import { PHASE } from '../constants/constants';
 interface HackathonOverviewProps {
   uri: string;
   name: string;
+  description: string;
   owner: string;
   hackathonId: string;
   winnerCount: number;
@@ -17,14 +18,24 @@ interface HackathonOverviewProps {
   phase: number;
 }
 
-const HackathonOverview = ({ uri, name, owner, hackathonId, winnerCount, voteNft, voteNftSnapshot, phase}: HackathonOverviewProps) => {
+const HackathonOverview = ({
+  uri,
+  name,
+  description,
+  owner,
+  hackathonId,
+  winnerCount,
+  voteNft,
+  voteNftSnapshot,
+  phase,
+}: HackathonOverviewProps) => {
   const { showToast, toastType } = useToast();
   const [shouldRedirect, setShouldRedirect] = useState(false);
   const [myAddress, setMyAddress] = useState('');
   const [administrator, setAdministrator] = useState('');
 
   const {
-    systemCalls: { deleteHackathon },
+    systemCalls: { deleteHackathon, deleteHackathonByAdmin },
     network: { signerOrProvider, worldContract },
   } = useMUD();
 
@@ -52,9 +63,16 @@ const HackathonOverview = ({ uri, name, owner, hackathonId, winnerCount, voteNft
       <div className="font-bold">
         <p className="text-2xl">{name}</p>
       </div>
+      <div className="mt-1">
+        <p className="">{description}</p>
+      </div>
       <div className="mt-4 flex items-center">
         <p className="text-xl mr-2">Number of winners</p>
-        <p className="font-bold">{winnerCount}</p>
+        <p className="mt-1 font-bold">{winnerCount}</p>
+      </div>
+      <div className="mt-4 flex items-center">
+        <p className="text-xl mr-2">Author</p>
+        <p className="mt-1 font-bold">{owner}</p>
       </div>
 
       <div className="mt-4">
@@ -73,20 +91,36 @@ const HackathonOverview = ({ uri, name, owner, hackathonId, winnerCount, voteNft
         </p>
       </div>
 
-
       <button className="mt-6 bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl mr-2">
-        
         <a href={uri} target="_blank" rel="noopener noreferrer">
           Detail
         </a>
       </button>
-      {(myAddress === owner || myAddress === administrator) && phase === PHASE.PREPARE_PRIZE && (
+      {myAddress === owner && phase === PHASE.PREPARE_PRIZE && (
         <button
           className="mt-6 bg-white text-[#333333] border border-[#333333] pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl"
           onClick={async (event) => {
             event.preventDefault();
             try {
               await deleteHackathon(hackathonId);
+              showToast('success');
+              setShouldRedirect(true);
+            } catch (error) {
+              console.error(error);
+              showToast('error');
+            }
+          }}
+        >
+          Delete hackathon
+        </button>
+      )}
+      {myAddress === administrator && phase === PHASE.PREPARE_PRIZE && (
+        <button
+          className="mt-6 bg-white text-[#333333] border border-[#333333] pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl"
+          onClick={async (event) => {
+            event.preventDefault();
+            try {
+              await deleteHackathonByAdmin(hackathonId);
               showToast('success');
               setShouldRedirect(true);
             } catch (error) {

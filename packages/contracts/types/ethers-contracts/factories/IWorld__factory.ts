@@ -352,6 +352,19 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
+        name: "_newAdmin",
+        type: "address",
+      },
+    ],
+    name: "changeAdmin",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "_prizeToken",
         type: "address",
       },
@@ -381,19 +394,31 @@ const _abi = [
         type: "uint8",
       },
       {
-        internalType: "string",
-        name: "_name",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_uri",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_imageUri",
-        type: "string",
+        components: [
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "uri",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "imageUri",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "description",
+            type: "string",
+          },
+        ],
+        internalType: "struct HackathonInfoData",
+        name: "_hackathonInfo",
+        type: "tuple",
       },
       {
         internalType: "address",
@@ -737,6 +762,27 @@ const _abi = [
             name: "winnerCount",
             type: "uint8",
           },
+        ],
+        internalType: "struct HackathonData",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+    ],
+    name: "getHackathonInfo",
+    outputs: [
+      {
+        components: [
           {
             internalType: "string",
             name: "name",
@@ -752,8 +798,13 @@ const _abi = [
             name: "imageUri",
             type: "string",
           },
+          {
+            internalType: "string",
+            name: "description",
+            type: "string",
+          },
         ],
-        internalType: "struct HackathonData",
+        internalType: "struct HackathonInfoData",
         name: "",
         type: "tuple",
       },
@@ -787,6 +838,30 @@ const _abi = [
         internalType: "struct HackathonPrizeData",
         name: "",
         type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+    ],
+    name: "getHackathonSponsor",
+    outputs: [
+      {
+        internalType: "uint256[]",
+        name: "",
+        type: "uint256[]",
+      },
+      {
+        internalType: "address[]",
+        name: "",
+        type: "address[]",
       },
     ],
     stateMutability: "view",
@@ -1523,6 +1598,19 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "_newAdmin",
+        type: "address",
+      },
+    ],
+    name: "setAdmin",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "bytes32",
         name: "table",
         type: "bytes32",
@@ -1767,19 +1855,31 @@ const _abi = [
         type: "uint8",
       },
       {
-        internalType: "string",
-        name: "_name",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_uri",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_imageUri",
-        type: "string",
+        components: [
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "uri",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "imageUri",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "description",
+            type: "string",
+          },
+        ],
+        internalType: "struct HackathonInfoData",
+        name: "_hackathonInfo",
+        type: "tuple",
       },
       {
         internalType: "address",

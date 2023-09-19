@@ -2,23 +2,22 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Administrator } from "../codegen/Tables.sol";
-import { Hackathon,HackathonData,HackathonPrize,Submission,HackathonVoteNft } from "../codegen/Tables.sol";
-import { Phase } from "../codegen/Types.sol";
+import { Administrator,HackathonPrizeData,Hackathon,Config,HackathonData,HackathonPrizeSponsor } from "../codegen/Tables.sol";
 
 contract AdministratorSystem is System {
 
   modifier onlyAdmin() {
-    require(Administrator.get() == _msgSender(), "Only owner can call this function.");
+    require(Administrator.get() == _msgSender(), "Only administrator can call this function.");
     _;
   }
 
-  function deleteHackathonByAdmin(bytes32 _hackathonId) public onlyAdmin() {
-    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
-    require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
-
-    Hackathon.deleteRecord(_hackathonId);
-    HackathonVoteNft.deleteRecord(_hackathonId);
-    HackathonPrize.deleteRecord(_hackathonId);
+  function setAdmin(address _newAdmin) public {
+    require(Administrator.get() == address(0), "Already set.");
+    Administrator.set(_newAdmin);
   }
+
+  function changeAdmin(address _newAdmin) public onlyAdmin {
+    Administrator.set(_newAdmin);
+  }
+
 }
