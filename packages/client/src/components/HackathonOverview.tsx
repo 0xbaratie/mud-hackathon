@@ -68,7 +68,11 @@ const HackathonOverview = ({
       </div>
       <div className="mt-4 flex items-center">
         <p className="text-xl mr-2">Number of winners</p>
-        <p className="font-bold">{winnerCount}</p>
+        <p className="mt-1 font-bold">{winnerCount}</p>
+      </div>
+      <div className="mt-4 flex items-center">
+        <p className="text-xl mr-2">Author</p>
+        <p className="mt-1 font-bold">{owner}</p>
       </div>
 
       <div className="mt-4">
