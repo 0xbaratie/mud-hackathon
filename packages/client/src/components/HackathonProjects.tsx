@@ -56,6 +56,7 @@ const HackathonProjects = ({ hackathonId, phase }: HackathonProjectsProps) => {
           <a onClick={openModal}>
             <button className="btn bg-[#333333] text-white rounded-lg">Submit project</button>
           </a>
+          <p className="mt-2 text-[#333333] text-sm">1 project per address only</p>
         </div>
       ) : (
         <div className="text-center mb-10">
