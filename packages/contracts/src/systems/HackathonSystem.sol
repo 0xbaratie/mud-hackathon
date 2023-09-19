@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Hackathon,Config,HackathonData,HackathonPrize,HackathonPrizeData,Submission,SubmissionData,HackathonVoteNft,HackathonVoteNftData,Administrator,HackathonPrizeSponsor } from "../codegen/Tables.sol";
+import { Hackathon,Config,HackathonData,HackathonPrize,HackathonPrizeData,Submission,SubmissionData,HackathonVoteNft,HackathonVoteNftData,Administrator,HackathonPrizeSponsor,HackathonInfo,HackathonInfoData } from "../codegen/Tables.sol";
 import { Phase } from "../codegen/Types.sol";
 import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
@@ -35,9 +35,7 @@ contract HackathonSystem is System {
     uint256 _votingPeriod,
     uint256 _withdrawalPeriod,
     uint8 _winnerCount,
-    string memory _name,
-    string memory _uri,
-    string memory _imageUri,
+    HackathonInfoData memory _hackathonInfo,
     address _voteNft,
     uint64 _voteNftSnapshot
   ) public  {
@@ -51,11 +49,9 @@ contract HackathonSystem is System {
       _submitPeriod,
       _votingPeriod,
       _withdrawalPeriod,
-      _winnerCount,
-      _name,
-      _uri,
-      _imageUri
+      _winnerCount
     ));
+    HackathonInfo.set(_hackathonId,_hackathonInfo);
     HackathonVoteNft.set(_hackathonId,
       HackathonVoteNftData(_voteNft,_voteNftSnapshot, specialVoters)
     );
@@ -74,9 +70,7 @@ contract HackathonSystem is System {
     uint256 _votingPeriod,
     uint256 _withdrawalPeriod,
     uint8 _winnerCount,
-    string memory _name,
-    string memory _uri,
-    string memory _imageUri,
+    HackathonInfoData memory _hackathonInfo,
     address _voteNft,
     uint64 _voteNftSnapshot
   ) public onlyOwner(_hackathonId) {
@@ -91,12 +85,10 @@ contract HackathonSystem is System {
       _submitPeriod,
       _votingPeriod,
       _withdrawalPeriod,
-      _winnerCount,
-      _name,
-      _uri,
-      _imageUri
+      _winnerCount
     );
     Hackathon.set(_hackathonId,_newHackathonData);
+    HackathonInfo.set(_hackathonId,_hackathonInfo);
 
     HackathonVoteNft.set(_hackathonId,
       HackathonVoteNftData(_voteNft,_voteNftSnapshot, specialVoters)
@@ -116,6 +108,7 @@ contract HackathonSystem is System {
     require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
 
     Hackathon.deleteRecord(_hackathonId);
+    HackathonInfo.deleteRecord(_hackathonId);
     HackathonVoteNft.deleteRecord(_hackathonId);
     HackathonPrize.deleteRecord(_hackathonId);
 

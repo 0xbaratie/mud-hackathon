@@ -394,19 +394,31 @@ const _abi = [
         type: "uint8",
       },
       {
-        internalType: "string",
-        name: "_name",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_uri",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_imageUri",
-        type: "string",
+        components: [
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "uri",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "imageUri",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "description",
+            type: "string",
+          },
+        ],
+        internalType: "struct HackathonInfoData",
+        name: "_hackathonInfo",
+        type: "tuple",
       },
       {
         internalType: "address",
@@ -750,6 +762,27 @@ const _abi = [
             name: "winnerCount",
             type: "uint8",
           },
+        ],
+        internalType: "struct HackathonData",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+    ],
+    name: "getHackathonInfo",
+    outputs: [
+      {
+        components: [
           {
             internalType: "string",
             name: "name",
@@ -765,8 +798,13 @@ const _abi = [
             name: "imageUri",
             type: "string",
           },
+          {
+            internalType: "string",
+            name: "description",
+            type: "string",
+          },
         ],
-        internalType: "struct HackathonData",
+        internalType: "struct HackathonInfoData",
         name: "",
         type: "tuple",
       },
@@ -1817,19 +1855,31 @@ const _abi = [
         type: "uint8",
       },
       {
-        internalType: "string",
-        name: "_name",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_uri",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_imageUri",
-        type: "string",
+        components: [
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "uri",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "imageUri",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "description",
+            type: "string",
+          },
+        ],
+        internalType: "struct HackathonInfoData",
+        name: "_hackathonInfo",
+        type: "tuple",
       },
       {
         internalType: "address",

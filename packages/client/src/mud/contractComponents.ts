@@ -63,9 +63,24 @@ export function defineContractComponents(world: World) {
           votingPeriod: RecsType.BigInt,
           withdrawalPeriod: RecsType.BigInt,
           winnerCount: RecsType.Number,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    HackathonInfo: (() => {
+      const tableId = new TableId("", "HackathonInfo");
+      return defineComponent(
+        world,
+        {
           name: RecsType.String,
           uri: RecsType.String,
           imageUri: RecsType.String,
+          description: RecsType.String,
         },
         {
           metadata: {

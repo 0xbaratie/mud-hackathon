@@ -6,7 +6,7 @@ import { MudV2Test } from "@latticexyz/std-contracts/src/test/MudV2Test.t.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 import { IWorld } from "../src/codegen/world/IWorld.sol";
-import { Hackathon,HackathonData,Config,Submission } from "../src/codegen/Tables.sol";
+import { Hackathon,HackathonData,Config,Submission,HackathonInfo,HackathonInfoData } from "../src/codegen/Tables.sol";
 import { Phase } from "../src/systems/HackathonSystem.sol";
 import { ERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import { ERC721, IERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
@@ -52,7 +52,7 @@ contract HackathonSystemTest is MudV2Test {
 
   function testCreateHackathonRevert() public {
     vm.expectRevert(bytes("StartTimestamp is not future."));
-    world.createHackathon(address(mock),1,2,3,4,1,"test1","uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
+    world.createHackathon(address(mock),1,2,3,4,1,HackathonInfoData("test1","uri1","imageUri1","hackathon description1"), 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
   }
 
   function testCreateHackathon() public {
@@ -64,11 +64,11 @@ contract HackathonSystemTest is MudV2Test {
       3,
       4,
       1,
-      "test1",
-      "uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076
+      HackathonInfoData("test1","uri1","imageUri1","hackathon description1"), 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076
     );
 
     HackathonData memory _hackathon = Hackathon.get(world, bytes32(uint256(1)));
+    HackathonInfoData memory _hackathonInfo = HackathonInfo.get(world, bytes32(uint256(1)));
     assertEq(_hackathon.owner, address(this));
     assertEq(_hackathon.prizeToken, address(mock));
     assertEq(_hackathon.phase, uint8(Phase.PREPARE_PRIZE));
@@ -76,8 +76,10 @@ contract HackathonSystemTest is MudV2Test {
     assertEq(_hackathon.submitPeriod, 2);
     assertEq(_hackathon.votingPeriod, 3);
     assertEq(_hackathon.withdrawalPeriod, 4);
-    assertEq(_hackathon.name, "test1");
-    assertEq(_hackathon.uri, "uri1");
+    assertEq(_hackathonInfo.name, "test1");
+    assertEq(_hackathonInfo.uri, "uri1");
+    assertEq(_hackathonInfo.imageUri, "imageUri1");
+    assertEq(_hackathonInfo.description, "hackathon description1");
     assertEq(_hackathon.winnerCount, 1);
     assertEq(Config.get(world), bytes32(uint256(1)));
 
@@ -90,10 +92,10 @@ contract HackathonSystemTest is MudV2Test {
       7,
       8,
       2,
-      "test2",
-      "uri2","imageUri2", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076
+      HackathonInfoData("test2","uri2","imageUri2","hackathon description2"), 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076
     );
     HackathonData memory _hackathon2 = Hackathon.get(world, bytes32(uint256(2)));
+    HackathonInfoData memory _hackathonInfo2 = HackathonInfo.get(world, bytes32(uint256(2)));
     assertEq(_hackathon2.owner, address(1));
     assertEq(_hackathon2.prizeToken, address(2));
     assertEq(_hackathon2.phase, uint8(Phase.PREPARE_PRIZE));
@@ -101,8 +103,10 @@ contract HackathonSystemTest is MudV2Test {
     assertEq(_hackathon2.submitPeriod, 6);
     assertEq(_hackathon2.votingPeriod, 7);
     assertEq(_hackathon2.withdrawalPeriod, 8);
-    assertEq(_hackathon2.name, "test2");
-    assertEq(_hackathon2.uri, "uri2");
+    assertEq(_hackathonInfo2.name, "test2");
+    assertEq(_hackathonInfo2.uri, "uri2");
+    assertEq(_hackathonInfo2.imageUri, "imageUri2");
+    assertEq(_hackathonInfo2.description, "hackathon description2");
     assertEq(_hackathon2.winnerCount, 2);
     assertEq(Config.get(world), bytes32(uint256(2)));
   }
@@ -115,8 +119,7 @@ contract HackathonSystemTest is MudV2Test {
       3,
       4,
       1,
-      "test1",
-      "uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076
+      HackathonInfoData("test1","uri1","imageUri1","hackathon description1"), 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076
     );
 
     world.updateHackathon(
@@ -127,10 +130,10 @@ contract HackathonSystemTest is MudV2Test {
       7,
       8,
       2,
-      "test2",
-      "uri2","imageUri2", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076
+      HackathonInfoData("test2","uri2","imageUri2","hackathon description2"), 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076
     );
     HackathonData memory _hackathon = Hackathon.get(world, bytes32(uint256(1)));
+    HackathonInfoData memory _hackathonInfo = HackathonInfo.get(world, bytes32(uint256(1)));
     assertEq(_hackathon.owner, address(this));
     assertEq(_hackathon.prizeToken, address(1));
     assertEq(_hackathon.phase, uint8(Phase.PREPARE_PRIZE));
@@ -139,8 +142,10 @@ contract HackathonSystemTest is MudV2Test {
     assertEq(_hackathon.votingPeriod, 7);
     assertEq(_hackathon.withdrawalPeriod, 8);
     assertEq(_hackathon.winnerCount, 2);
-    assertEq(_hackathon.name, "test2");
-    assertEq(_hackathon.uri, "uri2");
+    assertEq(_hackathonInfo.name, "test2");
+    assertEq(_hackathonInfo.uri, "uri2");
+    assertEq(_hackathonInfo.imageUri, "imageUri2");
+    assertEq(_hackathonInfo.description, "hackathon description2");
     assertEq(Config.get(world), bytes32(uint256(1)));
   }
 
@@ -152,8 +157,7 @@ contract HackathonSystemTest is MudV2Test {
       3,
       4,
       1,
-      "test1",
-      "uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076
+      HackathonInfoData("test1","uri1","imageUri1","hackathon description1"), 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076
     );
 
     deal(address(mock), address(1), 100000e6);
@@ -176,7 +180,7 @@ contract HackathonSystemTest is MudV2Test {
   }
 
   function testProceedPhase0() public {
-    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,HackathonInfoData("test1","uri1","imageUri1","hackathon description1"), 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
 
     //revert
     // vm.expectRevert(bytes("Deposit amount must be greater than 0."));    
@@ -191,7 +195,7 @@ contract HackathonSystemTest is MudV2Test {
   }
 
   function testProceedPhase() public {
-    world.createHackathon(address(mock),block.timestamp + 1,block.timestamp + 3,block.timestamp + 6,block.timestamp + 10,1,"test1","uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
+    world.createHackathon(address(mock),block.timestamp + 1,block.timestamp + 3,block.timestamp + 6,block.timestamp + 10,1,HackathonInfoData("test1","uri1","imageUri1","hackathon description1"), 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
 
     //proceed HACKING
     mock.approve(address(world), 100000e6);    
@@ -232,7 +236,7 @@ contract HackathonSystemTest is MudV2Test {
   function testFinishVotingRevert() public {
     world.createHackathon(address(mock),block.timestamp + 1,2,3,4,
       2, // 2 winners
-      "test1","uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
+      HackathonInfoData("test1","uri1","imageUri1","hackathon description1"), 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
 
     //proceed HACKING
     mock.approve(address(world), 100000e6);    
@@ -253,7 +257,7 @@ contract HackathonSystemTest is MudV2Test {
   }
 
   function testFinishVoting1() public {
-    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,HackathonInfoData("test1","uri1","imageUri1","hackathon description1"), 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
 
     //proceed HACKING
     mock.approve(address(world), 100000e6);    
@@ -276,7 +280,7 @@ contract HackathonSystemTest is MudV2Test {
   function testFinishVoting2() public {
     world.createHackathon(address(mock),block.timestamp + 1,2,3,4,
       2, // 2 winners
-      "test1","uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
+      HackathonInfoData("test1","uri1","imageUri1","hackathon description1"), 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
 
     //proceed HACKING
     mock.approve(address(world), 100000e6);    
@@ -302,7 +306,7 @@ contract HackathonSystemTest is MudV2Test {
   function testFinishVoting3() public { //winnerCount is 2 but really 3
     world.createHackathon(address(mock),block.timestamp + 1,2,3,4,
       2, // 2 winners
-      "test1","uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
+      HackathonInfoData("test1","uri1","imageUri1","hackathon description1"), 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
 
     //proceed HACKING
     mock.approve(address(world), 100000e6);    
@@ -338,7 +342,7 @@ contract HackathonSystemTest is MudV2Test {
   }
 
   function testWithdrawByOwner() public {
-    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,"test1","uri1","imageUri1", 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
+    world.createHackathon(address(mock),block.timestamp + 1,2,3,4,1,HackathonInfoData("test1","uri1","imageUri1","hackathon description1"), 0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E, 17928076);
 
     vm.expectRevert(bytes("Hackathon is not in END phase."));
     world.withdrawByOwner(bytes32(uint256(1)));

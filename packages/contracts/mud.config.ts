@@ -27,9 +27,14 @@ export default mudConfig({
         votingPeriod: "uint256",
         withdrawalPeriod: "uint256",
         winnerCount: "uint8", // prize is awarded to top N submitters
+      },
+    },
+    HackathonInfo: {
+      schema: {
         name: "string",
         uri: "string",
         imageUri: "string",
+        description: "string",
       },
     },
     HackathonPrize: {
