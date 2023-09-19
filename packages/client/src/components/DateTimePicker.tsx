@@ -8,7 +8,7 @@ interface DateTimePickerProps {
   setSelectedDateTime: string;
 }
 
-const DateTimePicker = ({ selectedDateTime, setSelectedDateTime }: any) => {  
+const DateTimePicker = ({ selectedDateTime, setSelectedDateTime }: any) => {
   const handleDateTimeChange = (dateTime: any) => {
     setSelectedDateTime(dateTime);
   };
@@ -26,6 +26,7 @@ const DateTimePicker = ({ selectedDateTime, setSelectedDateTime }: any) => {
           dateFormat="MMMM d, yyyy h:mm aa"
           className="text-gray-900 w-full"
           wrapperClassName="w-full"
+          minDate={new Date()}
         />
       </div>
     </div>
