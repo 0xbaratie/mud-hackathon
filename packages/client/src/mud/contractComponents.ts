@@ -164,8 +164,7 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
-          count: RecsType.BigInt,
-          aggregated: RecsType.Boolean,
+          tokenId: RecsType.BigInt,
         },
         {
           metadata: {

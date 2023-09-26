@@ -13,7 +13,6 @@ import {
   Submission,
   SubmissionData,
   Vote,
-  VoteData,
   Administrator,
   HackathonPrizeSponsor,
   HackathonPrizeSponsorData,
@@ -43,8 +42,8 @@ contract ViewSystem is System {
     return Submission.get(_hackathonId, _submitter);
   }
 
-  function getVote(bytes32 _hackathonId, address _voter)  public view returns(VoteData memory){
-    return Vote.get(_hackathonId, _voter);
+  function getVote(bytes32 _hackathonId, address _nft)  public view returns(uint256){
+    return Vote.get(_hackathonId, _nft);
   }
 
   function getAdministrator() public view returns(address) {
