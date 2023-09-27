@@ -425,11 +425,6 @@ const _abi = [
         name: "_voteNft",
         type: "address",
       },
-      {
-        internalType: "uint64",
-        name: "_voteNftSnapshot",
-        type: "uint64",
-      },
     ],
     name: "createHackathon",
     outputs: [],
@@ -885,11 +880,6 @@ const _abi = [
             type: "address",
           },
           {
-            internalType: "uint64",
-            name: "voteNftSnapshot",
-            type: "uint64",
-          },
-          {
             internalType: "address[]",
             name: "specialVoters",
             type: "address[]",
@@ -1072,28 +1062,16 @@ const _abi = [
       },
       {
         internalType: "address",
-        name: "_voter",
+        name: "_nft",
         type: "address",
       },
     ],
     name: "getVote",
     outputs: [
       {
-        components: [
-          {
-            internalType: "uint256",
-            name: "count",
-            type: "uint256",
-          },
-          {
-            internalType: "bool",
-            name: "aggregated",
-            type: "bool",
-          },
-        ],
-        internalType: "struct VoteData",
+        internalType: "uint256",
         name: "",
-        type: "tuple",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -1885,11 +1863,6 @@ const _abi = [
         internalType: "address",
         name: "_voteNft",
         type: "address",
-      },
-      {
-        internalType: "uint64",
-        name: "_voteNftSnapshot",
-        type: "uint64",
       },
     ],
     name: "updateHackathon",

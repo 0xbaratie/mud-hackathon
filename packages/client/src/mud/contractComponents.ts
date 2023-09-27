@@ -128,7 +128,6 @@ export function defineContractComponents(world: World) {
         world,
         {
           voteNft: RecsType.String,
-          voteNftSnapshot: RecsType.BigInt,
           specialVoters: RecsType.StringArray,
         },
         {

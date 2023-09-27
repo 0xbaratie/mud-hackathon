@@ -14,7 +14,6 @@ interface HackathonOverviewProps {
   hackathonId: string;
   winnerCount: number;
   voteNft: string;
-  voteNftSnapshot: number;
   phase: number;
 }
 
@@ -26,7 +25,6 @@ const HackathonOverview = ({
   hackathonId,
   winnerCount,
   voteNft,
-  voteNftSnapshot,
   phase,
 }: HackathonOverviewProps) => {
   const { showToast, toastType } = useToast();
@@ -87,7 +85,7 @@ const HackathonOverview = ({
           >
             {voteNft}
           </a>
-          ) owners can vote. (Snapshot: {voteNftSnapshot})
+          ) owners can vote.
         </p>
       </div>
 

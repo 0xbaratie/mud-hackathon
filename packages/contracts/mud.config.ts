@@ -52,7 +52,6 @@ export default mudConfig({
     HackathonVoteNft: {
       schema: {
         voteNft: "address",
-        voteNftSnapshot: "uint64",
         specialVoters: "address[]",
       },
     },

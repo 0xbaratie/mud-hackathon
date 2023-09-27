@@ -22,7 +22,6 @@ contract SubmissionSystem is System {
   address public voteToken;
   address public addressERC721;
   uint32 public chainId = 1;
-  uint64 public snapshotBlock;
   IL2VotingOnChainRequest public l2VotingOnChainRequest;
   
   modifier onlyOwner(bytes32 _hackathonId) {
@@ -69,7 +68,6 @@ contract SubmissionSystem is System {
 
     // HackathonVoteNftData memory _hackathonNftData = HackathonVoteNft.get(_hackathonId);
     // addressERC721 = _hackathonNftData.voteNft;
-    // snapshotBlock = _hackathonNftData.voteNftSnapshot;
     
     // VoteData memory _voteData = Vote.get(_hackathonId, address(_msgSender()));
     // // Only one check for each address per hackathon to see if you have NFTs

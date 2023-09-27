@@ -14,8 +14,7 @@ interface IHackathonSystem {
     uint256 _withdrawalPeriod,
     uint8 _winnerCount,
     HackathonInfoData memory _hackathonInfo,
-    address _voteNft,
-    uint64 _voteNftSnapshot
+    address _voteNft
   ) external;
 
   function updateHackathon(
@@ -27,8 +26,7 @@ interface IHackathonSystem {
     uint256 _withdrawalPeriod,
     uint8 _winnerCount,
     HackathonInfoData memory _hackathonInfo,
-    address _voteNft,
-    uint64 _voteNftSnapshot
+    address _voteNft
   ) external;
 
   function deleteHackathon(bytes32 _hackathonId) external;

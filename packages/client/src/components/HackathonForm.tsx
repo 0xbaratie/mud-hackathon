@@ -48,7 +48,6 @@ const HackathonForm: FC<HackathonFormProps> = ({
   const [imageUri, setImageUri] = useState('');
   const [description, setDescription] = useState('');
   const [voteNft, setVoteNft] = useState('0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E');
-  const [voteNftSnapshot, setVoteNftSnapshot] = useState(17928076);
 
   return (
     <div className="p-4 overflow-y-auto max-h-[800px]">
@@ -160,13 +159,6 @@ const HackathonForm: FC<HackathonFormProps> = ({
         .
       </p>
 
-      <input
-        type="text"
-        placeholder="17928076"
-        className="input input-bordered w-full max-w-xs text-gray-900"
-        value={voteNftSnapshot}
-        onChange={(e) => setVoteNftSnapshot(parseInt(e.target.value))}
-      />
       <div className="mt-4">
         <button
           className="btn bg-[#333333] text-white rounded-lg"
@@ -185,7 +177,6 @@ const HackathonForm: FC<HackathonFormProps> = ({
                 imageUri,
                 description,
                 voteNft,
-                voteNftSnapshot,
               );
               const newMaxHackathonNum = maxHackathonNum + 1;
               setMaxHackathonNum(newMaxHackathonNum);
