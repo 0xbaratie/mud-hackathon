@@ -7,34 +7,19 @@ import { Phase } from "../codegen/Types.sol";
 import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import { IERC721 } from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
-interface IL2VotingOnChainRequest {
-  function vote(address, uint64) external;
-  function erc721SnapBalance(address, address, uint256) external view returns (uint256);
-  function testPlus() external;
-}
 
 contract SubmissionSystem is System {
   using SafeERC20 for IERC20;
   event Voted(address indexed holder);
 
   address private constant ETH_ADDRESS = 0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000;
-  address public constant ERC721_L1_BALANCE_CHECK = 0xEe53229C1Ec56798963B703fD79CF409DF310858;
-  address public voteToken;
   address public addressERC721;
   uint32 public chainId = 1;
-  IL2VotingOnChainRequest public l2VotingOnChainRequest;
+  // IL2VotingOnChainRequest public l2VotingOnChainRequest;
   
   modifier onlyOwner(bytes32 _hackathonId) {
     require(Hackathon.get(_hackathonId).owner == _msgSender(), "Only owner can call this function.");
     _;
-  }
-
-  mapping(bytes32 => mapping(address => uint256)) public voteCount;
-
-  //TODO
-  function setVoteToken(address _voteToken) public {
-    if(voteToken != address(0)) revert("Vote token already set.");
-    voteToken = _voteToken;
   }
 
   function submit(
@@ -60,49 +45,29 @@ contract SubmissionSystem is System {
     Submission.setImageUri(_hackathonId, _msgSender(), _imageUri);
   }
 
-  function vote(bytes32 _hackathonId, address _submitter ) public {    
-    // l2VotingOnChainRequest = IL2VotingOnChainRequest(address(0x112E07dbF91e6f97Fd2a4bF0851c1C5d959B756C));
-    // HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
-    // //validate phase
-    // require(uint8(_hackathonData.phase) == uint8(Phase.VOTING), "Hackathon is not in VOTING phase.");
+  function vote(bytes32 _hackathonId, uint256[] memory submissionIds ) public {    
+    // Validate phase
+    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
+    require(uint8(_hackathonData.phase) == uint8(Phase.VOTING), "Hackathon is not in VOTING phase.");
 
-    // HackathonVoteNftData memory _hackathonNftData = HackathonVoteNft.get(_hackathonId);
-    // addressERC721 = _hackathonNftData.voteNft;
+    // Get NFT
+    HackathonVoteNftData memory _hackathonNftData = HackathonVoteNft.get(_hackathonId);
+    addressERC721 = _hackathonNftData.voteNft;
     
-    // VoteData memory _voteData = Vote.get(_hackathonId, address(_msgSender()));
-    // // Only one check for each address per hackathon to see if you have NFTs
-    // if (_voteData.aggregated == false) {
-    //   l2VotingOnChainRequest.vote(addressERC721, snapshotBlock);
-    //   uint256 nftBalance = l2VotingOnChainRequest.erc721SnapBalance(addressERC721, _msgSender(), snapshotBlock);
-    //   // l2VotingOnChainRequest.testPlus();
-    //   Vote.set(_hackathonId, address(_msgSender()), nftBalance, true);
-    // }
-    
-    // // TODO: The condition is being changed for debugging purposes. Need to replace with commented out one later. 
-    // // require(_voteData.count > voteCount[_hackathonId][address(_msgSender())], "Your voting numbers had already exceed.");
-    // require(_voteData.count >= voteCount[_hackathonId][address(_msgSender())], "Your voting numbers had already exceed.");
-    
+    // VoteSum
+    uint256 votesCast = IERC721(addressERC721).balanceOf(_msgSender());
+    require(submissionIds.length <= votesCast, "Voting sum exceed.");
 
-    // // validate submission
+    // TODO: Obtain a token ID for each
+
+
+    // TODO: Add the number of votes to each utilizing the TokenID obtained.
+    // validate submission
     // SubmissionData memory _submissionData = Submission.get(_hackathonId, _submitter);
     // require(bytes(_submissionData.name).length > 0, "Submission does not exist.");
-    
     // //increment votes
-    // voteCount[_hackathonId][address(_msgSender())] += 1;
     // Submission.setVotes(_hackathonId, _submitter, _submissionData.votes + 1);
   }
-
-  function addSpecialVoter(bytes32 _hackathonId, address _voter, uint32 voteSum) public onlyOwner(_hackathonId) {
-    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
-    require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
-    
-    // TODO: comment out for changing Vote table
-    // Vote.set(_hackathonId, _voter, voteSum, true);
-
-    // Needed to list by hackathon
-    HackathonVoteNft.pushSpecialVoters(_hackathonId, _voter);  
-  }
-
 
   function withdrawPrize(bytes32 _hackathonId) public payable {
     //validate phase
