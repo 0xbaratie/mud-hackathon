@@ -27,7 +27,6 @@ export function createSystemCalls(
     _imageUri: string,
     _description: string,
     _voteNft: string,
-    _voteNftSnapshot: number,
   ) => {
     const tx = await worldSend('createHackathon', [
       _prizeToken,
@@ -55,7 +54,6 @@ export function createSystemCalls(
     _uri: string,
     _imageUri: string,
     _voteNft: string,
-    _voteNftSnapshot: number,
   ) => {
     const tx = await worldSend('updateHackathon', [
       _hackathonId,
@@ -65,9 +63,8 @@ export function createSystemCalls(
       _votingPeriod,
       _withdrawalPeriod,
       _winnerCount,
-      { name: _name, uri: _uri, imageUri: _imageUri, description: _description },
+      { name: _name, uri: _uri, imageUri: _imageUri},
       _voteNft,
-      _voteNftSnapshot,
     ]);
     // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };

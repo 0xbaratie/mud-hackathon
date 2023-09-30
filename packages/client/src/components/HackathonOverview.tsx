@@ -76,9 +76,9 @@ const HackathonOverview = ({
       <div className="mt-4">
         <p className="text-xl">Voter</p>
         <p className="w-full mt-2">
-          L1 NFT (
+          Optimism NFT (
           <a
-            href={`https://etherscan.io/address/${voteNft}`}
+            href={`https://optimistic.etherscan.io/${voteNft}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-500"
