@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Hackathon, HackathonData, Submission, SubmissionData, HackathonPrize, HackathonVoteNft, HackathonVoteNftData, SpecialVote, Config, Vote} from "../codegen/Tables.sol";
+import { Hackathon, HackathonData, Submission, SubmissionData, HackathonPrize, HackathonVoteNft, HackathonVoteNftData, SpecialVote, SpecialVoteData, Config, Vote} from "../codegen/Tables.sol";
 import { Phase } from "../codegen/Types.sol";
 import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
@@ -62,25 +62,41 @@ contract SubmissionSystem is System {
     // Get NFT
     HackathonVoteNftData memory _hackathonNftData = HackathonVoteNft.get(_hackathonId);
     addressERC721 = _hackathonNftData.voteNft;
-    
-    // VoteSum
-    uint256 votesCast = IERC721Enumerable(addressERC721).balanceOf(_msgSender());
-    require(submissionAddresses.length <= votesCast, "Voting sum exceed.");
 
-    // After examining the token ID, the Id is utilized to cast a vote.
-    for (uint i = 0; i < votesCast; i++) {
-      uint256 tokenId = IERC721Enumerable(addressERC721).tokenOfOwnerByIndex(_msgSender(), i);
-      SubmissionData memory _submissionData = Submission.get(_hackathonId, submissionAddresses[i]);
+    // Determines whether the applicant is a special judge or not. 0 means not applicable.
+    SpecialVoteData memory _specialVoteData  = SpecialVote.get(_hackathonId, _msgSender());
 
-      address voter = Vote.get(_hackathonId, tokenId);
-      require(voter == address(0), "This tokenId has already been used to vote.");
-      
-      // Vote counts for submitted projects
-      require(bytes(_submissionData.name).length > 0, "Submission does not exist.");
-      Submission.setVotes(_hackathonId, submissionAddresses[i], _submissionData.votes + 1);
-      
-      // Keep a record of who has voted utilizing which Id.
-      Vote.set(_hackathonId, tokenId, address(_msgSender()));
+    // If you are not registered as a special judge, you can vote for less than the number of NFTs.
+    if (_specialVoteData.count == 0) {
+      // VoteSum
+      uint256 votesCast = IERC721Enumerable(addressERC721).balanceOf(_msgSender());
+      require(submissionAddresses.length <= votesCast, "Voting sum exceed.");
+
+      // After examining the token ID, the Id is utilized to cast a vote.
+      for (uint i = 0; i < submissionAddresses.length; i++) {
+        uint256 tokenId = IERC721Enumerable(addressERC721).tokenOfOwnerByIndex(_msgSender(), i);
+        SubmissionData memory _submissionData = Submission.get(_hackathonId, submissionAddresses[i]);
+
+        address voter = Vote.get(_hackathonId, tokenId);
+        require(voter == address(0), "This tokenId has already been used to vote.");
+        
+        // Vote counts for submitted projects
+        require(bytes(_submissionData.name).length > 0, "Submission does not exist.");
+        Submission.setVotes(_hackathonId, submissionAddresses[i], _submissionData.votes + 1);
+        
+        // Keep a record of who has voted utilizing which Id.
+        Vote.set(_hackathonId, tokenId, address(_msgSender()));
+      }
+    } else {
+      require(_specialVoteData.used == false, "You have already voted");
+      require(submissionAddresses.length <= _specialVoteData.count, "Voting sum exceed.");
+
+      for (uint i = 0; i < submissionAddresses.length; i++) {
+        SubmissionData memory _submissionData = Submission.get(_hackathonId, submissionAddresses[i]);
+        require(bytes(_submissionData.name).length > 0, "Submission does not exist.");
+        Submission.setVotes(_hackathonId, submissionAddresses[i], _submissionData.votes + 1);
+      }
+      SpecialVote.set(_hackathonId, address(_msgSender()), submissionAddresses.length, true);
     }
   }
 
@@ -88,7 +104,7 @@ contract SubmissionSystem is System {
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
     require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
 
-    SpecialVote.set(_hackathonId, _voter, voteSum);
+    SpecialVote.set(_hackathonId, _voter, voteSum, false);
     // Needed to list by hackathon
     HackathonVoteNft.pushSpecialVoters(_hackathonId, _voter);  
   }

@@ -57,7 +57,7 @@ contract ViewSystem is System {
   }
 
   function getSpecialVote(bytes32 _hackathonId, address _voter)  public view returns(uint256){
-    return SpecialVote.get(_hackathonId, _voter);
+    return SpecialVote.getCount(_hackathonId, _voter);
   }
 
 }
