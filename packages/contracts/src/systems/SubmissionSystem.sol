@@ -2,10 +2,19 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Hackathon, HackathonData, Submission, SubmissionData, HackathonPrize, HackathonVoteNft, HackathonVoteNftData, Config, Vote} from "../codegen/Tables.sol";
+import { Hackathon, HackathonData, Submission, SubmissionData, HackathonPrize, HackathonVoteNft, HackathonVoteNftData, SpecialVote, Config, Vote} from "../codegen/Tables.sol";
 import { Phase } from "../codegen/Types.sol";
 import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import { IERC721 } from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+
+
+interface IERC721Enumerable {
+    function balanceOf(address owner) external view returns (uint256 balance);
+    function tokenOfOwnerByIndex(address owner, uint256 index) external view virtual returns (uint256);
+}
+
+struct VoteData {
+  address voter;
+}
 
 
 contract SubmissionSystem is System {
@@ -45,7 +54,7 @@ contract SubmissionSystem is System {
     Submission.setImageUri(_hackathonId, _msgSender(), _imageUri);
   }
 
-  function vote(bytes32 _hackathonId, uint256[] memory submissionIds ) public {    
+  function vote(bytes32 _hackathonId, address[] memory submissionAddresses ) public {    
     // Validate phase
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
     require(uint8(_hackathonData.phase) == uint8(Phase.VOTING), "Hackathon is not in VOTING phase.");
@@ -55,18 +64,33 @@ contract SubmissionSystem is System {
     addressERC721 = _hackathonNftData.voteNft;
     
     // VoteSum
-    uint256 votesCast = IERC721(addressERC721).balanceOf(_msgSender());
-    require(submissionIds.length <= votesCast, "Voting sum exceed.");
+    uint256 votesCast = IERC721Enumerable(addressERC721).balanceOf(_msgSender());
+    require(submissionAddresses.length <= votesCast, "Voting sum exceed.");
 
-    // TODO: Obtain a token ID for each
+    // After examining the token ID, the Id is utilized to cast a vote.
+    for (uint i = 0; i < votesCast; i++) {
+      uint256 tokenId = IERC721Enumerable(addressERC721).tokenOfOwnerByIndex(_msgSender(), i);
+      SubmissionData memory _submissionData = Submission.get(_hackathonId, submissionAddresses[i]);
 
+      address voter = Vote.get(_hackathonId, tokenId);
+      require(voter == address(0), "This tokenId has already been used to vote.");
+      
+      // Vote counts for submitted projects
+      require(bytes(_submissionData.name).length > 0, "Submission does not exist.");
+      Submission.setVotes(_hackathonId, submissionAddresses[i], _submissionData.votes + 1);
+      
+      // Keep a record of who has voted utilizing which Id.
+      Vote.set(_hackathonId, tokenId, address(_msgSender()));
+    }
+  }
 
-    // TODO: Add the number of votes to each utilizing the TokenID obtained.
-    // validate submission
-    // SubmissionData memory _submissionData = Submission.get(_hackathonId, _submitter);
-    // require(bytes(_submissionData.name).length > 0, "Submission does not exist.");
-    // //increment votes
-    // Submission.setVotes(_hackathonId, _submitter, _submissionData.votes + 1);
+  function addSpecialVoter(bytes32 _hackathonId, address _voter, uint32 voteSum) public onlyOwner(_hackathonId) {    
+    HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
+    require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
+
+    SpecialVote.set(_hackathonId, _voter, voteSum);
+    // Needed to list by hackathon
+    HackathonVoteNft.pushSpecialVoters(_hackathonId, _voter);  
   }
 
   function withdrawPrize(bytes32 _hackathonId) public payable {

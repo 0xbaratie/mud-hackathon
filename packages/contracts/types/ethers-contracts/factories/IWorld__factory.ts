@@ -1006,6 +1006,30 @@ const _abi = [
       },
       {
         internalType: "address",
+        name: "_voter",
+        type: "address",
+      },
+    ],
+    name: "getSpecialVote",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_hackathonId",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
         name: "_submitter",
         type: "address",
       },
@@ -1048,30 +1072,6 @@ const _abi = [
         internalType: "struct SubmissionData",
         name: "",
         type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "_hackathonId",
-        type: "bytes32",
-      },
-      {
-        internalType: "address",
-        name: "_nft",
-        type: "address",
-      },
-    ],
-    name: "getVote",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -1752,19 +1752,6 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "_voteToken",
-        type: "address",
-      },
-    ],
-    name: "setVoteToken",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "bytes32",
         name: "_hackathonId",
         type: "bytes32",
@@ -1949,9 +1936,9 @@ const _abi = [
         type: "bytes32",
       },
       {
-        internalType: "address",
-        name: "_submitter",
-        type: "address",
+        internalType: "address[]",
+        name: "submissionAddresses",
+        type: "address[]",
       },
     ],
     name: "vote",

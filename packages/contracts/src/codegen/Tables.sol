@@ -13,3 +13,4 @@ import { HackathonPrizeSponsor, HackathonPrizeSponsorData, HackathonPrizeSponsor
 import { HackathonVoteNft, HackathonVoteNftData, HackathonVoteNftTableId } from "./tables/HackathonVoteNft.sol";
 import { Submission, SubmissionData, SubmissionTableId } from "./tables/Submission.sol";
 import { Vote, VoteTableId } from "./tables/Vote.sol";
+import { SpecialVote, SpecialVoteTableId } from "./tables/SpecialVote.sol";
