@@ -47,7 +47,6 @@ contract HackathonSystemTest is MudV2Test {
     nft.mint(address(this), 2);
     nft.mint(address(this), 3);
     nft.mint(address(1), 4);
-    world.setVoteToken(address(nft));
   }
 
   function testCreateHackathonRevert() public {
@@ -327,9 +326,12 @@ contract HackathonSystemTest is MudV2Test {
     //proceed VOTING
     skip(2);
     world.proceedPhase(bytes32(uint256(1)));
-    world.vote(bytes32(uint256(1)), address(this));
-    world.vote(bytes32(uint256(1)), address(1));
-    world.vote(bytes32(uint256(1)), address(2));
+    address[] memory submissionAddresses = new address[](3);
+    submissionAddresses[0] = address(1);
+    submissionAddresses[1] = address(2);
+    submissionAddresses[2] = address(3);
+
+    world.vote(bytes32(uint256(1)), submissionAddresses);
 
     //proceed WITHDRAWING
     skip(3);

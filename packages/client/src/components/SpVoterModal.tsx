@@ -14,7 +14,7 @@ const SpVoterModal = ({ onClose, hackathonId, setError, setSuccess }: SpVoterPro
     systemCalls: { addSpecialVoter },
   } = useMUD();
   const [amount, setAmount] = useState(0);
-  const [voteNft, setVoteNft] = useState('0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E');
+  const [walletAddress, setWalletAddress] = useState('');
 
   return (
     <div className="p-6">
@@ -24,8 +24,8 @@ const SpVoterModal = ({ onClose, hackathonId, setError, setSuccess }: SpVoterPro
         <input
           type="text"
           className="input input-bordered w-full  text-gray-900"
-          value={voteNft}
-          onChange={(e) => setVoteNft(e.target.value)}
+          value={walletAddress}
+          onChange={(e) => setWalletAddress(e.target.value)}
         />
         <h1 className="text-sm mb-1 mt-3">Number of votes</h1>
         <input
@@ -43,7 +43,7 @@ const SpVoterModal = ({ onClose, hackathonId, setError, setSuccess }: SpVoterPro
               onClick={async (event) => {
                 event.preventDefault();
                 try {
-                  await addSpecialVoter(hackathonId, voteNft, amount);
+                  await addSpecialVoter(hackathonId, walletAddress, amount);
                   setSuccess('The special voter has been added');
                 } catch (error) {
                   console.error(error);

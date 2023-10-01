@@ -33,14 +33,14 @@ const VoteNone = ({ hackathonId, phase }: HackathonPrizesProps) => {
   }, [error, success]);
 
   return (
-    <div className="mt-10 w-full mx-auto">
+    <div className="mt-1 w-full mx-auto">
       {error && <ToastError message={error} />}
       {success && <ToastSuccess message={success} />}
       <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
         <VoteModal
           onClose={closeModal}
           hackathonId={hackathonId}
-          submitter={'0x0000000000000000000000000000000000000000'}
+          submitter={['0x0000000000000000000000000000000000000000']}
           setError={setError}
           setSuccess={setSuccess}
         />

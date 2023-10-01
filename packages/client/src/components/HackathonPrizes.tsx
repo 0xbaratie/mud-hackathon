@@ -75,8 +75,8 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: Hackat
       const hackathonVoteNft = await worldContract.getHackathonVoteNft(hackathonId);
       setSpecialVotersAddress(hackathonVoteNft.specialVoters);
       for (const voteAddress of hackathonVoteNft.specialVoters) {
-        const vote = await worldContract.getVote(hackathonId, voteAddress)
-        fetchedSpecialVoters.push(vote.count.toNumber()); 
+        const vote = await worldContract.getSpecialVote(hackathonId, voteAddress)
+        fetchedSpecialVoters.push(vote.toNumber()); 
       }
       setSpecialVoters(fetchedSpecialVoters); 
 

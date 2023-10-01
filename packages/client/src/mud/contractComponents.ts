@@ -163,7 +163,23 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
-          tokenId: RecsType.BigInt,
+          voter: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    SpecialVote: (() => {
+      const tableId = new TableId("", "SpecialVote");
+      return defineComponent(
+        world,
+        {
+          count: RecsType.BigInt,
+          used: RecsType.Boolean,
         },
         {
           metadata: {
