@@ -1,19 +1,18 @@
 import { useState, useEffect } from 'react';
 import VotingBox from '../../public/voting_box.svg';
-import FullScreenModal from './FullScreenModal';
-import VoteModal from './VoteModal';
 import { useMUD } from '../MUDContext';
 import { PHASE } from '../constants/constants';
 import { ToastError } from './ToastError';
-import { ToastSuccess } from './ToastSuccess';
 
 interface HackathonPrizesProps {
   hackathonId: string;
   submitter: string;
   phase: number;
+  votesNum: Record<string, number>;
+  setVotesNum: React.Dispatch<React.SetStateAction<Record<string, number>>>;
 }
 
-const HackathonProjects = ({ hackathonId, submitter, phase }: HackathonPrizesProps) => {
+const HackathonProjects = ({ hackathonId, submitter, phase, votesNum, setVotesNum}: HackathonPrizesProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => {
     setModalOpen(true);
@@ -47,31 +46,39 @@ const HackathonProjects = ({ hackathonId, submitter, phase }: HackathonPrizesPro
   }, []);
 
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
   useEffect(() => {
     const timer = setTimeout(() => {
       setError(null);
-      setSuccess(null);
     }, 10000);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [error, success]);
+  }, [error]);
+
+  const handleVoteIncrease = () => {
+      console.log("@@@");
+      setVotesNum(prevVotes => ({
+          ...prevVotes,
+          [submitter]: (prevVotes[submitter] || 0) + 1
+      }));
+  };
+
+  
+const handleVoteDecrease = () => {
+  if (votesNum[submitter] <= 0) {
+    setError("You can't reduce votes below zero.");
+    return;
+  }
+  setVotesNum(prevVotes => ({
+    ...prevVotes,
+    [submitter]: prevVotes[submitter] - 1
+  }));
+};
 
   return (
     <div className="mt-10 w-[390px] mx-auto">
       {error && <ToastError message={error} />}
-      {success && <ToastSuccess message={success} />}
-      <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
-        <VoteModal
-          onClose={closeModal}
-          hackathonId={hackathonId}
-          submitter={submitter}
-          setError={setError}
-          setSuccess={setSuccess}
-        />
-      </FullScreenModal>
       <a href={url} target="blank">
         <div className="border rounded-md shadow-md h-[438px] relative">
           <img className="h-[228px] w-full object-cover" src={imageURL} alt="Image"></img>
@@ -86,20 +93,37 @@ const HackathonProjects = ({ hackathonId, submitter, phase }: HackathonPrizesPro
         </div>
       </a>
       {phase === PHASE.VOTING ? (
-        <div className="flex justify-center items-center">
-          <a onClick={openModal}>
-            <button className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg">
-              Vote
-            </button>
-          </a>
+        <div className="flex justify-center items-center mt-4 space-x-2">
+          <button
+            onClick={handleVoteDecrease}
+            className="font-bold pl-6 pr-6 pt-2 pb-2 shadow-xl rounded-lg"
+          >
+            -
+          </button>
+          <span className="text-xl font-bold">{votesNum[submitter] || 0}</span>
+          <button
+            onClick={handleVoteIncrease}
+            className="font-bold pl-6 pr-6 pt-2 pb-2 shadow-xl rounded-lg"
+          >
+            +
+          </button>
         </div>
       ) : (
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center mt-4 space-x-2">
           <button
-            className="mt-4 pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg bg-gray-400 text-white"
+            onClick={handleVoteDecrease}
+            className="font-bold pl-6 pr-6 pt-2 pb-2 shadow-xl rounded-lg bg-gray-400"
             disabled
           >
-            Vote
+            -
+          </button>
+          <span className="text-xl font-bold">{votesNum[submitter] || 0}</span>
+          <button
+            onClick={handleVoteIncrease}
+            className="font-bold pl-6 pr-6 pt-2 pb-2 shadow-xl rounded-lg bg-gray-400"
+            disabled
+          >
+            +
           </button>
         </div>
       )}

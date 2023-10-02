@@ -14,7 +14,6 @@ interface HackathonOverviewProps {
   hackathonId: string;
   winnerCount: number;
   voteNft: string;
-  voteNftSnapshot: number;
   phase: number;
 }
 
@@ -26,7 +25,6 @@ const HackathonOverview = ({
   hackathonId,
   winnerCount,
   voteNft,
-  voteNftSnapshot,
   phase,
 }: HackathonOverviewProps) => {
   const { showToast, toastType } = useToast();
@@ -78,16 +76,16 @@ const HackathonOverview = ({
       <div className="mt-4">
         <p className="text-xl">Voter</p>
         <p className="w-full mt-2">
-          L1 NFT (
+          Optimism NFT (
           <a
-            href={`https://etherscan.io/address/${voteNft}`}
+            href={`https://optimistic.etherscan.io/${voteNft}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-500"
           >
             {voteNft}
           </a>
-          ) owners can vote. (Snapshot: {voteNftSnapshot})
+          ) owners can vote.
         </p>
       </div>
 

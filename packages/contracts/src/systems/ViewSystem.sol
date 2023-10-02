@@ -13,22 +13,18 @@ import {
   Submission,
   SubmissionData,
   Vote,
-  VoteData,
   Administrator,
   HackathonPrizeSponsor,
   HackathonPrizeSponsorData,
   HackathonInfo,
-  HackathonInfoData
+  HackathonInfoData,
+  SpecialVote
 } from "../codegen/Tables.sol";
 import { Phase } from "../codegen/Types.sol";
 
 contract ViewSystem is System {
   function getMaxHackathonId() public view returns(bytes32){
     return Config.get();
-  }
-
-  function getHackathon(bytes32 _hackathonId) public view returns(HackathonData memory){
-    return Hackathon.get(_hackathonId);
   }
 
   function getHackathonVoteNft(bytes32 _hackathonId) public view returns(HackathonVoteNftData memory){
@@ -43,10 +39,6 @@ contract ViewSystem is System {
     return Submission.get(_hackathonId, _submitter);
   }
 
-  function getVote(bytes32 _hackathonId, address _voter)  public view returns(VoteData memory){
-    return Vote.get(_hackathonId, _voter);
-  }
-
   function getAdministrator() public view returns(address) {
     return Administrator.get();
   }
@@ -58,6 +50,14 @@ contract ViewSystem is System {
 
   function getHackathonInfo(bytes32 _hackathonId) public view returns(HackathonInfoData memory){
     return HackathonInfo.get(_hackathonId);
+  }
+
+  function getHackathon(bytes32 _hackathonId) public view returns(HackathonData memory){
+    return Hackathon.get(_hackathonId);
+  }
+
+  function getSpecialVote(bytes32 _hackathonId, address _voter)  public view returns(uint256){
+    return SpecialVote.getCount(_hackathonId, _voter);
   }
 
 }

@@ -48,7 +48,6 @@ const HackathonForm: FC<HackathonFormProps> = ({
   const [imageUri, setImageUri] = useState('');
   const [description, setDescription] = useState('');
   const [voteNft, setVoteNft] = useState('0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E');
-  const [voteNftSnapshot, setVoteNftSnapshot] = useState(17928076);
 
   return (
     <div className="p-4 overflow-y-auto max-h-[800px]">
@@ -137,7 +136,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
         <option value={prizeTokens.DAI}>DAI</option>
       </select>
       <h1 className="text-sm mb-1 mt-4 font-bold">Vote NFT Address</h1>
-      <p className="text-sm text-gray-500 mb-1">This vote contract is only ERC721 on L1 only.</p>
+      <p className="text-sm text-gray-500 mb-1">This vote contract is only ERC721(With Enumerable) on Optimism only.</p>
       <input
         type="text"
         placeholder="0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E"
@@ -145,28 +144,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
         value={voteNft}
         onChange={(e) => setVoteNft(e.target.value)}
       />
-      <h1 className="text-sm mb-1 mt-4 font-bold">Vote NFT Snapshot</h1>
-      <p className="text-sm text-gray-500 mb-1">
-        You need to decide which block ID you want to use to implement the timing of your ownership.
-        Please check the block numbers on{' '}
-        <a
-          href="https://etherscan.io/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline"
-        >
-          Etherscan
-        </a>
-        .
-      </p>
 
-      <input
-        type="text"
-        placeholder="17928076"
-        className="input input-bordered w-full max-w-xs text-gray-900"
-        value={voteNftSnapshot}
-        onChange={(e) => setVoteNftSnapshot(parseInt(e.target.value))}
-      />
       <div className="mt-4">
         <button
           className="btn bg-[#333333] text-white rounded-lg"
@@ -185,7 +163,6 @@ const HackathonForm: FC<HackathonFormProps> = ({
                 imageUri,
                 description,
                 voteNft,
-                voteNftSnapshot,
               );
               const newMaxHackathonNum = maxHackathonNum + 1;
               setMaxHackathonNum(newMaxHackathonNum);

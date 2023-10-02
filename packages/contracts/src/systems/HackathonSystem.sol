@@ -36,8 +36,7 @@ contract HackathonSystem is System {
     uint256 _withdrawalPeriod,
     uint8 _winnerCount,
     HackathonInfoData memory _hackathonInfo,
-    address _voteNft,
-    uint64 _voteNftSnapshot
+    address _voteNft
   ) public  {
     require(_startTimestamp >= block.timestamp, "StartTimestamp is not future.");
     bytes32 _hackathonId = _incrementHackathonId();
@@ -53,7 +52,7 @@ contract HackathonSystem is System {
     ));
     HackathonInfo.set(_hackathonId,_hackathonInfo);
     HackathonVoteNft.set(_hackathonId,
-      HackathonVoteNftData(_voteNft,_voteNftSnapshot, specialVoters)
+      HackathonVoteNftData(_voteNft, specialVoters)
     );
     HackathonPrize.set(_hackathonId,
       HackathonPrizeData( 0, new address[](0))
@@ -71,8 +70,7 @@ contract HackathonSystem is System {
     uint256 _withdrawalPeriod,
     uint8 _winnerCount,
     HackathonInfoData memory _hackathonInfo,
-    address _voteNft,
-    uint64 _voteNftSnapshot
+    address _voteNft
   ) public onlyOwner(_hackathonId) {
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
     require(_hackathonData.phase == uint8(Phase.PREPARE_PRIZE), "Hackathon is not in PREPARE_PRIZE phase.");
@@ -91,7 +89,7 @@ contract HackathonSystem is System {
     HackathonInfo.set(_hackathonId,_hackathonInfo);
 
     HackathonVoteNft.set(_hackathonId,
-      HackathonVoteNftData(_voteNft,_voteNftSnapshot, specialVoters)
+      HackathonVoteNftData(_voteNft, specialVoters)
     );
   }
 

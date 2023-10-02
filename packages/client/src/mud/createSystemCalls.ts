@@ -27,7 +27,6 @@ export function createSystemCalls(
     _imageUri: string,
     _description: string,
     _voteNft: string,
-    _voteNftSnapshot: number,
   ) => {
     const tx = await worldSend('createHackathon', [
       _prizeToken,
@@ -37,8 +36,7 @@ export function createSystemCalls(
       _withdrawalPeriod,
       _winnerCount,
       { name: _name, uri: _uri, imageUri: _imageUri, description: _description },
-      _voteNft,
-      _voteNftSnapshot,
+      _voteNft
     ]);
     // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
@@ -55,7 +53,6 @@ export function createSystemCalls(
     _uri: string,
     _imageUri: string,
     _voteNft: string,
-    _voteNftSnapshot: number,
   ) => {
     const tx = await worldSend('updateHackathon', [
       _hackathonId,
@@ -65,9 +62,8 @@ export function createSystemCalls(
       _votingPeriod,
       _withdrawalPeriod,
       _winnerCount,
-      { name: _name, uri: _uri, imageUri: _imageUri, description: _description },
-      _voteNft,
-      _voteNftSnapshot,
+      { name: _name, uri: _uri, imageUri: _imageUri},
+      _voteNft
     ]);
     // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
@@ -104,10 +100,6 @@ export function createSystemCalls(
     // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
-  const setVoteToken = async (_voteToken: string) => {
-    const tx = await worldSend('setVoteToken', [_voteToken]);
-    // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
-  };
 
   const submit = async (
     _hackathonId: string,
@@ -120,8 +112,8 @@ export function createSystemCalls(
     // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
-  const vote = async (_hackathonId: string, _submitter: string) => {
-    const tx = await worldSend('vote', [_hackathonId, _submitter]);
+  const vote = async (_hackathonId: string, _submitters: string[]) => {
+    const tx = await worldSend('vote', [_hackathonId, _submitters]);
     // await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
   };
 
@@ -140,7 +132,6 @@ export function createSystemCalls(
     depositPrize,
     depositPrizeEth,
     addSpecialVoter,
-    setVoteToken,
     submit,
     vote,
     withdrawPrize,

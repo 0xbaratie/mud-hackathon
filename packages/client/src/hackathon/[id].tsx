@@ -25,7 +25,6 @@ export const HackathonPage = () => {
   const [phase, setPhase] = useState(0);
   const [winnerCount, setWinnerCount] = useState(0);
   const [voteNft, setVoteNft] = useState('');
-  const [voteNftSnapshot, setVoteNftSnapshot] = useState(0);
   const [startTimestamp, setStartTimestamp] = useState(0);
   const [submitPeriod, setSubmitPeriod] = useState(0);
   const [votingPeriod, setVotingPeriod] = useState(0);
@@ -49,9 +48,6 @@ export const HackathonPage = () => {
       setPhase(hackathon.phase);
       setWinnerCount(hackathon.winnerCount);
       setVoteNft(hackathonVoteNft.voteNft);
-      setVoteNftSnapshot(
-        parseInt('0x' + hackathonVoteNft.voteNftSnapshot.toHexString().slice(2).padStart(64, '0')),
-      );
       setStartTimestamp(hackathon.startTimestamp.toNumber());
       setSubmitPeriod(hackathon.submitPeriod.toNumber());
       setVotingPeriod(hackathon.votingPeriod.toNumber());
@@ -70,7 +66,6 @@ export const HackathonPage = () => {
         hackathonId={productId}
         winnerCount={winnerCount}
         voteNft={voteNft}
-        voteNftSnapshot={voteNftSnapshot}
         phase={phase}
       />
     );
