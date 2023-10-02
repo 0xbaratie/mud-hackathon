@@ -52,7 +52,6 @@ export default mudConfig({
     HackathonVoteNft: {
       schema: {
         voteNft: "address",
-        voteNftSnapshot: "uint64",
         specialVoters: "address[]",
       },
     },
@@ -72,14 +71,23 @@ export default mudConfig({
     },
     Vote: {
       schema: {
+        voter: "address",
+      },
+      keySchema: {
+        hackathonId: "bytes32",
+        tokenId: "uint256",
+      },
+    },
+    SpecialVote: {
+      schema: {
         count: "uint256",
-        aggregated: "bool",
+        used: "bool"
       },
       keySchema: {
         hackathonId: "bytes32",
         voter: "address",
       },
-    },
+    }
   },
   enums: {
     Phase: ["NONE", "PREPARE_PRIZE", "HACKING", "VOTING", "WITHDRAWING", "END"],

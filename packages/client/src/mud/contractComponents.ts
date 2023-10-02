@@ -128,7 +128,6 @@ export function defineContractComponents(world: World) {
         world,
         {
           voteNft: RecsType.String,
-          voteNftSnapshot: RecsType.BigInt,
           specialVoters: RecsType.StringArray,
         },
         {
@@ -164,8 +163,23 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
+          voter: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    SpecialVote: (() => {
+      const tableId = new TableId("", "SpecialVote");
+      return defineComponent(
+        world,
+        {
           count: RecsType.BigInt,
-          aggregated: RecsType.Boolean,
+          used: RecsType.Boolean,
         },
         {
           metadata: {
