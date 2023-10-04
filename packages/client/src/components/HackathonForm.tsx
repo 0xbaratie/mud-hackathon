@@ -30,8 +30,15 @@ const HackathonForm: FC<HackathonFormProps> = ({
     return date;
   };
 
-  const getTimestampFromDate = (date: Date) => {
-    return Math.floor(date.getTime() / 1000);
+  const getTimestampFromDateAsUTC = (date: Date) => {
+      // getTimezoneOffset() returns the difference from UTC in minutes
+      const offsetMinutes = date.getTimezoneOffset();
+
+      // Adjust the date using the offset
+      const adjustedDate = new Date(date.getTime() - offsetMinutes * 60 * 1000);
+
+      // Return the UNIX timestamp of the adjusted date
+      return Math.floor(adjustedDate.getTime() / 1000);
   };
 
   const {
@@ -47,7 +54,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
   const [uri, setUri] = useState('');
   const [imageUri, setImageUri] = useState('');
   const [description, setDescription] = useState('');
-  const [voteNft, setVoteNft] = useState('0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E');
+  const [voteNft, setVoteNft] = useState('');
 
   return (
     <div className="p-4 overflow-y-auto max-h-[800px]">
@@ -79,7 +86,7 @@ const HackathonForm: FC<HackathonFormProps> = ({
         value={imageUri}
         onChange={(e) => setImageUri(e.target.value)}
       />
-      <h1 className="text-sm mb-1 font-bold">Description</h1>
+      <h1 className="text-sm mt-4 mb-1 font-bold">Description</h1>
       <textarea
         placeholder="Enter your project overview"
         className="input input-bordered w-full max-w-ms text-gray-900 pt-2"
@@ -153,10 +160,10 @@ const HackathonForm: FC<HackathonFormProps> = ({
             try {
               await createHackathon(
                 prizeToken,
-                getTimestampFromDate(startTimestamp),
-                getTimestampFromDate(submitPeriod),
-                getTimestampFromDate(votingPeriod),
-                getTimestampFromDate(withdrawalPeriod),
+                getTimestampFromDateAsUTC(startTimestamp),
+                getTimestampFromDateAsUTC(submitPeriod),
+                getTimestampFromDateAsUTC(votingPeriod),
+                getTimestampFromDateAsUTC(withdrawalPeriod),
                 winnerCount,
                 name,
                 uri,
