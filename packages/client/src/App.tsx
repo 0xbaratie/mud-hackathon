@@ -63,20 +63,6 @@ export const App = () => {
         </p>
       </div>
 
-      {/* {loadingState.state !== SyncState.LIVE ? (
-        <div className="font-dot text-center mt-32">
-          {loadingState.msg}
-          <br />
-          <progress
-            className="mt-6 [&::-webkit-progress-bar]:rounded-sm [&::-webkit-progress-value]:rounded-sm [&::-webkit-progress-bar]:bg-gray-300 [&::-webkit-progress-value]:bg-black [&::-moz-progress-bar]:bg-black"
-            value={Math.floor(loadingState.percentage)}
-            max="100"
-          />
-        </div>
-      ) : (
-        <EventCards />
-      )} */}
-
       <div className="text-center">
         <a onClick={openModal}>
           <button className="btn bg-[#333333] text-white rounded-lg">Create a hackathon</button>

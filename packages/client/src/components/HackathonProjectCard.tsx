@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext} from 'react';
 import VotingBox from '../../public/voting_box.svg';
 import { useMUD } from '../MUDContext';
 import { PHASE } from '../constants/constants';
 import { ToastError } from './ToastError';
+import { walletContext } from '../WalletConnection'; 
 
 interface HackathonPrizesProps {
   hackathonId: string;
@@ -76,7 +77,10 @@ const handleVoteDecrease = () => {
   }));
 };
 
-  return (
+const { wallet } = useContext(walletContext)
+const connectedWalletAddress = wallet?.accounts?.[0];
+
+return (
     <div className="mt-10 w-[390px] mx-auto">
       {error && <ToastError message={error} />}
       <a href={url} target="blank">
@@ -128,8 +132,7 @@ const handleVoteDecrease = () => {
         </div>
       )}
       {
-        //TODO if address == owner
-        prize > 0 && (
+        connectedWalletAddress === submitter && prize > 0 && (
           <div className="flex justify-center items-center">
             <button
               className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg"

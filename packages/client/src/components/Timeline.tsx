@@ -10,11 +10,10 @@ import { Toast } from './Toast';
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const timestampToDateString = (timestamp: any) => {
   const date = new Date(Number(timestamp) * 1000);
-  const formattedDate = `${
-    months[date.getMonth()]
-  } ${date.getDate()}, ${date.getFullYear()}, ${date.getHours()}:${('0' + date.getMinutes()).slice(
-    -2,
-  )}`;
+
+  // Use methods to retrieve UTC date and time values
+  const formattedDate = `${months[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}, ${date.getUTCHours()}:${('0' + date.getUTCMinutes()).slice(-2)}`;
+
   return formattedDate;
 };
 
