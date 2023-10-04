@@ -105,8 +105,6 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: Hackat
         return 18;
     }
   };
-  
-  console.log("@@prizeToken=", getPrizeTokenSymbol(prizeToken, chainId))
 
   return (
     <>
