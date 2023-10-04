@@ -97,6 +97,17 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: Hackat
     })();
   }, []);
 
+  const getDecimalForToken = (tokenSymbol: string) => {
+    switch (tokenSymbol) {
+      case 'USDC':
+        return 6;
+      default:
+        return 18;
+    }
+  };
+  
+  console.log("@@prizeToken=", getPrizeTokenSymbol(prizeToken, chainId))
+
   return (
     <>
       {error && <ToastError message={error} />}
@@ -160,7 +171,7 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: Hackat
                 </div>
                 <div key={`sponsor-${index}`}>
                   <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">
-                    {ethers.utils.formatEther(depositSum)}
+                    {ethers.utils.formatUnits(depositSum, getDecimalForToken(getPrizeTokenSymbol(prizeToken, chainId) || "ETH"))}
                   </div>
                 </div>
               </>
