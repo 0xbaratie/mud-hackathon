@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext} from 'react';
 import { useMUD } from '../MUDContext';
 import FullScreenModal from './FullScreenModal';
 import SpVoterModal from './SpVoterModal';
@@ -11,15 +11,17 @@ import { ToastError } from '../components/ToastError';
 import { ToastSuccess } from '../components/ToastSuccess';
 import { useInterval } from '../hooks/useInterval';
 import { PHASE } from '../constants/constants';
+import { walletContext } from '../WalletConnection';
 
 interface HackathonPrizesProps {
   hackathonId: string;
   prizeToken: string;
   winnerCount: number;
   phase: number;
+  owner: string;
 }
 
-const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: HackathonPrizesProps) => {
+const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase, owner }: HackathonPrizesProps) => {
   const {
     network: { worldContract, chainId },
   } = useMUD();
@@ -106,6 +108,9 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: Hackat
     }
   };
 
+  const { wallet } = useContext(walletContext)
+  const connectedWalletAddress = wallet?.accounts?.[0];
+
   return (
     <>
       {error && <ToastError message={error} />}
@@ -151,7 +156,7 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: Hackat
         {hackathonSponsors.length > 0 && hackathonSponsors[0].length > 0 ? ( 
           <div className="grid grid-cols-2 p-4 rounded-md shadow-md mt-4 mb-12">
             <div className="col-span-1 border-b font-bold pb-2">Account</div>
-            <div className="col-span-1 border-b font-bold pb-2">Sum</div>
+            <div className="col-span-1 border-b font-bold pb-2">Amount</div>
 
             {hackathonSponsors[0].map((depositSum, index) => (
               <>
@@ -180,19 +185,24 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: Hackat
         )}
 
         
+        
+      
         <div className="flex justify-between items-center mt-16">
           <h2 className="text-2xl font-bold">Voters</h2>
-          <a onClick={openModalSpVoter}>
-            <button
-              className={`pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl text-white ${
-                phase === PHASE.PREPARE_PRIZE ? 'bg-[#333333]' : 'bg-gray-400'
-              }`}
-              disabled={phase !== PHASE.PREPARE_PRIZE}
-            >
-              Add special voters
-            </button>
-          </a>
+          {connectedWalletAddress === owner && (
+            <a onClick={openModalSpVoter}>
+              <button
+                className={`pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl text-white ${
+                  phase === PHASE.PREPARE_PRIZE ? 'bg-[#333333]' : 'bg-gray-400'
+                }`}
+                disabled={phase !== PHASE.PREPARE_PRIZE}
+              >
+                Add special voters
+              </button>
+            </a>
+          )}
         </div>
+      
 
         <p className={"mt-2"}>
           The hack owner can add people who are not entitled to vote when in Deposit prize status only.(Optional to do) 
