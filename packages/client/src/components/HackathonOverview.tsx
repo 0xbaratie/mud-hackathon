@@ -78,14 +78,14 @@ const HackathonOverview = ({
         <p className="w-full mt-2">
           Optimism NFT (
           <a
-            href={`https://optimistic.etherscan.io/${voteNft}`}
+            href={`https://optimistic.etherscan.io/address/${voteNft}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-500"
           >
             {voteNft}
           </a>
-          ) owners can vote.
+          ) holders can vote.
         </p>
       </div>
 
