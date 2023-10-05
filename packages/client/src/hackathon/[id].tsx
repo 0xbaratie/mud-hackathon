@@ -78,6 +78,7 @@ export const HackathonPage = () => {
         prizeToken={prizeToken}
         winnerCount={winnerCount}
         phase={phase}
+        owner={owner}
       />
     );
   };
