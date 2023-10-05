@@ -151,7 +151,7 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase }: Hackat
         {hackathonSponsors.length > 0 && hackathonSponsors[0].length > 0 ? ( 
           <div className="grid grid-cols-2 p-4 rounded-md shadow-md mt-4 mb-12">
             <div className="col-span-1 border-b font-bold pb-2">Account</div>
-            <div className="col-span-1 border-b font-bold pb-2">Sum</div>
+            <div className="col-span-1 border-b font-bold pb-2">Amount</div>
 
             {hackathonSponsors[0].map((depositSum, index) => (
               <>
