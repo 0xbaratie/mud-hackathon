@@ -62,7 +62,7 @@ const HackathonOverview = ({
         <p className="text-2xl">{name}</p>
       </div>
       <div className="mt-1">
-        <p className="">{description}</p>
+          <p className="break-words">{description}</p>
       </div>
       <div className="mt-4 flex items-center">
         <p className="text-xl mr-2">Number of winners</p>
