@@ -92,7 +92,7 @@ return (
           </div>
           <div className="flex absolute bottom-4 right-0 pr-4">
             <img src={VotingBox} className="w-6" alt="Voting box icon" />
-            <span className="ml-1 text-xl font-bold">{votes}</span>
+            <span className="ml-2 text-xl font-bold">{votes}</span>
           </div>
         </div>
       </a>
