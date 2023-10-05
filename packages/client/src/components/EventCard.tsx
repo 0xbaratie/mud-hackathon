@@ -67,7 +67,7 @@ export const EventCard = ({ hackathonNum }: EventcardProps) => {
     : 0;
 
   function getDecimalPlaces(prizeToken: string, chainId: number): number {
-    return getPrizeTokenSymbol(prizeToken, chainId) === 'ETH' ? 18 : 6;
+    return getPrizeTokenSymbol(prizeToken, chainId) === 'USDC' ? 6: 18;
   }
 
   return loading ? (
