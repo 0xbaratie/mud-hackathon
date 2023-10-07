@@ -189,7 +189,7 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase, owner }:
       
         <div className="flex justify-between items-center mt-16">
           <h2 className="text-2xl font-bold">Voters</h2>
-          {connectedWalletAddress === owner && (
+          {connectedWalletAddress === owner.toLowerCase() && (
             <a onClick={openModalSpVoter}>
               <button
                 className={`pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl text-white ${
