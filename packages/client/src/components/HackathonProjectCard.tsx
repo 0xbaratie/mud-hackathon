@@ -132,7 +132,7 @@ return (
         </div>
       )}
       {
-        connectedWalletAddress === submitter && prize > 0 && (
+        connectedWalletAddress === submitter.toLowerCase() && prize > 0 && (
           <div className="flex justify-center items-center">
             <button
               className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg"
