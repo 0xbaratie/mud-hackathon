@@ -58,7 +58,6 @@ const HackathonProjects = ({ hackathonId, submitter, phase, votesNum, setVotesNu
   }, [error]);
 
   const handleVoteIncrease = () => {
-      console.log("@@@");
       setVotesNum(prevVotes => ({
           ...prevVotes,
           [submitter]: (prevVotes[submitter] || 0) + 1
