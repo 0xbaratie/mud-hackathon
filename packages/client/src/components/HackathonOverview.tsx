@@ -56,7 +56,7 @@ const HackathonOverview = ({
   }
 
   return (
-    <div className="ml-2 mr-2">
+    <div className="ml-2 mr-8">
       <Toast toastType={toastType} />
       <div className="font-bold">
         <p className="text-2xl">{name}</p>
@@ -64,36 +64,30 @@ const HackathonOverview = ({
       <div className="mt-1">
           <p className="break-words">{description}</p>
       </div>
-      <div className="mt-4 flex items-center">
-        <p className="text-xl mr-2">Number of winners</p>
-        <p className="mt-1 font-bold">{winnerCount}</p>
-      </div>
-      <div className="mt-4 flex items-center">
-        <p className="text-xl mr-2">Author</p>
-        <p className="mt-1 font-bold">{owner}</p>
-      </div>
-
-      <div className="mt-4">
-        <p className="text-xl">Voter</p>
-        <p className="w-full mt-2">
-          Optimism NFT (
-          <a
-            href={`https://optimistic.etherscan.io/address/${voteNft}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500"
-          >
-            {voteNft}
-          </a>
-          ) holders can vote.
-        </p>
-      </div>
-
       <button className="mt-6 bg-[#333333] text-white pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl mr-2">
         <a href={uri} target="_blank" rel="noopener noreferrer">
           Detail
         </a>
       </button>
+      <div className="overflow-x-auto mt-8 h-48">
+        <table className="table table-pin-rows">
+          <tbody>
+            <tr><td>Winners: {winnerCount}</td></tr>
+            <tr><td>Author: {owner}</td></tr>
+            <tr><td>Voter: 
+          <a
+            href={`https://optimistic.etherscan.io/address/${voteNft}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 ml-1 mr-1"
+          >
+            {voteNft }
+          </a>
+          holders can vote.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
       {myAddress === owner && phase === PHASE.PREPARE_PRIZE && (
         <button
           className="mt-6 bg-white text-[#333333] border border-[#333333] pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl"
