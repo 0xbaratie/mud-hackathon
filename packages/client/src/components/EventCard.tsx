@@ -79,7 +79,11 @@ export const EventCard = ({ hackathonNum }: EventcardProps) => {
       <div className="flex items-center space-x-4 custom-border h-[190px]">
         <div className="ml-3">
           <figure>
-            <img src={imageUri} alt="Shoes" className="w-[108px] h-[108px] object-cover " />
+            <img 
+              src={imageUri.startsWith('http') ? imageUri : 'http://arweave.net/SFQNZecr_C3oxxsJBFItR6HYnlVyC4vAzsV_PlKcn5E'} 
+              alt="Shoes" 
+              className="w-[108px] h-[108px] object-cover " 
+            />
           </figure>
         </div>
         <div className="card-compact">
