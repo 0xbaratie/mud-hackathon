@@ -70,6 +70,7 @@ const HackathonProjects = ({ hackathonId, phase }: HackathonProjectsProps) => {
           votesNum={votesNum}
           setError={setError}
           setSuccess={setSuccess}
+          displayNum={true}
         />
       </FullScreenModal>
       <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
@@ -91,17 +92,21 @@ const HackathonProjects = ({ hackathonId, phase }: HackathonProjectsProps) => {
           ))
         }
         {phase === PHASE.VOTING ? (
-          <div className="w-full flex justify-center items-center">
-            <a onClick={openModalVote}>
-              <button className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg">
-                Vote
-              </button>
-            </a>
-          </div>
+          <>
+            <div className="w-full flex justify-center items-center">
+              <a onClick={openModalVote}>
+                <button className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg">
+                  Vote
+                </button>
+              </a>
+              
+            </div>
+            <VoteNone hackathonId={hackathonId} phase={phase} />
+          </>
         ) : (
           <></>
         )}
-        <VoteNone hackathonId={hackathonId} phase={phase} />
+        
       </div>
       
       {phase === PHASE.HACKING ? (

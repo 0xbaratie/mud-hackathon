@@ -8,9 +8,10 @@ interface VoteModalProps {
   votesNum: Record<string, number>;
   setError: (error: string | null) => void;
   setSuccess: (success: string | null) => void;
+  displayNum: boolean;
 }
 
-const VoteModal = ({ onClose, hackathonId, votesNum, setError, setSuccess}: VoteModalProps) => {
+const VoteModal = ({ onClose, hackathonId, votesNum, setError, setSuccess, displayNum}: VoteModalProps) => {
   const {
     systemCalls: { vote },
   } = useMUD();
@@ -25,25 +26,30 @@ const VoteModal = ({ onClose, hackathonId, votesNum, setError, setSuccess}: Vote
       await vote(hackathonId, submitters);
       setSuccess('Your vote has been cast!.');
     } catch (error) {
-      setError('An error occurred while voting.');
+      setError('An error occurred while voting.(Check if you have already voted or are entitled to vote)');
     }
     
     onClose();
   };
 
+  let totalVotes = 0;
+  Object.values(votesNum).forEach(votes => {
+    totalVotes += votes;
+  });
+
   return (
     <div className="p-6">
-      <p className="font-bold text-xl flex justify-center">
-      Once a vote is made, it cannot be undone or overwritten. Is it OK?
+      <h2 className="font-bold text-xl flex justify-center">Caution!</h2>
+      <p className="text-xl flex justify-center">
+      Once you vote, you cannot undo or overwrite. Also, even if you have an extra vote, you cannot cast an additional vote. Is everything ok?
       </p>
-      {votesNum && Object.entries(votesNum).map(([submitter, votes]) => (
-        <p className="text-xl flex justify-center" key={submitter}>
-          {submitter}: {votes}
-        </p>
-      ))}
+      
+      <p className="text-xl font-bold flex justify-center mt-1" >
+        {displayNum ? `${totalVotes} selected` : ``}
+      </p>
 
       <div className="mt-6 flex justify-center">
-        <button
+        <button 
           className="btn bg-black text-white rounded-lg w-80"
           onClick={event => {
             event.preventDefault();
