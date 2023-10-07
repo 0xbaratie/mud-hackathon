@@ -1,6 +1,6 @@
 # AW Hack [WIP]
 
-This is an on-chain hackathon kit that utilizes MUD. The winner of the hackathon will be determined by voting utilizing the ERC721 (but Enumerable is required) on the deployed chain.
+This is an onchain hackathon kit that utilizes MUD. The winner of the hackathon will be determined by voting utilizing the ERC721 (but Enumerable is required) on the deployed chain.
 
 For detailed specifications of the hackathon, [click here.](https://komorebi88.notion.site/AW-Hack-Doc-193901bf9a33417dae3d5103d7c8bb18)
 
