@@ -82,7 +82,7 @@ export const EventCard = ({ hackathonNum }: EventcardProps) => {
             <img src={imageUri} alt="Shoes" className="w-[108px] h-[108px] object-cover " />
           </figure>
         </div>
-        <div className="card-body">
+        <div className="card-compact">
           <h2 className="card-title text-md">{name}</h2>
           <div className="card-actions mt-2">
             <button className="bg-[#333333] text-white pl-4 pr-4 pt-1 pb-1 text-sm rounded-3xl">
