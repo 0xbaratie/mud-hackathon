@@ -2,7 +2,11 @@ import React, { useEffect } from 'react';
 import { useMUD } from '../MUDContext';
 import { useState } from 'react';
 import { utils, Contract, BigNumber } from 'ethers';
-import { getPrizeTokenSymbol, numberToBigNumber } from '../utils/common';
+import {
+  getPrizeTokenSymbol,
+  getPrizeTokenDecimalBySymbol,
+  numberToBigNumber,
+} from '../utils/common';
 import { erc20abi } from '../constants/erc20abi';
 import { worldAbi } from '../constants/worldAbi';
 import { useInterval } from '../hooks/useInterval';
@@ -17,25 +21,31 @@ interface HackathonPrizeMocalProps {
   setSuccess: (success: string | null) => void;
 }
 
-const HackathonPrizeModal = ({ onClose, hackathonId, prizeToken, setError, setSuccess }: HackathonPrizeMocalProps) => {
+const HackathonPrizeModal = ({
+  onClose,
+  hackathonId,
+  prizeToken,
+  setError,
+  setSuccess,
+}: HackathonPrizeMocalProps) => {
   const {
     systemCalls: { depositPrize },
     network: { worldContract, signerOrProvider, chainId },
   } = useMUD();
   const [amount, setAmount] = useState(0);
   const [allowance, setAllowance] = useState(BigNumber.from('0'));
-  const prizeTokenSymbol = getPrizeTokenSymbol(prizeToken, chainId);
+  const prizeTokenSymbol = getPrizeTokenSymbol(prizeToken, chainId)!;
 
   //Timer
   useInterval(() => {
     (async () => {
       if (prizeTokenSymbol === 'ETH') return;
       const myAddress = await signerOrProvider.getAddress();
-      console.log('myAddress', myAddress);
+      // console.log('myAddress', myAddress);
       const prizeTokenERC20 = new Contract(prizeToken, erc20abi, signerOrProvider);
       const _allowance = await prizeTokenERC20.allowance(myAddress, worldContract.address);
-      console.log('allowance', _allowance.toNumber());
-      setAllowance(_allowance.toNumber());
+      // console.log('allowance', _allowance.toNumber());
+      setAllowance(_allowance);
     })();
   }, 5000);
 
@@ -59,9 +69,16 @@ const HackathonPrizeModal = ({ onClose, hackathonId, prizeToken, setError, setSu
                 event.preventDefault();
                 try {
                   const world = new Contract(worldContract.address, worldAbi, signerOrProvider);
-                  await world.depositPrizeEth(hackathonId, numberToBigNumber(amount, 18), {
-                    value: numberToBigNumber(amount, 18),
-                  });
+                  await world.depositPrizeEth(
+                    hackathonId,
+                    numberToBigNumber(amount, getPrizeTokenDecimalBySymbol(prizeTokenSymbol)),
+                    {
+                      value: numberToBigNumber(
+                        amount,
+                        getPrizeTokenDecimalBySymbol(prizeTokenSymbol),
+                      ),
+                    },
+                  );
                   setSuccess('Deposit success');
                 } catch (error) {
                   console.error(error);
@@ -76,7 +93,11 @@ const HackathonPrizeModal = ({ onClose, hackathonId, prizeToken, setError, setSu
         ) : (
           <>
             <div className="text-center">
-              {amount && allowance < numberToBigNumber(amount, 6) ? (
+              {amount &&
+              // less than
+              allowance.lt(
+                numberToBigNumber(amount, getPrizeTokenDecimalBySymbol(prizeTokenSymbol)),
+              ) ? (
                 <button
                   className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2  bg-[#333333] text-white rounded-lg"
                   onClick={async (event) => {
@@ -85,7 +106,7 @@ const HackathonPrizeModal = ({ onClose, hackathonId, prizeToken, setError, setSu
                       const prizeTokenERC20 = new Contract(prizeToken, erc20abi, signerOrProvider);
                       await prizeTokenERC20.approve(
                         worldContract.address,
-                        numberToBigNumber(amount, 6),
+                        numberToBigNumber(amount, getPrizeTokenDecimalBySymbol(prizeTokenSymbol)),
                       );
                       setSuccess('Approve success, please deposit the token next');
                     } catch (error) {
@@ -106,13 +127,20 @@ const HackathonPrizeModal = ({ onClose, hackathonId, prizeToken, setError, setSu
               )}
             </div>
             <div className="text-center">
-              {amount && allowance >= numberToBigNumber(amount, 6) ? (
+              {amount &&
+              // greater than or equal
+              allowance.gte(
+                numberToBigNumber(amount, getPrizeTokenDecimalBySymbol(prizeTokenSymbol)),
+              ) ? (
                 <button
                   className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2  bg-[#333333] text-white rounded-lg"
                   onClick={async (event) => {
                     event.preventDefault();
                     try {
-                      await depositPrize(hackathonId, numberToBigNumber(amount, 6));
+                      await depositPrize(
+                        hackathonId,
+                        numberToBigNumber(amount, getPrizeTokenDecimalBySymbol(prizeTokenSymbol)),
+                      );
                       setSuccess('Deposit success');
                     } catch (error) {
                       console.error(error);

@@ -31,20 +31,20 @@ const HackathonForm: FC<HackathonFormProps> = ({
   };
 
   const getTimestampFromDateAsUTC = (date: Date) => {
-      // getTimezoneOffset() returns the difference from UTC in minutes
-      const offsetMinutes = date.getTimezoneOffset();
+    // getTimezoneOffset() returns the difference from UTC in minutes
+    const offsetMinutes = date.getTimezoneOffset();
 
-      // Adjust the date using the offset
-      const adjustedDate = new Date(date.getTime() - offsetMinutes * 60 * 1000);
+    // Adjust the date using the offset
+    const adjustedDate = new Date(date.getTime() - offsetMinutes * 60 * 1000);
 
-      // Return the UNIX timestamp of the adjusted date
-      return Math.floor(adjustedDate.getTime() / 1000);
+    // Return the UNIX timestamp of the adjusted date
+    return Math.floor(adjustedDate.getTime() / 1000);
   };
 
   const {
     systemCalls: { createHackathon },
   } = useMUD();
-  const [prizeToken, setPrizeToken] = useState(prizeTokens.ETH);
+  const [prizeToken, setPrizeToken] = useState(prizeTokens.ETH.address);
   const [startTimestamp, setStartTimestamp] = useState(getWeeksLater(1.0));
   const [submitPeriod, setSubmitPeriod] = useState(getWeeksLater(2.5));
   const [votingPeriod, setVotingPeriod] = useState(getWeeksLater(3.0));
@@ -138,12 +138,14 @@ const HackathonForm: FC<HackathonFormProps> = ({
         value={prizeToken}
         onChange={(e) => setPrizeToken(e.target.value)}
       >
-        <option value={prizeTokens.ETH}>ETH</option>
-        <option value={prizeTokens.USDC}>USDC</option>
-        <option value={prizeTokens.DAI}>DAI</option>
+        <option value={prizeTokens.ETH.address}>ETH</option>
+        <option value={prizeTokens.USDC.address}>USDC</option>
+        <option value={prizeTokens.DAI.address}>DAI</option>
       </select>
       <h1 className="text-sm mb-1 mt-4 font-bold">Vote NFT Address</h1>
-      <p className="text-sm text-gray-500 mb-1">This vote contract is only ERC721(With Enumerable) on Optimism only.</p>
+      <p className="text-sm text-gray-500 mb-1">
+        This vote contract is only ERC721(With Enumerable) on Optimism only.
+      </p>
       <input
         type="text"
         placeholder="0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E"

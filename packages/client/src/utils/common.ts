@@ -1,11 +1,15 @@
 import { PRIZE_TOKEN, PRIZE_TOKEN_TEST } from '../constants/constants';
 import { BigNumber, utils } from 'ethers';
 
-export const getPrizeTokenSymbol = (input: string, chainId: number): string | undefined => {
+export const getPrizeTokenSymbol = (tokenAddress: string, chainId: number): string | undefined => {
   const prizeToken = chainId === 10 ? PRIZE_TOKEN : PRIZE_TOKEN_TEST;
   return Object.keys(prizeToken).find(
-    (key) => prizeToken[key].toLowerCase() === input.toLowerCase(),
+    (key) => prizeToken[key].address.toLowerCase() === tokenAddress.toLowerCase(),
   );
+};
+
+export const getPrizeTokenDecimalBySymbol = (symbol: string): number => {
+  return PRIZE_TOKEN[symbol].decimal;
 };
 
 export const numberToBigNumber = (amount: number, decimal: number): BigNumber => {
