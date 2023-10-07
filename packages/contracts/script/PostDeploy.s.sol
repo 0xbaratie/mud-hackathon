@@ -20,8 +20,11 @@ contract PostDeploy is Script {
     uint32 newValue = IWorld(worldAddress).increment();
     console.log("Increment via IWorld:", newValue);
 
-    ERC20 token = new MockERC20();
-    console.log("MockERC20 address:", address(token));
+    // ERC20 token = new MockERC20();
+    // console.log("MockERC20 address:", address(token));
+
+    address initAdmin = 0x1626Cc835842C480c1689A0A69AA419B9F761a4e;
+    IWorld(worldAddress).setAdmin(initAdmin);
 
     vm.stopBroadcast();
   }

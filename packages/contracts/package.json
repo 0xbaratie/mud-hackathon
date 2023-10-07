@@ -11,6 +11,7 @@
     "deploy:local": "pnpm run build && mud deploy",
     "deploy:testnet": "pnpm run build && mud deploy --profile=lattice-testnet",
     "deploy:opgoerli": "pnpm run build && mud deploy --profile=opgoerli",
+    "deploy:op": "pnpm run build && mud deploy --profile=op",
     "dev": "pnpm mud dev-contracts --tsgenOutput ../client/src/mud",
     "lint": "pnpm run prettier && pnpm run solhint",
     "prettier": "prettier --write 'src/**/*.sol'",
