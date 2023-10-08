@@ -1,8 +1,6 @@
-import React, { ReactNode, useContext, useState, createContext, useEffect } from 'react';
-import { Button, Container, Grid, SvgIcon, Typography, Menu, MenuItem, Box } from '@mui/material';
-import MetaMaskIcon from './MetaMaskIcon';
+import React, { ReactNode, useState, createContext, useEffect } from 'react';
+import { Button, Menu, MenuItem} from '@mui/material';
 import './index.css';
-import { ethers } from 'ethers';
 import TitleLogo from '../public/logo.svg';
 
 const chainIdFromEnv = import.meta.env.VITE_CHAIN_ID; // Gets the value from .env with Vite
@@ -108,39 +106,50 @@ const WalletConnection = ({ children }: Props) => {
             <img src={TitleLogo} className="" alt="AW Hackathon logo" />
           </a>
         </div>
-        <div className="flex-none mr-4">
-          {wallet.accounts.length > 0 && network === NETWORK_ID ? (
-            <>
-              <button
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
-                className="btn bg-[#333333] text-white rounded-lg"
-              >
-                {(wallet.accounts[0] as string)?.slice(0, 5)}...
-                {(wallet.accounts[0] as string)?.slice(-5)}
+        <div className="flex-none mr-4">  
+          <>
+            <a 
+              href={"https://komorebi88.notion.site/AW-Hack-Doc-193901bf9a33417dae3d5103d7c8bb18"} 
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <button className="pl-2 pr-2 pt-2 pb-2 mr-2 font-bold text-sm">
+                About AWHack
               </button>
-            </>
-          ) : network === NETWORK_ID ? (
-            <>
-              <button
-                onClick={handleConnect}
-                disabled={!isMetaMask}
-                className="btn bg-[#333333] text-white rounded-lg"
-              >
-                connect
-              </button>
-            </>
-          ) : (
-            <>
-              <Button
-                variant="outlined"
-                onClick={switchToNetwork}
-                sx={{ color: 'red', borderColor: 'red' }} // Change text and border color to red
-              >
-                Wrong Network
-              </Button>
-            </>
-          )}
+            </a>
+            {wallet.accounts.length > 0 && network === NETWORK_ID ? (
+              
+                <button
+                  aria-expanded={open ? 'true' : undefined}
+                  onClick={handleClick}
+                  className="btn bg-[#333333] text-white rounded-lg"
+                >
+                  {(wallet.accounts[0] as string)?.slice(0, 5)}...
+                  {(wallet.accounts[0] as string)?.slice(-5)}
+                </button>
+              
+            ) : network === NETWORK_ID ? (
+              
+                <button
+                  onClick={handleConnect}
+                  disabled={!isMetaMask}
+                  className="btn bg-[#333333] text-white rounded-lg"
+                >
+                  connect
+                </button>
+              
+            ) : (
+              
+                <Button
+                  variant="outlined"
+                  onClick={switchToNetwork}
+                  sx={{ color: 'red', borderColor: 'red' }} // Change text and border color to red
+                >
+                  Wrong Network
+                </Button>
+              
+            )}
+          </>
         </div>
       </div>
     
