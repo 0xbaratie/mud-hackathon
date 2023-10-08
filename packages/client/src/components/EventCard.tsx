@@ -81,7 +81,7 @@ export const EventCard = ({ hackathonNum }: EventcardProps) => {
           <figure>
             <img 
               src={imageUri.startsWith('http') ? imageUri : 'http://arweave.net/SFQNZecr_C3oxxsJBFItR6HYnlVyC4vAzsV_PlKcn5E'} 
-              alt="Shoes" 
+              alt="Hackathon image" 
               className="w-[108px] h-[108px] object-cover " 
             />
           </figure>
