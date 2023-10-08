@@ -1,4 +1,4 @@
-# AW Hack [WIP]
+# AW Hack
 
 This is an onchain hackathon kit that utilizes MUD. The winner of the hackathon will be determined by voting utilizing the ERC721 (but Enumerable is required) on the deployed chain.
 
@@ -8,7 +8,7 @@ Although it is technically possible to use Lattice net, we recommend using Optim
 
 [**About Prizes]**
 
-Hackathon owner can choose your winnings in one of the following tokens: ETH, DAI and USDC. Anyone can make a donate in advance before the hackathon takes place.
+Hackathon owner can choose their winnings in one of the following tokens: ETH, DAI and USDC. Anyone can make a donation in advance before the hackathon takes place.
 
 [**About Voting]**
 
@@ -17,7 +17,9 @@ There are two main types of voting. Basically, voting will be done using the ERC
 - Be sure to use the ERC721 with Enumerable as the ballot.
 See below for detailed specifications
 https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/extensions/ERC721Enumerable.sol
+
 sample code: https://goerli-optimism.etherscan.io/address/0x8366fbc573bf8b1113c99dee297cfe46e875d3db#code
+
 - A hackathon owner can give the Wallet address the right to vote and the number of votes without having a pre-whitelist-like ballot.
 (To be used when inviting special guests or judges).
 
@@ -29,7 +31,7 @@ https://github.com/dubiella/mud-template-read-vite-metamask/tree/master/packages
 
 ## Get Started
 
-**Setup a env file on client**
+**Setup an env file on client**
 
 ```markdown
 cp packages/client/.env.sample packages/client/.env
@@ -43,7 +45,7 @@ VITE_PRIVATE_KEY=WALLET_PRIVATE_KEY
 VITE_RPC_PROVIDER="https://optimism-goerli.publicnode.com"
 ```
 
-**Setup a env file on contracts**
+**Setup an env file on contracts**
 
 ```markdown
 cp packages/contracts/.env.sample packages/contracts/.env
@@ -53,7 +55,7 @@ cp packages/contracts/.env.sample packages/contracts/.env
 # This .env file is for demonstration purposes only.
 #
 # This should usually be excluded via .gitignore and the env vars attached to
-# your deployment enviroment, but we're including this here for ease of local
+# your deployment environment, but we're including this here for ease of local
 # development. Please do not commit changes to this file!
 #
 # Anvil default private key:
@@ -77,7 +79,7 @@ pnpm dev
 
 ### Configure Contracts
 
-This project uses [MUD](https://mud.dev/), a solidity library and associated set of client libraries, for smart contracts & client-side onchain state syncing. For more info on MUD, look at mud.dev
+This project uses [MUD](https://mud.dev/), a solidity library and associated set of client libraries, for smart contracts & client-side onchain state syncing. For more info on MUD, look at [MUD](https://mud.dev/).
 
 ## Getting Help
 
