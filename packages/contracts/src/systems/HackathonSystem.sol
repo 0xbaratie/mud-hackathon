@@ -202,12 +202,17 @@ contract HackathonSystem is System {
   function withdrawByOwner(bytes32 _hackathonId) public onlyOwner(_hackathonId) {
     HackathonData memory _hackathonData = Hackathon.get(_hackathonId);
     require(_hackathonData.phase == uint8(Phase.END), "Hackathon is not in END phase.");
-
-    //if deposit is left, withdraw to owner
-    uint256 _deposit = HackathonPrize.getDeposit(_hackathonId);
-    if(_deposit > 0){
+    
+    //if prize is still left, withdraw to owner
+    uint256 _prize = HackathonPrize.getDeposit(_hackathonId);
+    if(_prize > 0){
       HackathonPrize.setDeposit(_hackathonId,0);
-      IERC20(_hackathonData.prizeToken).safeTransfer(_msgSender(), _deposit);
+      //if prizeToken is ETH
+      if(_hackathonData.prizeToken == ETH_ADDRESS){
+        payable(_msgSender()).transfer(_prize);
+      }else{
+        IERC20(_hackathonData.prizeToken).safeTransfer(_msgSender(), _prize);
+      }
     }
 
   }
