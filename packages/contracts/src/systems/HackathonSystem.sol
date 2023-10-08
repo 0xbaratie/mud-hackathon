@@ -164,7 +164,10 @@ contract HackathonSystem is System {
     address[] memory _submitters = HackathonPrize.getSubmitters(_hackathonId);
     uint8 _submittersLength = uint8(_submitters.length);
     uint8 _winnerCount = Hackathon.get(_hackathonId).winnerCount;
-    if(_submittersLength < _winnerCount) revert ("The number of submitters is less than the number of winners.");
+    if(_submittersLength < _winnerCount) {
+        // Just return if there are not enough submitters
+        return;
+    }
 
     //set memory
     SubmitterWithVote[] memory _submittersWithVotes = new SubmitterWithVote[](_submittersLength);
