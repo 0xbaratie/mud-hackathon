@@ -3,6 +3,7 @@ import { useMUD } from '../MUDContext';
 import FullScreenModal from './FullScreenModal';
 import SpVoterModal from './SpVoterModal';
 import HackathonPrizeModal from './HackathonPrizeModal';
+import ENSResolver from './ENSResolver';
 
 import { BigNumber } from 'ethers';
 import {
@@ -164,16 +165,7 @@ const HackathonPrizes = ({
               <>
                 <div key={`sum-${index}`}>
                   <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">
-                    <a
-                      href={`https://optimistic.etherscan.io/address/${hackathonSponsors[1][index]}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500"
-                    >
-                      {`${hackathonSponsors[1][index].slice(0, 5)}...${hackathonSponsors[1][
-                        index
-                      ].slice(-5)}`}
-                    </a>
+                    <ENSResolver address={hackathonSponsors[1][index]} />
                   </div>
                 </div>
                 <div key={`sponsor-${index}`}>
