@@ -43,6 +43,7 @@ VITE_CHAIN_ID=420 #optimism goerli
 VITE_ALCHEMY_ID=ALCHEMY_ID
 VITE_PRIVATE_KEY=WALLET_PRIVATE_KEY
 VITE_RPC_PROVIDER="https://optimism-goerli.publicnode.com"
+VITE_ETH_PROVIDER="https://ethereum.publicnode.com"
 ```
 
 **Setup an env file on contracts**
