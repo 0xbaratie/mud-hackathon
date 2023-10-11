@@ -86,8 +86,8 @@ return (
         <div className="border rounded-md shadow-md h-[438px] relative">
           <img className="h-[228px] w-full object-cover" src={imageURL} alt="Image"></img>
           <div className="p-4">
-            <p className="font-bold text-xl mb-1">{name}</p>
-            <p className="text-sm">{description}</p>
+            <p className="font-bold text-xl mb-1 break-words">{name.length > 40 ? `${name.slice(0, 40)}...` : name}</p>
+            <p className="text-xs break-words">{description.length > 280 ? `${description.slice(0, 280)}...` : description}</p>
           </div>
           <div className="flex absolute bottom-4 right-0 pr-4">
             <img src={VotingBox} className="w-6" alt="Voting box icon" />

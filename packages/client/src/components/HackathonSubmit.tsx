@@ -10,7 +10,6 @@ type HackathonSubmitProps = {
 };
 
 const HackathonSubmit: FC<HackathonSubmitProps> = ({ onClose, hackathonId }) => {
-  //TODO 自分のSubmit情報取得
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [uri, setUri] = useState('');
@@ -71,6 +70,9 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ onClose, hackathonId }) => 
         {error && error.length > 0 && <ToastError message={error} />}
       </Transition>
       <h1 className="text-md mb-2">Project title</h1>
+      <p className="text-sm text-gray-500 mb-1">
+        Max 40-character or less description of your project title.
+      </p>
       <input
         type="text"
         placeholder="Enter your project title"
@@ -90,7 +92,7 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ onClose, hackathonId }) => 
 
       <h1 className="text-md mb-2 mt-6">Short description</h1>
       <p className="text-sm text-gray-500 mb-1">
-        A max 280-character or less description of your project (it should fit in a tweet!)
+        Max 280-character or less description of your project (it should fit in a tweet!)
       </p>
       <input
         type="text"
@@ -182,7 +184,9 @@ const HackathonSubmit: FC<HackathonSubmitProps> = ({ onClose, hackathonId }) => 
               setError('An error occurred while submitting your project.');
             }
           }}
+          disabled={name.length > 40 || description.length > 280} 
         >
+          
           Submit your project
         </button>
       </div>
