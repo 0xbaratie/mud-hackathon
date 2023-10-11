@@ -1,9 +1,10 @@
-import { useState, useEffect, useContext} from 'react';
+import { useState, useEffect, useContext } from 'react';
 import VotingBox from '../../public/voting_box.svg';
 import { useMUD } from '../MUDContext';
 import { PHASE } from '../constants/constants';
 import { ToastError } from './ToastError';
-import { walletContext } from '../WalletConnection'; 
+import { walletContext } from '../WalletConnection';
+import ENSResolver from './ENSResolver';
 
 interface HackathonPrizesProps {
   hackathonId: string;
@@ -13,7 +14,13 @@ interface HackathonPrizesProps {
   setVotesNum: React.Dispatch<React.SetStateAction<Record<string, number>>>;
 }
 
-const HackathonProjects = ({ hackathonId, submitter, phase, votesNum, setVotesNum}: HackathonPrizesProps) => {
+const HackathonProjects = ({
+  hackathonId,
+  submitter,
+  phase,
+  votesNum,
+  setVotesNum,
+}: HackathonPrizesProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => {
     setModalOpen(true);
@@ -58,28 +65,27 @@ const HackathonProjects = ({ hackathonId, submitter, phase, votesNum, setVotesNu
   }, [error]);
 
   const handleVoteIncrease = () => {
-      setVotesNum(prevVotes => ({
-          ...prevVotes,
-          [submitter]: (prevVotes[submitter] || 0) + 1
-      }));
+    setVotesNum((prevVotes) => ({
+      ...prevVotes,
+      [submitter]: (prevVotes[submitter] || 0) + 1,
+    }));
   };
 
-  
-const handleVoteDecrease = () => {
-  if (votesNum[submitter] <= 0) {
-    setError("You can't reduce votes below zero.");
-    return;
-  }
-  setVotesNum(prevVotes => ({
-    ...prevVotes,
-    [submitter]: prevVotes[submitter] - 1
-  }));
-};
+  const handleVoteDecrease = () => {
+    if (votesNum[submitter] <= 0) {
+      // setError("You can't reduce votes below zero.");
+      return;
+    }
+    setVotesNum((prevVotes) => ({
+      ...prevVotes,
+      [submitter]: prevVotes[submitter] - 1,
+    }));
+  };
 
-const { wallet } = useContext(walletContext)
-const connectedWalletAddress = wallet?.accounts?.[0];
+  const { wallet } = useContext(walletContext);
+  const connectedWalletAddress = wallet?.accounts?.[0];
 
-return (
+  return (
     <div className="mt-10 w-[390px] mx-auto">
       {error && <ToastError message={error} />}
       <a href={url} target="blank">
@@ -89,9 +95,17 @@ return (
             <p className="font-bold text-xl mb-1">{name}</p>
             <p className="text-sm">{description}</p>
           </div>
-          <div className="flex absolute bottom-4 right-0 pr-4">
-            <img src={VotingBox} className="w-6" alt="Voting box icon" />
-            <span className="ml-2 text-xl font-bold">{votes}</span>
+          <div className="absolute bottom-4 right-0 pr-4 pl-4 w-full">
+            <div className="flex justify-between">
+              <div className="">
+                <span className="font-bold mr-1">Author:</span>
+                <ENSResolver address={submitter} />
+              </div>
+              <div className="flex">
+                <img src={VotingBox} className="w-6" alt="Voting box icon" />
+                <span className="ml-2 text-xl font-bold">{votes}</span>
+              </div>
+            </div>
           </div>
         </div>
       </a>
@@ -130,8 +144,9 @@ return (
           </button>
         </div>
       )}
-      {
-        connectedWalletAddress === submitter.toLowerCase() && prize > 0 && phase === PHASE.WITHDRAWING && (
+      {connectedWalletAddress === submitter.toLowerCase() &&
+        prize > 0 &&
+        phase === PHASE.WITHDRAWING && (
           <div className="flex justify-center items-center">
             <button
               className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg"
@@ -142,10 +157,8 @@ return (
             >
               WithdrawPrize
             </button>
-            
           </div>
-        )
-      }
+        )}
     </div>
   );
 };
