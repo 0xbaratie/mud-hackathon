@@ -138,7 +138,7 @@ const HackathonOverview = ({
             }
           }}
         >
-          Delete hackathon
+          Delete hackathon (By admin)
         </button>
       )}
     </div>
