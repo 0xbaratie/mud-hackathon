@@ -109,7 +109,7 @@ const WalletConnection = ({ children }: Props) => {
         <div className="flex-none mr-4">  
           <>
             <a 
-              href={"https://komorebi88.notion.site/AW-Hack-Doc-193901bf9a33417dae3d5103d7c8bb18"} 
+              href={"https://komorebi88.notion.site/AW-Hack-doc-e82110e8c392409aadc3f5bee09239fc"} 
               target="_blank"
               rel="noopener noreferrer"
             >
