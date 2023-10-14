@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react';
-import { mount as mountDevTools } from '@latticexyz/dev-tools';
+// import { mount as mountDevTools } from '@latticexyz/dev-tools';
 import { setup } from './mud/setup';
 import { MUDProvider } from './MUDContext';
 
@@ -21,7 +21,7 @@ const MUDSetup = ({ children }: Props) => {
       .catch((error) => {
         console.error("Setup function error:", error);
       });
-    mountDevTools();
+    // mountDevTools();
   }, []);
   
   return <>{setupValue && <MUDProvider value={setupValue}>{children}</MUDProvider>}</>;

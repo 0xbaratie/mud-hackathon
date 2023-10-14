@@ -31,7 +31,7 @@ export const EventCard = ({ hackathonNum }: EventcardProps) => {
         const hackathonInfo = await worldContract.getHackathonInfo(paddedHexStr);
         console.log('hackathon', hackathon);
         console.log('hackathonInfo', hackathonInfo);
-        setName(hackathonInfo.name);
+        setName(hackathonInfo.name.length > 48 ? `${hackathonInfo.name.slice(0, 45)}...` : hackathonInfo.name);
         setImageUri(hackathonInfo.imageUri);
         setSubmitPeriod(hackathon.submitPeriod);
         setPrizeToken(hackathon.prizeToken);
@@ -78,11 +78,11 @@ export const EventCard = ({ hackathonNum }: EventcardProps) => {
     <Link to={`/hackathon/${hackathonNum}`}>
       <div className="flex items-center space-x-4 custom-border h-[190px]">
         <div className="ml-3">
-          <figure>
+          <figure className="relative overflow-hidden w-[108px] h-[108px]">
             <img 
               src={imageUri.startsWith('http') ? imageUri : 'http://arweave.net/SFQNZecr_C3oxxsJBFItR6HYnlVyC4vAzsV_PlKcn5E'} 
               alt="Hackathon image" 
-              className="w-[108px] h-[108px] object-cover " 
+              className="w-full h-full object-cover" 
             />
           </figure>
         </div>
