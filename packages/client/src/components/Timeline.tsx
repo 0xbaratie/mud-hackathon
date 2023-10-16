@@ -50,7 +50,7 @@ const Timeline = ({
         </div>
         <div className="pl-4 z-0 relative">
           <h2 className="font-bold">Deposit prize</h2>
-          <p className="text-gray-500">{timestampToDateString(startTimestamp)} GMT</p>
+          <p className="text-gray-500">By {timestampToDateString(startTimestamp)} GMT</p>
         </div>
       </div>
       <div className="mt-8">
@@ -63,7 +63,7 @@ const Timeline = ({
         </div>
         <div className="pl-4 z-0 relative">
           <h2 className="font-bold text-[#4D4D4D]">Hacking</h2>
-          <p className="text-gray-500">{timestampToDateString(submitPeriod)} GMT</p>
+          <p className="text-gray-500">By {timestampToDateString(submitPeriod)} GMT</p>
         </div>
       </div>
       <div className="mt-8">
@@ -76,7 +76,7 @@ const Timeline = ({
         </div>
         <div className="pl-4 z-0 relative">
           <h2 className="font-bold text-[#4D4D4D]">Voting</h2>
-          <p className="text-gray-500">{timestampToDateString(votingPeriod)} GMT</p>
+          <p className="text-gray-500">By {timestampToDateString(votingPeriod)} GMT</p>
         </div>
       </div>
       <div className="mt-8">
@@ -89,7 +89,7 @@ const Timeline = ({
         </div>
         <div className="pl-4 z-0 relative">
           <h2 className="font-bold text-[#4D4D4D]">Withdrawing prize</h2>
-          <p className="text-gray-500">{timestampToDateString(withdrawalPeriod)} GMT</p>
+          <p className="text-gray-500">By {timestampToDateString(withdrawalPeriod)} GMT</p>
         </div>
       </div>
       <div className="mt-8">
