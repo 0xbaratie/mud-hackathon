@@ -145,7 +145,6 @@ const HackathonProjects = ({
         </div>
       )}
       {connectedWalletAddress === submitter.toLowerCase() &&
-        prize > 0 &&
         phase === PHASE.WITHDRAWING && (
           <div className="flex justify-center items-center">
             <button
