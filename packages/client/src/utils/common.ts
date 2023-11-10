@@ -30,10 +30,12 @@ export const bigNumberToNumber = (amount: BigNumber, decimal: number): number =>
   let ret: number;
   try {
     ret = Number(utils.formatUnits(amount, decimal));
+    if (Math.abs(ret) < 1e-15) {
+      ret = 0;
+    }
   } catch (e) {
-    // console.log('error', e);
     ret = 0;
   }
-  // console.log('bigNumber', bigNumber.toNumber());
   return ret;
 };
+
