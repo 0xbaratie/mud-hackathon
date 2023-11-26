@@ -12,6 +12,7 @@
     "deploy:testnet": "pnpm run build && mud deploy --profile=lattice-testnet",
     "deploy:opgoerli": "pnpm run build && mud deploy --profile=opgoerli",
     "deploy:op": "pnpm run build && mud deploy --profile=op",
+    "deploy:redstone": "pnpm run build && mud deploy --profile=redstone",
     "dev": "pnpm mud dev-contracts --tsgenOutput ../client/src/mud",
     "lint": "pnpm run prettier && pnpm run solhint",
     "prettier": "prettier --write 'src/**/*.sol'",
